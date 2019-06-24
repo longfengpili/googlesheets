@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:18:16
-@LastEditTime: 2019-06-20 12:28:02
+@LastEditTime: 2019-06-24 13:45:01
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -14,15 +14,15 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-import config
+from params import *
 
 
 class GetSpreadsheet(object):
 
     def __init__(self):
-        self.creds_pickle_path = config.CREDENTIALS_PICKLE_PATH
-        self.creds_json_path = config.CREDENTIALS_JSON_PATH
-        self.scopes = config.SCOPES
+        self.creds_pickle_path = CREDENTIALS_PICKLE_PATH
+        self.creds_json_path = CREDENTIALS_JSON_PATH
+        self.scopes = SCOPES
 
     def get_credential(self):
         creds = None
@@ -57,4 +57,30 @@ class GetSpreadsheet(object):
             return 'No data found !'
         else:
             return values
+
+    def get_spreadsheet_main(self, spreadsheet_id, columns=None):
+        columns_index = []
+        result = []
+        creads = self.get_credential()
+        values = self.get_sheet_value(creads, spreadsheet_id=spreadsheet_id)
+
+        if isinstance(columns,dict):
+            values_column = values[0]
+            for column in columns:
+                ix = values_column.index(column)
+                columns_index.append(ix)
+        for value in values:
+            value_ = []
+            for ix in columns_index:
+                try:
+                    v = (value[ix]).lower()
+                except:
+                    v = ''
+                value_.append(v)
+            # print(value_)
+            result.append(value_)
+        return result
+
+
+
     

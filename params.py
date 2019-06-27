@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-06-27 11:36:44
+@LastEditTime: 2019-06-27 17:14:16
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -17,16 +17,24 @@ import mysetting
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
+# GOOGLE
 CREDENTIALS_JSON_PATH = '../credentials.json'
 CREDENTIALS_PICKLE_PATH = '../token.pickle'
-
-DATABASE = mysetting.database
-HOST = mysetting.host
-USER = mysetting.user
-PASSWORD = mysetting.password
-
-TABLENAME = mysetting.table_name
-COLUMNS = mysetting.columns
-
+# Redshift
+R_DATABASE = mysetting.redshift_database
+R_HOST = mysetting.redshift_host
+R_USER = mysetting.redshift_user
+R_PASSWORD = mysetting.redshift_password
+R_TABLENAME = mysetting.item_table_name
+R_COLUMNS = mysetting.item_columns
 spreadsheet_id = mysetting.spreadsheet_id
+# Mysql
+M_DATABASE = mysetting.mysql_database
+M_HOST = mysetting.mysql_host
+M_USER = mysetting.mysql_user
+M_PASSWORD = mysetting.mysql_password
+M_O_TABLENAME = mysetting.events_table
+M_COLUMNS = mysetting.events_columns
+M_N_TABLENAME = mysetting.parse_table
+
+

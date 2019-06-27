@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-27 12:05:27
+@LastEditTime: 2019-06-27 19:39:45
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -45,7 +45,7 @@ class DBBase(object):
         self.conn = None
     
     def connect(self):
-        return None
+        pass
 
     def __close(self):
         if self.conn:
@@ -57,6 +57,7 @@ class DBBase(object):
         return result.group(1)
 
     def sql_execute(self, sql, count=None):
+        # print(sql)
         if not self.conn:
             self.connect()
         sql_type = self.__check_sql_type(sql)
@@ -76,12 +77,13 @@ class DBBase(object):
                 self.conn.commit()
             except Exception as e:
                 self.conn.rollback()
+                dblogger.error(sql)
                 dblogger.error(e)
 
         self.__close()
         return result
 
-    def sql_for_create_table(self, tablename, columns):
+    def sql_for_create(self, tablename, columns):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
         sql = f'''create table if not exists {tablename}
@@ -90,17 +92,24 @@ class DBBase(object):
         sql = re.sub('\s{2,}', '\n', sql)
         return sql
 
-    def sql_for_drop_table(self, tablename):
+    def sql_for_drop(self, tablename):
         sql = f'drop table if exists {tablename};'
         return sql
 
-    def sql_for_insert_table(self, tablename, columns, values):
-        columns = ','.join(columns.keys())
+    def sql_for_insert(self, tablename, columns, values):
+        columns = ','.join(columns)
         values = ',\n'.join(
             ['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
         sql = f'''insert into {tablename}
                  ({columns})
                  values
                  {values};'''
-        sql = re.sub('\s{2,}', '\n', sql)
+        return sql
+
+    def sql_for_select(self, tablename, columns, contions=None):
+        columns = ','.join(columns)
+        if contions:
+            sql = f'''select {columns} from {tablename} {contions};'''
+        else:
+            sql = f'''select {columns} from {tablename};'''
         return sql

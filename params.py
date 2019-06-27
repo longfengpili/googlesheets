@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-06-24 14:02:13
+@LastEditTime: 2019-06-27 11:36:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -28,3 +28,5 @@ PASSWORD = mysetting.password
 
 TABLENAME = mysetting.table_name
 COLUMNS = mysetting.columns
+
+spreadsheet_id = mysetting.spreadsheet_id

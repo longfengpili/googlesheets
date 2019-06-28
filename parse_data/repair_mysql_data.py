@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-28 18:35:38
+@LastEditTime: 2019-06-28 19:32:47
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -71,8 +71,12 @@ class RepairMysqlData(object):
         '''获取没有修复的数据'''
         self._mysql_connect()
         if self.new_tableid < self.old_tableid:
+            start_id = self.new_tableid
+            end_id = self.new_tableid + n
+            if end_id >= self.old_tableid:
+                end_id = self.old_tableid
             sql = self.db.sql_for_select(tablename=tablename, columns=columns,
-                                         contions=f'id > {self.new_tableid} and id <= {self.new_tableid + n}')
+                                         contions=f'id > {start_id} and id <= {end_id}')
             count,non_repair_data = self.db.sql_execute(sql)
             if count == 0:
                 count = 1

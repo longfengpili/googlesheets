@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-28 19:32:47
+@LastEditTime: 2019-06-28 20:06:54
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -78,8 +78,6 @@ class RepairMysqlData(object):
             sql = self.db.sql_for_select(tablename=tablename, columns=columns,
                                          contions=f'id > {start_id} and id <= {end_id}')
             count,non_repair_data = self.db.sql_execute(sql)
-            if count == 0:
-                count = 1
             self.count += count
             self.new_tableid += count
         return non_repair_data

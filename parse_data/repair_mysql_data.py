@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-28 10:54:45
+@LastEditTime: 2019-06-28 13:41:24
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,7 +12,7 @@ from datetime import datetime
 import json
 import re
 
-from db_api.db_api import DBMysql
+from db_api import DBMysql
 from params import *
 
 import logging
@@ -24,7 +24,7 @@ errorbi_logger.setLevel(logging.INFO)
 #2.创建handler写入日志
 logfile = './log/error_bi.log'
 fh = logging.handlers.TimedRotatingFileHandler(
-    logfile, when='S', interval=1, backupCount=100, encoding='utf-8')
+    logfile, when='D', interval=1, backupCount=100, encoding='utf-8')
 fh.setLevel(logging.WARNING)
 #3.创建handler输出控制台
 ch = logging.StreamHandler()
@@ -58,26 +58,14 @@ class RepairMysqlData(object):
         if not self.conn:
             self.conn = self.db.connect()
 
-    def get_table_id(self, new_tablename, old_tablename):
+    def get_table_id(self, new_tablename, old_tablename,column='id',func='max'):
         # 获取两个表的最大id，用于后续对比，并逐步导出
+        if not self.db:
+            self._mysql_connect()
         if not self.new_tableid:
-            self._mysql_connect()
-            sql = self.db.sql_for_select(tablename=new_tablename, columns=['id'])
-            result = self.db.sql_execute(sql)
-            if not result:
-                result = 0
-            else:
-                result = max(result)[0]
-            self.new_tableid = result
+            self.new_tableid = self.db.get_table_info(new_tablename, column=column, func=func)
         if not self.old_tableid:
-            self._mysql_connect()
-            sql = self.db.sql_for_select(tablename=old_tablename, columns=['id'])
-            result = self.db.sql_execute(sql)
-            if not result:
-                result = 0
-            else:
-                result = max(result)[0]
-            self.old_tableid = result
+            self.old_tableid = self.db.get_table_info(old_tablename, column=column, func=func)
 
     def get_non_repair_data(self, old_tablename, columns, n=1000):
         # 获取没有修复的数据
@@ -105,8 +93,6 @@ class RepairMysqlData(object):
             e_s = f'>>>>{e}'
 
             while e_s:
-                # errorbi_logger.info(e_s)
-                # errorbi_logger.info(myjson)
                 errors.append(e_s)
                 if 'UTF-8 BOM' in e_s:
                     myjson = myjson.encode('utf-8')[3:].decode('utf-8')

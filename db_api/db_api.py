@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 10:28:53
+@LastEditTime: 2019-06-28 12:44:26
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -76,6 +76,29 @@ class DBMysql(DBBase):
         except Exception as e:
             self.conn = None
             rlogger.error(e)
+
+    def get_table_info(self, tablename, column, func='max'):
+        if func not in ['min', 'max', 'sum', 'count']:
+            raise "func only support 'min', 'max', 'sum', 'count'"
+
+        if not self.conn:
+            self.connect()
+            
+        sql = self.sql_for_select(tablename=tablename, columns=[column])
+        result = self.sql_execute(sql)
+        if not result:
+            result = 0
+        else:
+            if func == 'min':
+                result = min(result)[0]
+            elif func == 'max':
+                result = max(result)[0]
+            elif func == 'sum':
+                result = sum(result)[0]
+            elif func == 'count':
+                result = len(result)[0]
+        return result
+        
 
         
             

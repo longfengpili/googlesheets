@@ -1,14 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-06-27 19:58:12
+@LastEditTime: 2019-06-28 13:42:56
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 @github: https://github.com/longfengpili
 '''
-from googlesheets.get_spreadsheet import GetSpreadsheet
-from db_api.db_api import DBRedshift
+from googlesheets import GetSpreadsheet
+from db_api import DBRedshift
 import sys
 import pandas as pd
 from params import *

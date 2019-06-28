@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 18:34:19
+@LastEditTime: 2019-06-28 19:26:50
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,8 +12,6 @@ import pymysql
 from datetime import date, timedelta, datetime
 import re
 import sys
-import pandas as pd
-from pandas import DataFrame
 from params import *
 from .dbbase import DBBase
 
@@ -99,8 +97,15 @@ class DBMysql(DBBase):
                 result = len(result)[0]
         return result
     
-    def delete(self, tablename, contion):
+    def delete_by_id(self, tablename, id_min, id_max):
+        if not self.conn:
+            self.connect()
+        contion = f'id > {id_min} and id <= {id_max}'
+        sql = self.sql_for_delete(tablename, contion=contion)
+        self.sql_execute(sql)
         
+
+
 
         
             

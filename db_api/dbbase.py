@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 18:36:20
+@LastEditTime: 2019-06-28 19:28:08
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -144,7 +144,6 @@ class DBBase(object):
             sql = f'''select {columns} from {tablename};'''
         return sql
 
-    def sql_for_delete(self, tablename, columns, contions):
-        columns = ','.join(columns)
-        sql = f'''delete from {tablename} where {contions};'''
+    def sql_for_delete(self, tablename, contion):
+        sql = f'''delete from {tablename} where {contion};'''
         return sql

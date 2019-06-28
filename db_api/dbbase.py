@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 19:28:08
+@LastEditTime: 2019-06-28 20:24:38
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -80,7 +80,6 @@ class DBBase(object):
         change_count = 0
         if not sql:
             return None, None
-        # print(sql)
         if not self.conn:
             self.connect()
         sql_type = self.__check_sql_type(sql)

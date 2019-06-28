@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-27 19:39:45
+@LastEditTime: 2019-06-28 10:29:01
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -14,13 +14,15 @@ import sys
 import pandas as pd
 from pandas import DataFrame
 import logging
+import logging.handlers
 
 #1.创建logger
 dblogger = logging.getLogger(name='db')
 dblogger.setLevel(logging.INFO)
 #2.创建handler写入日志
-logfile = './db.log'
-fh = logging.FileHandler(logfile, mode='a')
+logfile = './log/db.log'
+fh = logging.handlers.TimedRotatingFileHandler(
+    logfile, when='D', interval=1, backupCount=100, encoding='utf-8')
 fh.setLevel(logging.ERROR)
 #3.创建handler输出控制台
 ch = logging.StreamHandler()

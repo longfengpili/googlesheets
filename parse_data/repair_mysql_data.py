@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-27 19:53:46
+@LastEditTime: 2019-06-28 10:54:45
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -16,14 +16,16 @@ from db_api.db_api import DBMysql
 from params import *
 
 import logging
+import logging.handlers
 
 #1.创建logger
 errorbi_logger = logging.getLogger(name='error_bi')
 errorbi_logger.setLevel(logging.INFO)
 #2.创建handler写入日志
-logfile = './error_bi.log'
-fh = logging.FileHandler(logfile, mode='a')
-fh.setLevel(logging.ERROR)
+logfile = './log/error_bi.log'
+fh = logging.handlers.TimedRotatingFileHandler(
+    logfile, when='S', interval=1, backupCount=100, encoding='utf-8')
+fh.setLevel(logging.WARNING)
 #3.创建handler输出控制台
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
@@ -37,48 +39,54 @@ errorbi_logger.addHandler(fh)
 errorbi_logger.addHandler(ch)
 
 class RepairMysqlData(object):
-    def __init__(self):
-        self.repair_table_id = None
-        self.old_table_id = None
+    def __init__(self, host, user, password, database):
+        self.new_tableid = None
+        self.old_tableid = None
         self.count = 0
         self.db = None
         self.conn = None
+        self.host = host
+        self.port = 3306
+        self.user = user
+        self.password = password
+        self.database = database
 
-    def _mysql_connect(self, host=M_HOST, user=M_USER,password=M_PASSWORD, db=M_DATABASE):
+    def _mysql_connect(self):
         if not self.db:
-            self.db = DBMysql(host=host, user=user, password=password, db=db)
+            self.db = DBMysql(host=self.host, user=self.user,
+                              password=self.password, db=self.database)
         if not self.conn:
             self.conn = self.db.connect()
 
-    def get_table_id(self):
+    def get_table_id(self, new_tablename, old_tablename):
         # 获取两个表的最大id，用于后续对比，并逐步导出
-        if not self.repair_table_id:
+        if not self.new_tableid:
             self._mysql_connect()
-            sql = self.db.sql_for_select(tablename=M_N_TABLENAME,columns=['id'])
+            sql = self.db.sql_for_select(tablename=new_tablename, columns=['id'])
             result = self.db.sql_execute(sql)
             if not result:
                 result = 0
             else:
                 result = max(result)[0]
-            self.repair_table_id = result
-        if not self.old_table_id:
+            self.new_tableid = result
+        if not self.old_tableid:
             self._mysql_connect()
-            sql = self.db.sql_for_select(tablename=M_O_TABLENAME, columns=['id'])
+            sql = self.db.sql_for_select(tablename=old_tablename, columns=['id'])
             result = self.db.sql_execute(sql)
             if not result:
                 result = 0
             else:
                 result = max(result)[0]
-            self.old_table_id = result
+            self.old_tableid = result
 
-    def get_non_repair_data(self, n=1000):
+    def get_non_repair_data(self, old_tablename, columns, n=1000):
         # 获取没有修复的数据
         self._mysql_connect()
-        if self.repair_table_id < self.old_table_id:
-            sql = self.db.sql_for_select(tablename=M_O_TABLENAME, columns=M_COLUMNS,
-                                         contions=f'where id > {self.repair_table_id} and id <= {self.repair_table_id + n}')
+        if self.new_tableid < self.old_tableid:
+            sql = self.db.sql_for_select(tablename=old_tablename, columns=columns,
+                                         contions=f'where id > {self.new_tableid} and id <= {self.new_tableid + n}')
             non_repair_data = self.db.sql_execute(sql)
-            self.repair_table_id += n
+            self.new_tableid += n
         return non_repair_data
 
     def repair_row(self, row):
@@ -124,11 +132,10 @@ class RepairMysqlData(object):
                     myjson = None
                     break
             myjson = myjson_
-            errorbi_logger.error('\n'.join(errors))
+            errorbi_logger.warning('\n'.join(errors))
             return id, myjson, errors
-            
         if errors:
-            errorbi_logger.error('\n'.join(errors))
+            errorbi_logger.warning('\n'.join(errors))
         myjson = myjson_
         return id, myjson, errors
 

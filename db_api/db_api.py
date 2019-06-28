@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-27 14:22:46
+@LastEditTime: 2019-06-28 10:28:53
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -18,13 +18,16 @@ from params import *
 from .dbbase import DBBase
 
 import logging
+import logging.handlers
+
 
 #1.创建logger
 rlogger = logging.getLogger(name='db_api')
 rlogger.setLevel(logging.INFO)
 #2.创建handler写入日志
-logfile = './db.log'
-fh = logging.FileHandler(logfile,mode='a')
+logfile = './log/db.log'
+fh = logging.handlers.TimedRotatingFileHandler(
+    logfile, when='D', interval=1, backupCount=100, encoding='utf-8')
 fh.setLevel(logging.ERROR)
 #3.创建handler输出控制台
 ch = logging.StreamHandler()

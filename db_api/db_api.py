@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 12:44:26
+@LastEditTime: 2019-06-28 18:34:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -85,7 +85,7 @@ class DBMysql(DBBase):
             self.connect()
             
         sql = self.sql_for_select(tablename=tablename, columns=[column])
-        result = self.sql_execute(sql)
+        _, result = self.sql_execute(sql)
         if not result:
             result = 0
         else:
@@ -98,6 +98,8 @@ class DBMysql(DBBase):
             elif func == 'count':
                 result = len(result)[0]
         return result
+    
+    def delete(self, tablename, contion):
         
 
         

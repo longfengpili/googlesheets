@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-28 13:41:24
+@LastEditTime: 2019-06-28 18:35:38
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -28,7 +28,7 @@ fh = logging.handlers.TimedRotatingFileHandler(
 fh.setLevel(logging.WARNING)
 #3.创建handler输出控制台
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.ERROR)
 #4.创建格式
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(filename)s - %(lineno)d行 - %(message)s"
 formatter = logging.Formatter(fmt=LOG_FORMAT)
@@ -59,7 +59,7 @@ class RepairMysqlData(object):
             self.conn = self.db.connect()
 
     def get_table_id(self, new_tablename, old_tablename,column='id',func='max'):
-        # 获取两个表的最大id，用于后续对比，并逐步导出
+        '''获取两个表的最大id，用于后续对比，并逐步导出'''
         if not self.db:
             self._mysql_connect()
         if not self.new_tableid:
@@ -67,18 +67,21 @@ class RepairMysqlData(object):
         if not self.old_tableid:
             self.old_tableid = self.db.get_table_info(old_tablename, column=column, func=func)
 
-    def get_non_repair_data(self, old_tablename, columns, n=1000):
-        # 获取没有修复的数据
+    def get_non_repair_data(self, tablename, columns, n=1000):
+        '''获取没有修复的数据'''
         self._mysql_connect()
         if self.new_tableid < self.old_tableid:
-            sql = self.db.sql_for_select(tablename=old_tablename, columns=columns,
-                                         contions=f'where id > {self.new_tableid} and id <= {self.new_tableid + n}')
-            non_repair_data = self.db.sql_execute(sql)
-            self.new_tableid += n
+            sql = self.db.sql_for_select(tablename=tablename, columns=columns,
+                                         contions=f'id > {self.new_tableid} and id <= {self.new_tableid + n}')
+            count,non_repair_data = self.db.sql_execute(sql)
+            if count == 0:
+                count = 1
+            self.count += count
+            self.new_tableid += count
         return non_repair_data
 
     def repair_row(self, row):
-        # 修复单行数据
+        '''修复单行数据'''
         e_n = 0
         errors = []
         id, myjson = row

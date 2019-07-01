@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-06-28 20:25:59
+@LastEditTime: 2019-07-01 10:30:50
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,7 +12,6 @@ from datetime import datetime
 import json
 import re
 from db_api.db_api import DBMysql
-from params import *
 
 # import logging
 # import logging.handlers

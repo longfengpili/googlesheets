@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 12:26:40
-@LastEditTime: 2019-06-28 20:23:46
+@LastEditTime: 2019-07-01 10:31:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,9 +11,8 @@ from db_api import DBMysql
 from parse_data import RepairMysqlData
 from parse_data import ResolveMysqlData
 import sys
-import pandas as pd
-from params import *
 import time
+from psetting import *
 
 import logging
 import logging.handlers

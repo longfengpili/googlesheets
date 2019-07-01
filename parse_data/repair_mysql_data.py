@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-06-28 20:25:25
+@LastEditTime: 2019-07-01 10:30:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -13,7 +13,6 @@ import json
 import re
 
 from db_api import DBMysql
-from params import *
 
 import logging
 import logging.handlers

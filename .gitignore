@@ -1,13 +1,4 @@
-/*
- * @Author: longfengpili
- * @Date: 2019-07-01 10:11:18
- * @LastEditTime: 2019-07-01 10:11:18
- * @coding: 
- * #!/usr/bin/env python
-# -*- coding:utf-8 -*-
- * @github: https://github.com/longfengpili
- */
-
 .pyc
 .vscode/
 log/
+__pycache__/

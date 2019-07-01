@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 19:26:50
+@LastEditTime: 2019-07-01 10:30:32
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,7 +12,6 @@ import pymysql
 from datetime import date, timedelta, datetime
 import re
 import sys
-from params import *
 from .dbbase import DBBase
 
 import logging

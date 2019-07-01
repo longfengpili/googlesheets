@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-01 17:20:48
+@LastEditTime: 2019-07-01 18:21:24
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -30,11 +30,11 @@ R_COLUMNS = mysetting.item_columns
 spreadsheet_id = mysetting.spreadsheet_id
 # Mysql
 M_DATABASE = mysetting.mysql_database
-M_HOST = mysetting.mysql_host
+M_HOST = mysetting.mysql_j_host
 M_USER = mysetting.mysql_user
-M_PASSWORD = mysetting.mysql_password
-M_ORIGINAL_TABLENAME = mysetting.events_table
-M_ORIGINAL_COLUMNS = mysetting.events_columns
+M_PASSWORD = mysetting.mysql_j_password
+M_ORIGINAL_TABLENAME = mysetting.original_table
+M_ORIGINAL_COLUMNS = mysetting.original_columns
 M_REPAIR_TABLENAME = mysetting.repair_table
 M_RESOLVE_TABLENAME = mysetting.resolve_table
 M_RESOLVE_COLUMNS = mysetting.resolve_columns

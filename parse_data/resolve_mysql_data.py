@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-01 13:00:17
+@LastEditTime: 2019-07-01 13:33:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -108,10 +108,10 @@ class ResolveMysqlData(object):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        if id_min and id_max:
+        if id_min != None and id_max != None:
             if id_min >= id_max:
                 raise 'id_min should < id_max'
-        if id_min:
+        if id_min != None:
             id_min -= 1  # 左开右闭
 
             #删除resolve表数据
@@ -123,7 +123,7 @@ class ResolveMysqlData(object):
         if id_min:
             self.resolve_tableid = id_min
             self.repair_tableid = self.repair_tableid if self.repair_tableid <= id_max else id_max
-            parsebi_logger.info(f'开始修复丢失数据【({self.resolve_tableid},{self.repair_tableid}]】 ！')
+            parsebi_logger.info(f'开始修复丢失数据【[{self.resolve_tableid + 1},{self.repair_tableid}]】 ！')
         while self.resolve_tableid < self.repair_tableid:
             #获取未修复数据
             non_resolve_data = self.get_non_resolve_data(tablename=repair_tablename, columns=self.orignal_columns, n=1000)

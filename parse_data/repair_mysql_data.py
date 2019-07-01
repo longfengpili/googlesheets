@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-01 12:46:20
+@LastEditTime: 2019-07-01 13:32:14
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -132,22 +132,22 @@ class RepairMysqlData(object):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        if id_min and id_max:
+
+        if id_min != None and id_max != None:
             if id_min >= id_max:
                 raise 'id_min should < id_max'
-        if id_min:
+        if id_min != None:
             id_min -= 1  # 左开右闭
-
             #删除repair表数据
             self._mysql_connect()
             self.db.delete_by_id(tablename=repair_tablename, id_min=id_min, id_max=id_max)
-
+        
         # repair_table
         self.get_table_id(repair_tablename, orignal_tablename)
         if id_min:
             self.repair_tableid = id_min
             self.orignal_tableid = self.orignal_tableid if self.orignal_tableid <= id_max else id_max
-            parsebi_logger.info(f'开始修复丢失数据【({self.repair_tableid},{self.orignal_tableid}]】 ！')
+            parsebi_logger.info(f'开始修复丢失数据【[{self.repair_tableid + 1},{self.orignal_tableid}]】 ！')
         while self.repair_tableid < self.orignal_tableid:
             #获取未修复数据
             non_repair_data = self.get_non_repair_data(tablename=orignal_tablename, columns=self.orignal_columns, n=1000)

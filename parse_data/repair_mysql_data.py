@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-01 10:30:43
+@LastEditTime: 2019-07-01 11:31:58
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,7 +11,6 @@
 from datetime import datetime
 import json
 import re
-
 from db_api import DBMysql
 
 import logging
@@ -39,8 +38,8 @@ errorbi_logger.addHandler(ch)
 
 class RepairMysqlData(object):
     def __init__(self, host, user, password, database):
-        self.new_tableid = None
-        self.old_tableid = None
+        self.repair_tableid = None
+        self.orignal_tableid = None
         self.count = 0
         self.db = None
         self.conn = None
@@ -53,32 +52,32 @@ class RepairMysqlData(object):
     def _mysql_connect(self):
         if not self.db:
             self.db = DBMysql(host=self.host, user=self.user,
-                              password=self.password, db=self.database)
+                              password=self.password, database=self.database)
         if not self.conn:
             self.conn = self.db.connect()
 
-    def get_table_id(self, new_tablename, old_tablename,column='id',func='max'):
+    def get_table_id(self, repair_tablename, orignal_tablename,column='id',func='max'):
         '''获取两个表的最大id，用于后续对比，并逐步导出'''
         if not self.db:
             self._mysql_connect()
-        if not self.new_tableid:
-            self.new_tableid = self.db.get_table_info(new_tablename, column=column, func=func)
-        if not self.old_tableid:
-            self.old_tableid = self.db.get_table_info(old_tablename, column=column, func=func)
+        if not self.repair_tableid:
+            self.repair_tableid = self.db.get_table_info(repair_tablename, column=column, func=func)
+        if not self.orignal_tableid:
+            self.orignal_tableid = self.db.get_table_info(orignal_tablename, column=column, func=func)
 
     def get_non_repair_data(self, tablename, columns, n=1000):
         '''获取没有修复的数据'''
         self._mysql_connect()
-        if self.new_tableid < self.old_tableid:
-            start_id = self.new_tableid
-            end_id = self.new_tableid + n
-            if end_id >= self.old_tableid:
-                end_id = self.old_tableid
+        if self.repair_tableid < self.orignal_tableid:
+            start_id = self.repair_tableid
+            end_id = self.repair_tableid + n
+            if end_id >= self.orignal_tableid:
+                end_id = self.orignal_tableid
             sql = self.db.sql_for_select(tablename=tablename, columns=columns,
                                          contions=f'id > {start_id} and id <= {end_id}')
             count,non_repair_data = self.db.sql_execute(sql)
             self.count += count
-            self.new_tableid = end_id
+            self.repair_tableid = end_id
         return non_repair_data
 
     def repair_row(self, row):

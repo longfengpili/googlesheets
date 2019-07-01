@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 12:26:40
-@LastEditTime: 2019-07-01 10:31:35
+@LastEditTime: 2019-07-01 11:32:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,14 +39,14 @@ parsebi_logger.addHandler(ch)
 
 
 # 创建repair_table
-db = DBMysql(host=M_HOST, user=M_USER, password=M_PASSWORD, db=M_DATABASE)
+db = DBMysql(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE)
 sql = db.sql_for_create(tablename= M_N_TABLENAME,columns=M_COLUMNS)
 db.sql_execute(sql)
 
 # repair_table
 rmd = RepairMysqlData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE)
 rmd.get_table_id(M_N_TABLENAME, M_O_TABLENAME)
-while rmd.new_tableid < rmd.old_tableid:
+while rmd.repair_tableid < rmd.orignal_tableid:
     #获取未修复数据
     non_repair_data = rmd.get_non_repair_data(tablename=M_O_TABLENAME, columns=M_COLUMNS, n=1000)
     #修复数据
@@ -55,19 +55,19 @@ while rmd.new_tableid < rmd.old_tableid:
     #插入新表
     sql = db.sql_for_insert(tablename=M_N_TABLENAME,columns=M_COLUMNS, values=repaired)
     db.sql_execute(sql)
-    parsebi_logger.info(f'本次累计修复{rmd.count}条数据！最大id为{rmd.new_tableid} ！')
+    parsebi_logger.info(f'本次累计修复{rmd.count}条数据！最大id为{rmd.repair_tableid} ！')
 
 
 
 # 创建resolve_table
-db = DBMysql(host=M_HOST, user=M_USER, password=M_PASSWORD, db=M_DATABASE)
+db = DBMysql(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE)
 sql = db.sql_for_create(tablename= M_R_TABLENAME,columns=M_R_COLUMNS)
 db.sql_execute(sql)
 
 # resolve_table
 rsmd = ResolveMysqlData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE, resolve_columns=M_R_COLUMNS)
 rsmd.get_table_id(M_R_TABLENAME, M_N_TABLENAME)
-while rsmd.resolve_tableid < rsmd.new_tableid:
+while rsmd.resolve_tableid < rsmd.repair_tableid:
     #获取未拆分数据
     non_resolve_data = rsmd.get_non_resolve_data(tablename=M_N_TABLENAME, columns=M_COLUMNS, n=1000)
     #拆分数据

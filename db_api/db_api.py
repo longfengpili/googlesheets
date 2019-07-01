@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-01 10:30:32
+@LastEditTime: 2019-07-01 11:30:07
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -58,12 +58,12 @@ class DBRedshift(DBBase):
 
 
 class DBMysql(DBBase):
-    def __init__(self, host=None, user=None, password=None, db=None):
+    def __init__(self, host=None, user=None, password=None, database=None):
         self.host = host
         self.port = 3306
         self.user = user
         self.password = password
-        self.db = db
+        self.db = database
         self.conn = None
 
     def connect(self):
@@ -96,10 +96,15 @@ class DBMysql(DBBase):
                 result = len(result)[0]
         return result
     
-    def delete_by_id(self, tablename, id_min, id_max):
+    def delete_by_id(self, tablename, id_min=None, id_max=None):
         if not self.conn:
             self.connect()
-        contion = f'id > {id_min} and id <= {id_max}'
+        if id_min and id_max:
+            contion = f'id > {id_min} and id <= {id_max}'
+        elif id_min and not id_max:
+            contion = f'id > {id_min}'
+        else:
+            contion = f'id >= 0'
         sql = self.sql_for_delete(tablename, contion=contion)
         self.sql_execute(sql)
         

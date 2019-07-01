@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-01 13:56:07
+@LastEditTime: 2019-07-01 17:11:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,6 +37,7 @@ class DBBase(object):
             self.conn = None
 
     def __check_sql_type(self, sql):
+        sql = (sql.split(';')[-2]).strip()
         result = re.match('(\D.*?) ', sql)
         return result.group(1)
 
@@ -57,6 +58,29 @@ class DBBase(object):
             dblogger.error(values_)
             raise 'The values have some value use both "\'" and \'"\' !' 
         return values
+    
+    def execute_multiple(self, cur, sql, count=None):
+        sqls = sql.split(';')
+        if len(sqls) > 2:
+            for sql in sqls[:-1]:
+                if sql == sqls[-2]:
+                    cur.execute(sql)
+                    change_count = cur.rowcount
+                    if count:
+                        result = cur.fetchmany(sql)
+                    else:
+                        result = cur.fetchall()
+                else:
+                    cur.execute(sql)
+        else:
+            cur.execute(sql)
+            change_count = cur.rowcount
+            if count:
+                result = cur.fetchmany(sql)
+            else:
+                result = cur.fetchall()
+        return change_count, result
+        
 
     def sql_execute(self, sql, count=None):
         change_count = 0
@@ -69,23 +93,16 @@ class DBBase(object):
 
         cursor = self.conn.cursor()
         if sql_type == 'select':
-            if count:
-                cursor.execute(sql)
-                change_count = cursor.rowcount
-                result = cursor.fetchmany(count)
-            else:
-                cursor.execute(sql)
-                change_count = cursor.rowcount
-                result = cursor.fetchall()
+            change_count, result = self.execute_multiple(cursor,sql,count=count)
         else:
             try:
-                cursor.execute(sql)
-                change_count = cursor.rowcount
+                change_count, result = self.execute_multiple(cursor, sql)
                 self.conn.commit()
             except Exception as e:
                 self.conn.rollback()
                 dblogger.error(sql)
                 dblogger.error(e)
+                sys.exit()
 
         self.__close()
         return change_count,result

@@ -1,4 +1,6 @@
+
 .pyc
 .vscode/
 log/
 __pycache__/
+sql/

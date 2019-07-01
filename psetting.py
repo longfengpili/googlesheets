@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-01 12:02:04
+@LastEditTime: 2019-07-01 17:20:48
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -38,5 +38,7 @@ M_ORIGINAL_COLUMNS = mysetting.events_columns
 M_REPAIR_TABLENAME = mysetting.repair_table
 M_RESOLVE_TABLENAME = mysetting.resolve_table
 M_RESOLVE_COLUMNS = mysetting.resolve_columns
+# daily
+EXECUTE_ORDER = mysetting.execute_order
 
 

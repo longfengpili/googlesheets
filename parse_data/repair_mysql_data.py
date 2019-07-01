@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-01 13:32:14
+@LastEditTime: 2019-07-01 18:39:46
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -76,7 +76,13 @@ class RepairMysqlData(object):
         except Exception as e:
             l = '>' * ((30 - len(str(id)))//2)
             l_ = '<' * ((30 - len(str(id)))//2)
-            msg_type = re.search('"msg_type":"(.*?)"', str(myjson)).group(1)
+            msg_type = re.search('"msg_type":"(.*?)"', str(myjson))
+            if msg_type:
+                msg_type = msg_type.group(1)
+            else:
+                msg_type = 'ERROR'
+                repairbi_logger.error(f'不存在msg_type!\n{row}')
+
             errors.append(f'\n{l}【{msg_type}】{l_}【{id}】')
             e_s = f'>>>>{e}'
 

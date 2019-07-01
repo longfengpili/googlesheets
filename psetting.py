@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-01 18:27:26
+@LastEditTime: 2019-07-01 18:50:20
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -30,7 +30,7 @@ R_COLUMNS = mysetting.item_columns
 spreadsheet_id = mysetting.spreadsheet_id
 # Mysql
 M_DATABASE = mysetting.mysql_database
-M_HOST = mysetting.mysql_host
+M_HOST = mysetting.mysql_j_host
 M_USER = mysetting.mysql_user
 M_PASSWORD = mysetting.mysql_password
 M_ORIGINAL_TABLENAME = mysetting.original_table

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-06-28 20:24:38
+@LastEditTime: 2019-07-01 12:43:50
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,30 +11,12 @@ from datetime import date, timedelta, datetime
 import re
 import sys
 
-import pandas as pd
-from pandas import DataFrame
-import logging
-import logging.handlers
 
-#1.创建logger
-dblogger = logging.getLogger(name='db')
-dblogger.setLevel(logging.INFO)
-#2.创建handler写入日志
-logfile = './log/db.log'
-fh = logging.handlers.TimedRotatingFileHandler(
-    logfile, when='D', interval=1, backupCount=100, encoding='utf-8')
-fh.setLevel(logging.ERROR)
-#3.创建handler输出控制台
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-#4.创建格式
-LOG_FORMAT = "%(asctime)s - %(levelname)s - %(filename)s - %(lineno)d行 - %(message)s"
-formatter = logging.Formatter(fmt=LOG_FORMAT)
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
-#5.将handler加入到logger
-dblogger.addHandler(fh)
-dblogger.addHandler(ch)
+import logging
+from logging import config
+
+config.fileConfig('parselog.conf')
+dblogger = logging.getLogger('db')
 
 
 class DBBase(object):

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-01 11:32:05
+@LastEditTime: 2019-07-01 13:00:17
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -13,31 +13,15 @@ import json
 import re
 from db_api.db_api import DBMysql
 
-# import logging
-# import logging.handlers
+import logging
+from logging import config
 
-# #1.创建logger
-# resolve_logger = logging.getLogger(name='resolve_bi')
-# resolve_logger.setLevel(logging.INFO)
-# #2.创建handler写入日志
-# logfile = './log/resolve_bi.log'
-# fh = logging.handlers.TimedRotatingFileHandler(
-#     logfile, when='D', interval=1, backupCount=100, encoding='utf-8')
-# fh.setLevel(logging.WARNING)
-# #3.创建handler输出控制台
-# ch = logging.StreamHandler()
-# ch.setLevel(logging.INFO)
-# #4.创建格式
-# LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(filename)s - %(lineno)d行 - %(message)s"
-# formatter = logging.Formatter(fmt=LOG_FORMAT)
-# fh.setFormatter(formatter)
-# ch.setFormatter(formatter)
-# #5.将handler加入到logger
-# resolve_logger.addHandler(fh)
-# resolve_logger.addHandler(ch)
+config.fileConfig('parselog.conf')
+resolvebi_logger = logging.getLogger('resolvebi')
+parsebi_logger = logging.getLogger('parsebi')
 
 class ResolveMysqlData(object):
-    def __init__(self, host, user, password, database, resolve_columns):
+    def __init__(self, host, user, password, database, orignal_columns, resolve_columns):
         self.resolve_tableid = None
         self.repair_tableid = None
         self.count = 0
@@ -48,6 +32,7 @@ class ResolveMysqlData(object):
         self.user = user
         self.password = password
         self.database = database
+        self.orignal_columns = orignal_columns
         self.resolve_columns = resolve_columns
 
     def _mysql_connect(self):
@@ -113,6 +98,41 @@ class ResolveMysqlData(object):
             resolved.append(row)
         return resolved
 
+    def resolve_mysql_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
+        '''
+        @description: 处理格式并拆解
+        @param {type} 
+            repair_tablename:修正后数据表名
+            resolve_tablename:拆解后的数据表名
+            id_min:需要重新跑的id开始值
+            id_max:需要重新跑的id结束值
+        @return: 修改并解析数据，无返回值
+        '''
+        if id_min and id_max:
+            if id_min >= id_max:
+                raise 'id_min should < id_max'
+        if id_min:
+            id_min -= 1  # 左开右闭
+
+            #删除resolve表数据
+            self._mysql_connect()
+            self.db.delete_by_id(tablename=resolve_tablename, id_min=id_min, id_max=id_max)
+
+        # resolve_table
+        self.get_table_id(resolve_tablename, repair_tablename)
+        if id_min:
+            self.resolve_tableid = id_min
+            self.repair_tableid = self.repair_tableid if self.repair_tableid <= id_max else id_max
+            parsebi_logger.info(f'开始修复丢失数据【({self.resolve_tableid},{self.repair_tableid}]】 ！')
+        while self.resolve_tableid < self.repair_tableid:
+            #获取未修复数据
+            non_resolve_data = self.get_non_resolve_data(tablename=repair_tablename, columns=self.orignal_columns, n=1000)
+            #修复数据
+            resolveed = self.resolve_multiple_rows(non_resolve_data)
+            #插入新表
+            sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolveed)
+            self.db.sql_execute(sql)
+            parsebi_logger.info(f'本次累计修复{self.count}条数据！最大id为{self.resolve_tableid} ！')
 
 
 

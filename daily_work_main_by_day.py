@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-07-02 18:26:02
+@LastEditTime: 2019-07-02 18:42:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -29,11 +29,13 @@ def daily_work_single_main(schema, date_min, date_max, **kw):
     dm = DailyMain(host=M_HOST, user=M_USER,password=M_PASSWORD, database=M_DATABASE)
     dm.daily_execute_single(schema=schema, date_min=date_min, date_max=date_max, **kw)
 
-
-params_execute = input(f'''
-    every params please add blank !
+# 格式："\033[字背景颜色；字体颜色m————————\033[0m"   (——————表示字符串)
+params_execute = input(f'''every params please add blank !
 【PARAM_1】which sqlfile?
-    A.all B.raw_data C.fact_data D.report_data
+    A.all
+    B.raw_data
+    C.fact_data
+    D.report_data
 【PARAM_2】from begin days? 
     example:today is 0, yesterday is -1
 【PARAM_3】to end days?

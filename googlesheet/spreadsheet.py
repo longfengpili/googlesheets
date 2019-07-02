@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:18:16
-@LastEditTime: 2019-06-24 13:45:01
+@LastEditTime: 2019-07-02 12:09:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -14,10 +14,10 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from params import *
+from psetting import *
 
 
-class GetSpreadsheet(object):
+class Spreadsheet(object):
 
     def __init__(self):
         self.creds_pickle_path = CREDENTIALS_PICKLE_PATH
@@ -58,11 +58,11 @@ class GetSpreadsheet(object):
         else:
             return values
 
-    def get_spreadsheet_main(self, spreadsheet_id, columns=None):
+    def get_spreadsheet_main(self, spreadsheet_id,sheetname=None, columns=None):
         columns_index = []
         result = []
         creads = self.get_credential()
-        values = self.get_sheet_value(creads, spreadsheet_id=spreadsheet_id)
+        values = self.get_sheet_value(creads, spreadsheet_id=spreadsheet_id, sheetname=sheetname)
 
         if isinstance(columns,dict):
             values_column = values[0]

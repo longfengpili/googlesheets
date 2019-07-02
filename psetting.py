@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-01 19:08:15
+@LastEditTime: 2019-07-02 12:05:15
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -20,14 +20,17 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 # GOOGLE
 CREDENTIALS_JSON_PATH = '../credentials.json'
 CREDENTIALS_PICKLE_PATH = '../token.pickle'
+#item_info
+ITEM_TABLENAME = mysetting.item_table
+ITEM_COLUMNS = mysetting.item_columns
+ITEM_SPREADSHEET_ID = mysetting.item_spreadsheet_id
+
+
 # Redshift
 R_DATABASE = mysetting.redshift_database
 R_HOST = mysetting.redshift_host
 R_USER = mysetting.redshift_user
 R_PASSWORD = mysetting.redshift_password
-R_TABLENAME = mysetting.item_table_name
-R_COLUMNS = mysetting.item_columns
-spreadsheet_id = mysetting.spreadsheet_id
 # Mysql
 M_DATABASE = mysetting.mysql_database
 M_HOST = mysetting.mysql_j_host

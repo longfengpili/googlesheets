@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-02 12:15:14
+@LastEditTime: 2019-07-02 14:13:39
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -111,7 +111,7 @@ class DBBase(object):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
         sql = f'''create table if not exists {self.database}.{tablename}
-                    ({','.join([k.lower() + ' '+ v for k, v in columns.items()])},
+                    ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
                     primary key ({list(columns.keys())[0]} asc)
                     );'''
 

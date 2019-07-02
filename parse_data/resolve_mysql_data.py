@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-01 13:59:54
+@LastEditTime: 2019-07-02 19:53:06
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -80,7 +80,7 @@ class ResolveMysqlData(object):
                 if 0 < locals()[column] <= 19912435199: #2600-12-31
                     locals()[column] = datetime.utcfromtimestamp(locals()[column]).strftime('%Y-%m-%d %H:%M:%S')
                 else:
-                    locals()[column] = datetime.utcfromtimestamp(0).strftime('%Y-%m-%d %H:%M:%S')
+                    locals()[column] = 'Null'
             else:
                 locals()[column] = data_json.get(column, None)
                 if not locals()[column]:
@@ -120,6 +120,8 @@ class ResolveMysqlData(object):
 
         # resolve_table
         self.get_table_id(resolve_tablename, repair_tablename)
+        if not id_max:
+            id_max = self.repair_tableid
         if id_min:
             self.resolve_tableid = id_min
             self.repair_tableid = self.repair_tableid if self.repair_tableid <= id_max else id_max

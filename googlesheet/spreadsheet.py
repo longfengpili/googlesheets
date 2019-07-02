@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:18:16
-@LastEditTime: 2019-07-02 12:09:37
+@LastEditTime: 2019-07-02 12:28:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -43,7 +43,7 @@ class Spreadsheet(object):
         return creds
 
     def get_sheet_value(self, creds, spreadsheet_id, sheetname=None, range='a:z'):
-        service = build('sheets', 'v4', credentials=creds)
+        service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
         sheet = service.spreadsheets()
         if sheetname:
             range = sheetname + '!' + range

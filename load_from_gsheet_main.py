@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-07-02 15:19:11
+@LastEditTime: 2019-07-02 15:40:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -30,5 +30,7 @@ if load == '1':
     save_main(spreadsheet_id=ITEM_SPREADSHEET_ID, sheetname=ITME_SHEETNAME, tablename=ITEM_TABLENAME, columns=ITEM_COLUMNS)
 elif load == '2':
     save_main(spreadsheet_id=BI_SPREADSHEET_ID, sheetname=BI_SHEETNAME, tablename=BI_TABLENAME, columns=BI_COLUMNS, primary_key=False)
+elif load == '3':
+    save_main(spreadsheet_id=BI_SPREADSHEET_ID, sheetname=BI_SHEETNAME, tablename=BI_TABLENAME, columns=BI_COLUMNS, primary_key=True)
 
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:18:16
-@LastEditTime: 2019-07-02 15:28:17
+@LastEditTime: 2019-07-02 15:36:56
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -14,6 +14,12 @@ import re
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+
+import logging
+from logging import config
+
+config.fileConfig('parselog.conf')
+spreadsheet_logger = logging.getLogger('spreadsheet')
 
 from psetting import *
 
@@ -52,6 +58,7 @@ class Spreadsheet(object):
             range = range
             
         result = sheet.values().get(spreadsheetId=spreadsheet_id,range=range).execute()
+        # spreadsheet_logger.info(result)
         values = result.get('values', [])
 
         if not values:

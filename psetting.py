@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-02 14:29:36
+@LastEditTime: 2019-07-02 15:41:47
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -30,6 +30,11 @@ BI_TABLENAME = mysetting.bi_table
 BI_COLUMNS = mysetting.bi_columns
 BI_SPREADSHEET_ID = mysetting.bi_spreadsheet_id
 BI_SHEETNAME = mysetting.bi_sheetname
+#funnel_info
+BI_TABLENAME = mysetting.funnel_table
+BI_COLUMNS = mysetting.funnel_columns
+BI_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
+BI_SHEETNAME = mysetting.funnel_sheetname
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

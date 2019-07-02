@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-02 16:16:34
+@LastEditTime: 2019-07-02 16:29:39
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -17,14 +17,14 @@ config.fileConfig('parselog.conf')
 dailylogger = logging.getLogger('daily')
 
 class DailyMain(DBMysql):
+    '''
+    host:数据库地址
+    user:数据库用户名
+    password：数据库密码
+    database:数据库库名
+    sqlpath:默认sql地址
+        '''
     def __init__(self, host=None, user=None, password=None, database=None, sqlpath='./sql/'):
-        '''
-        host:数据库地址
-        user:数据库用户名
-        password：数据库密码
-        database:数据库库名
-        sqlpath:默认sql地址
-        '''
         self.db = None
         self.conn = None
         self.host = host

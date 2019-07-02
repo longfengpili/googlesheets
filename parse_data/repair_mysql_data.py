@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-01 18:39:46
+@LastEditTime: 2019-07-02 19:52:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -150,6 +150,8 @@ class RepairMysqlData(object):
         
         # repair_table
         self.get_table_id(repair_tablename, orignal_tablename)
+        if not id_max:
+            id_max = self.orignal_tableid
         if id_min:
             self.repair_tableid = id_min
             self.orignal_tableid = self.orignal_tableid if self.orignal_tableid <= id_max else id_max

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-01 17:24:31
+@LastEditTime: 2019-07-02 16:20:51
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -16,15 +16,26 @@ config.fileConfig('parselog.conf')
 pslogger = logging.getLogger('parsesql')
 
 class ParseSql(object):
-    def __init__(self, sql_path='./sql/'):
-        self.sql_path = sql_path
+    def __init__(self, sqlpath='./sql/'):
+        self.sqlpath = sqlpath
 
     def get_sql_files(self):
-        files = os.listdir(self.sql_path)
-        files = [self.sql_path + file for file in files]
+        '''
+        获取sql文件列表
+        '''
+        files = os.listdir(self.sqlpath)
+        files = [self.sqlpath + file for file in files]
         return files
         
     def get_sqls_params(self, filename):
+        '''
+        @description: 获取文件中sql的参数
+        @param {type} 
+            filename:文件名
+        @return: 
+            params：文件中需要设置的参数
+            sqls:文件中的sql列表
+        '''
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
         sqls = re.findall("'''\n--【(.*?)】(.*?)'''", sqls_txt, re.S)
@@ -32,6 +43,14 @@ class ParseSql(object):
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):
+        '''
+        @description:填充sql中的参数 
+        @param {type} 
+            filename:文件名
+            kw:sql中需要设定的参数
+        @return: 
+            sqls_n:修改后的sql列表
+        '''
         params, sqls = self.get_sqls_params(filename)
         for param in params:
             if param not in kw:
@@ -47,6 +66,7 @@ class ParseSql(object):
         return sqls_n
     
     def get_files_sqls(self, **kw):
+        '''所有文件中的sql'''
         sqls = {}
         files = self.get_sql_files()
         for file in files:

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-02 16:20:51
+@LastEditTime: 2019-07-02 18:24:21
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -54,7 +54,7 @@ class ParseSql(object):
         params, sqls = self.get_sqls_params(filename)
         for param in params:
             if param not in kw:
-                pslogger.error(f'"{param}" need setting !')
+                pslogger.error(f'【{filename}】"{param}" need setting !')
                 raise f'param need setting !'
         sqls_n = []
         for sql in sqls:

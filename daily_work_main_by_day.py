@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-07-02 16:46:20
+@LastEditTime: 2019-07-02 18:42:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -16,57 +16,41 @@ from datetime import datetime, date, timedelta
 
 def set_date(interval_day):
     today = date.today()
-    set_date = today - timedelta(days=interval_day)
+    set_date = today + timedelta(days=int(interval_day))
     set_date = set_date.strftime('%Y-%m-%d')
     return set_date
 
-def daily_work_main(date, **kw):
+def daily_work_main(date_min, date_max, **kw):
     dm = DailyMain(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE)
-    dm.daily_execute_all(execute_order=EXECUTE_ORDER, date=date, **kw)
+    dm.daily_execute_all(execute_order=EXECUTE_ORDER, date_min=date_min, date_max=date_max, **kw)
 
 
-def daily_work_single_main(schema, date, **kw):
+def daily_work_single_main(schema, date_min, date_max, **kw):
     dm = DailyMain(host=M_HOST, user=M_USER,password=M_PASSWORD, database=M_DATABASE)
-    dm.daily_execute_single(schema=schema, date=date, **kw)
+    dm.daily_execute_single(schema=schema, date_min=date_min, date_max=date_max, **kw)
 
+# 格式："\033[字背景颜色；字体颜色m————————\033[0m"   (——————表示字符串)
+params_execute = input(f'''every params please add blank !
+【PARAM_1】which sqlfile?
+    A.all
+    B.raw_data
+    C.fact_data
+    D.report_data
+【PARAM_2】from begin days? 
+    example:today is 0, yesterday is -1
+【PARAM_3】to end days?
+    example:today is 0, yesterday is -1
 
-date_execute = input(f'''
-1. all          【{set_date(0)}】
-2. all          【{set_date(1)}】
-3. all          【{set_date(2)}】
-4. raw_data     【{set_date(0)}】
-5. raw_data     【{set_date(1)}】
-6. raw_data     【{set_date(2)}】
-7. fact_data    【{set_date(0)}】
-8. fact_data    【{set_date(1)}】
-9. fact_data    【{set_date(2)}】
-10. report_data 【{set_date(0)}】
-11. report_data 【{set_date(1)}】
-12. report_data 【{set_date(2)}】
+            
 请选择要执行的内容：''')
+p1, p2, p3 = params_execute.split(' ')
+if p1.upper() == 'A':
+    daily_work_main(set_date(p2), set_date(p3))
+elif p1.upper() == 'B':
+    daily_work_single_main('raw_data', set_date(p2), set_date(p3))
+elif p1.upper() == 'C':
+    daily_work_single_main('fact_data', set_date(p2), set_date(p3))
+elif p1.upper() == 'D':
+    daily_work_single_main('report_data', set_date(p2), set_date(p3))
 
-if date_execute == '1' or not date_execute:
-    daily_work_main(set_date(0))
-elif date_execute == '2':
-    daily_work_main(set_date(1))
-elif date_execute == '3':
-    daily_work_main(set_date(2))
-elif date_execute == '4':
-    daily_work_single_main('raw_data', set_date(0))
-elif date_execute == '5':
-    daily_work_single_main('raw_data', set_date(1))
-elif date_execute == '6':
-    daily_work_single_main('raw_data', set_date(2))
-elif date_execute == '4':
-    daily_work_single_main('fact_data', set_date(0))
-elif date_execute == '5':
-    daily_work_single_main('fact_data', set_date(1))
-elif date_execute == '6':
-    daily_work_single_main('fact_data', set_date(2))
-elif date_execute == '4':
-    daily_work_single_main('report_data', set_date(0))
-elif date_execute == '5':
-    daily_work_single_main('report_data', set_date(1))
-elif date_execute == '6':
-    daily_work_single_main('report_data', set_date(2))
 

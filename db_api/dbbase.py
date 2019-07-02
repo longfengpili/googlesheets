@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-02 15:18:10
+@LastEditTime: 2019-07-02 15:55:57
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -114,10 +114,10 @@ class DBBase(object):
             sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
                         primary key ({list(columns.keys())[0]} asc)
-                        );'''
+                        ) CHARSET=utf8;'''
         else:
             sql = f'''create table if not exists {self.database}.{tablename}
-                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])});'''
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])}) CHARSET=utf8;'''
 
         sql = re.sub('\s{2,}', '\n', sql)
         return sql

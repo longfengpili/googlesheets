@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-02 14:13:39
+@LastEditTime: 2019-07-02 15:18:10
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -107,13 +107,17 @@ class DBBase(object):
         self.__close()
         return change_count,result
 
-    def sql_for_create(self, tablename, columns):
+    def sql_for_create(self, tablename, columns, primary_key=True):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
-        sql = f'''create table if not exists {self.database}.{tablename}
-                    ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
-                    primary key ({list(columns.keys())[0]} asc)
-                    );'''
+        if primary_key:
+            sql = f'''create table if not exists {self.database}.{tablename}
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
+                        primary key ({list(columns.keys())[0]} asc)
+                        );'''
+        else:
+            sql = f'''create table if not exists {self.database}.{tablename}
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])});'''
 
         sql = re.sub('\s{2,}', '\n', sql)
         return sql

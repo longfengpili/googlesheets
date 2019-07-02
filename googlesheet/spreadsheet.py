@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:18:16
-@LastEditTime: 2019-07-02 12:28:44
+@LastEditTime: 2019-07-02 15:28:17
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -10,6 +10,7 @@
 
 import pickle
 import os.path
+import re
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -59,26 +60,37 @@ class Spreadsheet(object):
             return values
 
     def get_spreadsheet_main(self, spreadsheet_id,sheetname=None, columns=None):
-        columns_index = []
+        columns_index = {}
         result = []
         creads = self.get_credential()
         values = self.get_sheet_value(creads, spreadsheet_id=spreadsheet_id, sheetname=sheetname)
-
-        if isinstance(columns,dict):
+        # print(values)
+        if set(columns) <= set(values[0]):#检测第一行是否有列名
             values_column = values[0]
             for column in columns:
                 ix = values_column.index(column)
-                columns_index.append(ix)
+                lens = re.findall('\d{3,}', columns.get(column))
+                lens = lens[0] if lens else 128
+                columns_index[ix] = lens
+            # print(columns_index)
+        else:#需要按照顺序提供列名(按照顺序取数据)
+            for ix, column in enumerate(columns):
+                lens = re.findall('\d{3,}', columns.get(column))
+                lens = lens[0] if lens else 128
+                columns_index[ix] = lens
+                
         for value in values:
             value_ = []
             for ix in columns_index:
                 try:
                     v = (value[ix]).lower()
+                    v = v[:columns_index.get(ix)]
                 except:
                     v = ''
                 value_.append(v)
             # print(value_)
-            result.append(value_)
+            if value_.count('') < len(columns) // 2 and value_ not in result:
+                result.append(value_)
         return result
 
 

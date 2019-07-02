@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-07-02 14:17:04
+@LastEditTime: 2019-07-02 15:19:11
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,9 +11,10 @@
 from googlesheet import SaveSpreadSheet
 from psetting import *
 
-def save_main(spreadsheet_id, sheetname, tablname, columns):
+
+def save_main(spreadsheet_id, sheetname, tablename, columns, primary_key=True):
     ss = SaveSpreadSheet(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE, spreadsheet_id=spreadsheet_id)
-    ss.save_values(sheetname=sheetname, tablename=tablname, columns=columns)
+    ss.save_values(sheetname=sheetname, tablename=tablename, columns=columns, primary_key=primary_key)
 
 
 
@@ -26,6 +27,8 @@ please choice reload data !!!!
 you want run :''')
 
 if load == '1':
-    save_main(spreadsheet_id=ITEM_SPREADSHEET_ID, sheetname=ITME_SHEETNAME, tablname=ITEM_TABLENAME, columns=ITEM_COLUMNS)
+    save_main(spreadsheet_id=ITEM_SPREADSHEET_ID, sheetname=ITME_SHEETNAME, tablename=ITEM_TABLENAME, columns=ITEM_COLUMNS)
+elif load == '2':
+    save_main(spreadsheet_id=BI_SPREADSHEET_ID, sheetname=BI_SHEETNAME, tablename=BI_TABLENAME, columns=BI_COLUMNS, primary_key=False)
 
 

@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-02 14:04:59
+@LastEditTime: 2019-07-02 14:29:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -25,7 +25,11 @@ ITEM_TABLENAME = mysetting.item_table
 ITEM_COLUMNS = mysetting.item_columns
 ITEM_SPREADSHEET_ID = mysetting.item_spreadsheet_id
 ITME_SHEETNAME = mysetting.item_sheetname
-
+#bi_info
+BI_TABLENAME = mysetting.bi_table
+BI_COLUMNS = mysetting.bi_columns
+BI_SPREADSHEET_ID = mysetting.bi_spreadsheet_id
+BI_SHEETNAME = mysetting.bi_sheetname
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

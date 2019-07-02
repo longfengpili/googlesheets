@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-01 17:11:35
+@LastEditTime: 2019-07-02 11:33:09
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -110,7 +110,7 @@ class DBBase(object):
     def sql_for_create(self, tablename, columns):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
-        sql = f'''create table if not exists {tablename}
+        sql = f'''create table if not exists {self.database}.{tablename}
                     ({','.join([k.lower() + ' '+ v for k, v in columns.items()])},
                     primary key ({list(columns.keys())[0]} asc)
                     );'''
@@ -119,7 +119,7 @@ class DBBase(object):
         return sql
 
     def sql_for_drop(self, tablename):
-        sql = f'drop table if exists {tablename};'
+        sql = f'drop table if exists {self.database}.{tablename};'
         return sql
 
     def sql_for_insert(self, tablename, columns, values):
@@ -130,7 +130,7 @@ class DBBase(object):
         
         if values:
             values = values.replace('"Null"', 'Null').replace("'Null'", 'Null')
-            sql = f'''insert into {tablename}
+            sql = f'''insert into {self.database}.{tablename}
                     ({columns})
                     values
                     {values};'''
@@ -139,11 +139,11 @@ class DBBase(object):
     def sql_for_select(self, tablename, columns, contions=None):
         columns = ','.join(columns)
         if contions:
-            sql = f'''select {columns} from {tablename} where {contions};'''
+            sql = f'''select {columns} from {self.database}.{tablename} where {contions};'''
         else:
-            sql = f'''select {columns} from {tablename};'''
+            sql = f'''select {columns} from {self.database}.{tablename};'''
         return sql
 
     def sql_for_delete(self, tablename, contion):
-        sql = f'''delete from {tablename} where {contion};'''
+        sql = f'''delete from {self.database}.{tablename} where {contion};'''
         return sql

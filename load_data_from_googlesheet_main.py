@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-06-28 13:42:56
+@LastEditTime: 2019-07-02 11:36:21
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,17 +11,12 @@ from googlesheets import GetSpreadsheet
 from db_api import DBRedshift
 import sys
 import pandas as pd
-from params import *
+from psetting import *
 
-spreadsheet_id = spreadsheet_id
+spreadsheet_id = ITEM_SPREADSHEET_ID
 
-# try:
-#     spreadsheet_id = sys.argv[1]
-# except:
-#     spreadsheet_id = input('please input your spredsheet_id:')
-
-table_name = R_TABLENAME
-columns = R_COLUMNS
+table_name = ITEM_TABLENAME
+columns = ITEM_COLUMNS
 
 c = GetSpreadsheet()
 values = c.get_spreadsheet_main(spreadsheet_id=spreadsheet_id, columns=columns)

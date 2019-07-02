@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-01 12:45:10
+@LastEditTime: 2019-07-02 11:38:13
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -44,13 +44,13 @@ class DBMysql(DBBase):
         self.port = 3306
         self.user = user
         self.password = password
-        self.db = database
+        self.database = database
         self.conn = None
 
     def connect(self):
         try:
             self.conn = pymysql.connect(
-                db=self.db, user=self.user, password=self.password, host=self.host, port=self.port)
+                db=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
         except Exception as e:
             self.conn = None
             dblogger.error(e)

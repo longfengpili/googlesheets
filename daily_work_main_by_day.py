@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-07-02 18:42:27
+@LastEditTime: 2019-07-03 16:10:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -9,7 +9,7 @@
 '''
 
 
-from daily_work import DailyMain
+from daily_work import DailyMainRedshift
 from psetting import *
 from datetime import datetime, date, timedelta
 
@@ -21,12 +21,14 @@ def set_date(interval_day):
     return set_date
 
 def daily_work_main(date_min, date_max, **kw):
-    dm = DailyMain(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE)
+    dm = DailyMainRedshift(host=R_HOST, user=R_USER,
+                           password=R_PASSWORD, database=R_DATABASE)
     dm.daily_execute_all(execute_order=EXECUTE_ORDER, date_min=date_min, date_max=date_max, **kw)
 
 
 def daily_work_single_main(schema, date_min, date_max, **kw):
-    dm = DailyMain(host=M_HOST, user=M_USER,password=M_PASSWORD, database=M_DATABASE)
+    dm = DailyMainRedshift(host=R_HOST, user=R_USER,
+                           password=R_PASSWORD, database=R_DATABASE)
     dm.daily_execute_single(schema=schema, date_min=date_min, date_max=date_max, **kw)
 
 # 格式："\033[字背景颜色；字体颜色m————————\033[0m"   (——————表示字符串)

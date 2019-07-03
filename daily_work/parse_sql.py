@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-02 18:24:21
+@LastEditTime: 2019-07-03 16:19:38
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -38,7 +38,7 @@ class ParseSql(object):
         '''
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
-        sqls = re.findall("'''\n--【(.*?)】(.*?)'''", sqls_txt, re.S)
+        sqls = re.findall("```\n--【(.*?)】(.*?)```", sqls_txt, re.S)
         params = re.findall("\$(.*?)[ |\n]", sqls_txt)
         return params, sqls
 

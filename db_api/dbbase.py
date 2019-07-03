@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-02 15:55:57
+@LastEditTime: 2019-07-03 14:49:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -49,7 +49,8 @@ class DBBase(object):
         if not values_:
             pass
         elif search_1 and not search_2:
-            values = ',\n'.join(['(' + ','.join([f'"{i}"' for i in value]) + ')' for value in values])
+            values = [[i.replace("'", '"') for i in value] for value in values]
+            values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
         elif search_2 and not search_1:
             values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
         elif not (search_1 and search_2):
@@ -63,46 +64,44 @@ class DBBase(object):
         sqls = sql.split(';')
         if len(sqls) > 2:
             for sql in sqls[:-1]:
-                if sql == sqls[-2]:
+                sql_type = self.__check_sql_type(sql)
+                result = f'{sql_type} completed !'
+                if sql == sqls[-2] and sql_type not in ['create']:
                     cur.execute(sql)
                     change_count = cur.rowcount
-                    if count:
-                        result = cur.fetchmany(sql)
-                    else:
-                        result = cur.fetchall()
+                    if sql_type == 'select':
+                        if count:
+                            result = cur.fetchmany(sql)
+                        else:
+                            result = cur.fetchall()
                 else:
                     cur.execute(sql)
         else:
+            sql_type = self.__check_sql_type(sql)
+            result = f'{sql_type} completed !'
             cur.execute(sql)
             change_count = cur.rowcount
-            if count:
-                result = cur.fetchmany(sql)
-            else:
-                result = cur.fetchall()
+            if sql_type == 'select':
+                if count:
+                    result = cur.fetchmany(sql)
+                else:
+                    result = cur.fetchall()
         return change_count, result
         
-
     def sql_execute(self, sql, count=None):
-        change_count = 0
         if not sql:
             return None, None
         if not self.conn:
             self.connect()
-        sql_type = self.__check_sql_type(sql)
-        result = f'{sql_type} completed !'
-
         cursor = self.conn.cursor()
-        if sql_type == 'select':
-            change_count, result = self.execute_multiple(cursor,sql,count=count)
-        else:
-            try:
-                change_count, result = self.execute_multiple(cursor, sql)
-                self.conn.commit()
-            except Exception as e:
-                self.conn.rollback()
-                dblogger.error(sql)
-                dblogger.error(e)
-                sys.exit()
+        try:
+            change_count, result = self.execute_multiple(cursor, sql)
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            dblogger.error(e)
+            dblogger.error(sql)
+            sys.exit()
 
         self.__close()
         return change_count,result
@@ -110,13 +109,23 @@ class DBBase(object):
     def sql_for_create(self, tablename, columns, primary_key=True):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
-        if primary_key:
-            sql = f'''create table if not exists {self.database}.{tablename}
+
+        if '.' in tablename: #redshift
+            if primary_key:
+                sql = f'''create table if not exists {self.database}.{tablename}
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
+                        primary key ({list(columns.keys())[0]})) sortkey({list(columns.keys())[0]});'''
+            else:
+                sql = f'''create table if not exists {self.database}.{tablename}
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])});'''
+        else:
+            if primary_key:
+                sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
                         primary key ({list(columns.keys())[0]} asc)
                         ) CHARSET=utf8;'''
-        else:
-            sql = f'''create table if not exists {self.database}.{tablename}
+            else:
+                sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])}) CHARSET=utf8;'''
 
         sql = re.sub('\s{2,}', '\n', sql)
@@ -129,15 +138,14 @@ class DBBase(object):
     def sql_for_insert(self, tablename, columns, values):
         sql = None
         columns = ','.join(columns)
-
         values = self.__join_values(values)
-        
         if values:
             values = values.replace('"Null"', 'Null').replace("'Null'", 'Null')
             sql = f'''insert into {self.database}.{tablename}
                     ({columns})
                     values
                     {values};'''
+            # dblogger.info(sql)
         return sql
 
     def sql_for_select(self, tablename, columns, contions=None):

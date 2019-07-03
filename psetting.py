@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-02 15:58:59
+@LastEditTime: 2019-07-03 12:03:28
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -41,6 +41,10 @@ R_DATABASE = mysetting.redshift_database
 R_HOST = mysetting.redshift_host
 R_USER = mysetting.redshift_user
 R_PASSWORD = mysetting.redshift_password
+R_REPAIR_TABLENAME = mysetting.r_repair_table
+R_RESOLVE_TABLENAME = mysetting.r_resolve_table
+R_RESOLVE_COLUMNS = mysetting.resolve_columns
+
 # Mysql
 M_DATABASE = mysetting.mysql_database
 M_HOST = mysetting.mysql_host

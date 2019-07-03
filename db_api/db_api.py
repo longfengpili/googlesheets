@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-02 11:38:13
+@LastEditTime: 2019-07-03 11:40:28
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -20,7 +20,49 @@ from logging import config
 config.fileConfig('parselog.conf')
 dblogger = logging.getLogger('db')
 
-class DBRedshift(DBBase):
+class DBFunction(DBBase):
+    '''
+    一些共用的内容
+    '''
+    def __init__(self):
+        self.conn = None
+    
+    def get_table_info(self, tablename, column, func='max'):
+        '''
+        获取table某列的agg值
+        '''
+        if func not in ['min', 'max', 'sum', 'count']:
+            raise "func only support 'min', 'max', 'sum', 'count'"
+        sql = self.sql_for_select(tablename=tablename, columns=[column])
+        _, result = self.sql_execute(sql)
+        if not result:
+            result = 0
+        else:
+            if func == 'min':
+                result = min(result)[0]
+            elif func == 'max':
+                result = max(result)[0]
+            elif func == 'sum':
+                result = sum(result)[0]
+            elif func == 'count':
+                result = len(result)[0]
+        return result
+
+    def delete_by_id(self, tablename, id_min=None, id_max=None):
+        '''
+        删除数据通过ID
+        '''
+        if id_min and id_max:
+            contion = f'id > {id_min} and id <= {id_max}'
+        elif id_min and not id_max:
+            contion = f'id > {id_min}'
+        else:
+            contion = f'id >= 0'
+        sql = self.sql_for_delete(tablename, contion=contion)
+        self.sql_execute(sql)
+        
+
+class DBRedshift(DBFunction):
     def __init__(self, host=None, user=None, password=None, database=None):
         self.host = host
         self.port = '5439'
@@ -37,8 +79,7 @@ class DBRedshift(DBBase):
             self.conn = None
             dblogger.error(e)
 
-
-class DBMysql(DBBase):
+class DBMysql(DBFunction):
     def __init__(self, host=None, user=None, password=None, database=None):
         self.host = host
         self.port = 3306
@@ -55,41 +96,7 @@ class DBMysql(DBBase):
             self.conn = None
             dblogger.error(e)
 
-    def get_table_info(self, tablename, column, func='max'):
-        if func not in ['min', 'max', 'sum', 'count']:
-            raise "func only support 'min', 'max', 'sum', 'count'"
-
-        if not self.conn:
-            self.connect()
-            
-        sql = self.sql_for_select(tablename=tablename, columns=[column])
-        _, result = self.sql_execute(sql)
-        if not result:
-            result = 0
-        else:
-            if func == 'min':
-                result = min(result)[0]
-            elif func == 'max':
-                result = max(result)[0]
-            elif func == 'sum':
-                result = sum(result)[0]
-            elif func == 'count':
-                result = len(result)[0]
-        return result
     
-    def delete_by_id(self, tablename, id_min=None, id_max=None):
-        if not self.conn:
-            self.connect()
-        if id_min and id_max:
-            contion = f'id > {id_min} and id <= {id_max}'
-        elif id_min and not id_max:
-            contion = f'id > {id_min}'
-        else:
-            contion = f'id >= 0'
-        sql = self.sql_for_delete(tablename, contion=contion)
-        self.sql_execute(sql)
-        
-
 
 
         

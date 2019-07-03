@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-03 16:19:38
+@LastEditTime: 2019-07-03 18:59:48
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,7 +39,7 @@ class ParseSql(object):
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
         sqls = re.findall("```\n--【(.*?)】(.*?)```", sqls_txt, re.S)
-        params = re.findall("\$(.*?)[ |\n]", sqls_txt)
+        params = re.findall("\$(.*?)[ |\n|)]", sqls_txt)
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):
@@ -60,7 +60,7 @@ class ParseSql(object):
         for sql in sqls:
             sql_n = sql[1]
             for param in params:
-                sql_n = re.sub(f"\${param}[ |\n]", f"'{kw.get(param)}'\n", sql_n)
+                sql_n = re.sub(f"\${param}", f"'{kw.get(param)}'", sql_n)
             sql = [sql[0],sql_n]
             sqls_n.append(sql)
         return sqls_n

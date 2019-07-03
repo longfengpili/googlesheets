@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-03 14:49:44
+@LastEditTime: 2019-07-03 19:10:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,8 +37,7 @@ class DBBase(object):
             self.conn = None
 
     def __check_sql_type(self, sql):
-        sql = (sql.split(';')[-2]).strip()
-        result = re.match('(\D.*?) ', sql)
+        result = re.match('(\D.*?) ', sql.strip())
         return result.group(1)
 
     def __join_values(self, values):

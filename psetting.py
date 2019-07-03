@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-03 16:27:14
+@LastEditTime: 2019-07-03 18:14:48
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -22,16 +22,19 @@ CREDENTIALS_JSON_PATH = '../credentials.json'
 CREDENTIALS_PICKLE_PATH = '../token.pickle'
 #item_info
 ITEM_TABLENAME = mysetting.item_table
+R_ITEM_TABLENAME = mysetting.r_item_table
 ITEM_COLUMNS = mysetting.item_columns
 ITEM_SPREADSHEET_ID = mysetting.item_spreadsheet_id
 ITME_SHEETNAME = mysetting.item_sheetname
 #bi_info
 BI_TABLENAME = mysetting.bi_table
+R_BI_TABLENAME = mysetting.r_bi_table
 BI_COLUMNS = mysetting.bi_columns
 BI_SPREADSHEET_ID = mysetting.bi_spreadsheet_id
 BI_SHEETNAME = mysetting.bi_sheetname
 #funnel_info
 FUNNEL_TABLENAME = mysetting.funnel_table
+R_FUNNEL_TABLENAME = mysetting.r_funnel_table
 FUNNEL_COLUMNS = mysetting.funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 FUNNEL_SHEETNAME = mysetting.funnel_sheetname

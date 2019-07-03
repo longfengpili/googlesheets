@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-03 16:17:25
+@LastEditTime: 2019-07-03 17:23:28
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -36,7 +36,7 @@ class DailyMain(object):
         '''
         ps = ParseSql(sqlpath=self.sqlpath)
         files_sqls = ps.get_files_sqls(**kw)
-        print(files_sqls)
+        # print(files_sqls)
         self._connect()
         for sql_file in execute_order:
             sql_file = self.sqlpath + sql_file + ".sql"

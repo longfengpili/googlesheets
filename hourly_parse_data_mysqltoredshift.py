@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-07-03 14:20:50
+@LastEditTime: 2019-07-03 16:57:12
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -20,6 +20,10 @@ parser.add_argument('-id_max', type=int, default=None)
 args = parser.parse_args()
 id_min = args.id_min
 id_max = args.id_max
+
+
+R_REPAIR_TABLENAME = R_REPAIR_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据不同的数据库创建不同的表
+R_RESOLVE_TABLENAME = R_RESOLVE_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据不同的数据库创建不同的表
 
 # 创建repair_table
 db = DBRedshift(host=R_HOST, user=R_USER,

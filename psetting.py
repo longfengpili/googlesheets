@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-04 11:30:44
+@LastEditTime: 2019-07-04 15:29:39
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -50,9 +50,9 @@ R_RESOLVE_COLUMNS = mysetting.resolve_columns
 
 # Mysql
 M_DATABASE = mysetting.mysql_database
-M_HOST = mysetting.mysql_j_host
+M_HOST = mysetting.mysql_host
 M_USER = mysetting.mysql_user
-M_PASSWORD = mysetting.mysql_j_password
+M_PASSWORD = mysetting.mysql_password
 M_ORIGINAL_TABLENAME = mysetting.original_table
 M_ORIGINAL_COLUMNS = mysetting.original_columns
 M_REPAIR_TABLENAME = mysetting.repair_table

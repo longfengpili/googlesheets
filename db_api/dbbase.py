@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-03 19:49:32
+@LastEditTime: 2019-07-04 15:28:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -113,7 +113,7 @@ class DBBase(object):
             if primary_key:
                 sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
-                        primary key ({list(columns.keys())[0]})) sortkey({list(columns.keys())[0]});'''
+                        unique({list(columns.keys())[0]})) sortkey({list(columns.keys())[0]});'''
             else:
                 sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])});'''

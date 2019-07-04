@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-03 18:52:53
+@LastEditTime: 2019-07-04 16:38:31
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -20,7 +20,7 @@ class DailyMain(object):
     '''
     sqlpath:默认sql地址
         '''
-    def __init__(self, sqlpath='./sql/'):
+    def __init__(self, sqlpath):
         self.sqlpath = sqlpath
 
     def _connect(self):
@@ -67,7 +67,7 @@ class DailyMain(object):
                 f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
 class DailyMainMysql(DailyMain):
-    def __init__(self, host, user, password, database, sqlpath='./sql/'):
+    def __init__(self, host, user, password, database, sqlpath):
         self.db = None
         self.conn = None
         self.host = host
@@ -85,7 +85,7 @@ class DailyMainMysql(DailyMain):
             self.conn = self.db.connect()
 
 class DailyMainRedshift(DailyMain):
-    def __init__(self, host, user, password, database, sqlpath='./sql/'):
+    def __init__(self, host, user, password, database, sqlpath):
         self.db = None
         self.conn = None
         self.host = host

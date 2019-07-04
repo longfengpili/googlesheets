@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-03 19:15:41
+@LastEditTime: 2019-07-04 16:38:13
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -16,7 +16,7 @@ config.fileConfig('parselog.conf')
 pslogger = logging.getLogger('parsesql')
 
 class ParseSql(object):
-    def __init__(self, sqlpath='./sql/'):
+    def __init__(self, sqlpath):
         self.sqlpath = sqlpath
 
     def get_sql_files(self):

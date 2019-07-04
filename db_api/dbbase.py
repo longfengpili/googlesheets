@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-04 17:51:17
+@LastEditTime: 2019-07-04 20:19:25
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -61,6 +61,7 @@ class DBBase(object):
         return values
     
     def execute_multiple(self, cur, sql, count=None):
+        change_count = 0
         sqls = sql.split(';')
         if len(sqls) > 2:
             for sql in sqls[:-1]:

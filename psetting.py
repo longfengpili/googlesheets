@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-04 16:06:35
+@LastEditTime: 2019-07-05 18:47:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -61,5 +61,6 @@ M_RESOLVE_COLUMNS = mysetting.resolve_columns
 # daily
 EXECUTE_ORDER = mysetting.execute_order
 SQL_PATH = mysetting.sql_path
-
+#messge
+MSG_USERS = mysetting.message_users
 

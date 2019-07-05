@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-07-05 18:49:25
+@LastEditTime: 2019-07-05 18:59:52
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -51,7 +51,7 @@ rsrd.resolve_redshift_main(repair_tablename=R_REPAIR_TABLENAME,
                         
 if datetime.now().hour >= 9 and datetime.now().hour <= 20 and datetime.now().minute >= 0 and datetime.now().minute <= 10:
     sent_message_tousers(MSG_USERS, content=f'【{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}】近10分钟产出{rsrd.count}条数据！数据库最大id为{rsrd.resolve_tableid} ！')
-elif datetime.now().hour >= 9 and datetime.now().hour <= 20 and datetime.now().minute >= 30 and datetime.now().minute <= 59:
+elif datetime.now().hour >= 9 and datetime.now().hour <= 20 and datetime.now().minute >= 30 and datetime.now().minute <= 40:
     sent_message_tousers(MSG_USERS, content=f'【{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}】近10分钟产出{rsrd.count}条数据！数据库最大id为{rsrd.resolve_tableid} ！')
 elif datetime.now().hour >= 20 and datetime.now().hour <= 24 and datetime.now().minute >= 30 and datetime.now().minute <= 40:
     sent_message_tousers(MSG_USERS, content=f'【{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}】近10分钟产出{rsrd.count}条数据！数据库最大id为{rsrd.resolve_tableid} ！')

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-04 16:38:13
+@LastEditTime: 2019-07-05 16:55:14
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -27,7 +27,7 @@ class ParseSql(object):
         files = [self.sqlpath + file for file in files]
         return files
         
-    def get_sqls_params(self, filename):
+    def get_file_content(self, filename):
         '''
         @description: 获取文件中sql的参数
         @param {type} 
@@ -39,7 +39,7 @@ class ParseSql(object):
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
         sqls = re.findall("```\n--【(.*?)】(.*?)```", sqls_txt, re.S)
-        params = re.findall("\$(.*?)[ |\n|)]", sqls_txt)
+        params = re.findall("\$(\w+)(?<!\$)[ |\n|)]", sqls_txt)
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):
@@ -51,7 +51,7 @@ class ParseSql(object):
         @return: 
             sqls_n:修改后的sql列表
         '''
-        params, sqls = self.get_sqls_params(filename)
+        params, sqls = self.get_file_content(filename)
         for param in params:
             if param not in kw:
                 pslogger.error(f'【{filename}】"{param}" need setting !')

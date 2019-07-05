@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-04 20:19:25
+@LastEditTime: 2019-07-05 17:43:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,7 +37,7 @@ class DBBase(object):
             self.conn = None
 
     def __check_sql_type(self, sql):
-        sql = re.subn('--.*?\n', '', sql.strip(), 1)[0]
+        sql = re.sub('--.*?\n', '', sql.strip())
         result = re.search('(\D.*?) ', sql.strip())
         return result.group(1)
 

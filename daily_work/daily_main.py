@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-04 20:26:36
+@LastEditTime: 2019-07-05 17:59:29
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -43,7 +43,7 @@ class DailyMain(object):
             sqls = files_sqls.get(sql_file)
             for sql in sqls:
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
-                dailylogger.debug(sql[1])
+                # dailylogger.debug(sql[1])
                 count, result = self.db.sql_execute(sql[1])
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
@@ -61,7 +61,7 @@ class DailyMain(object):
         sqls = files_sqls.get(sql_file)
         for sql in sqls:
             dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
-            dailylogger.debug(sql[1])
+            # dailylogger.debug(sql[1])
             count, result = self.db.sql_execute(sql[1])
             dailylogger.info(
                 f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')

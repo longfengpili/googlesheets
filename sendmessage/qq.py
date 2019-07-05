@@ -1,7 +1,7 @@
 import win32gui
 import win32con
 import win32clipboard as w
-
+import time
 
 def get_text():
     """获取剪贴板文本"""
@@ -31,3 +31,5 @@ def send_message_touser(user, content):
 def sent_message_tousers(users, content):
     for user in users:
         send_message_touser(user, content)
+        time.sleep(3)
+

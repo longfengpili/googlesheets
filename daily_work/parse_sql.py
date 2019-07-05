@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-05 17:52:27
+@LastEditTime: 2019-07-05 19:34:54
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -51,6 +51,7 @@ class ParseSql(object):
         @return: 
             sqls_n:修改后的sql列表
         '''
+        params_d = {}
         params, sqls = self.get_file_content(filename)
         for param in params:
             if param not in kw:
@@ -60,11 +61,13 @@ class ParseSql(object):
         for sql in sqls:
             sql_n = sql[1]
             for param in params:
+                params_d[param] = kw.get(param)
                 sql_n = re.sub(f"\${param} ", f"'{kw.get(param)}' ", sql_n)
                 sql_n = re.sub(f"\${param}\)", f"'{kw.get(param)}')", sql_n)
                 sql_n = re.sub(f"\${param}\n", f"'{kw.get(param)}'\n", sql_n)
             sql = [sql[0],sql_n]
             sqls_n.append(sql)
+        # print(f'【{filename}】{params_d}')
         return sqls_n
     
     def get_files_sqls(self, **kw):

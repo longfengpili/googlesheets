@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-08 12:52:36
+@LastEditTime: 2019-07-08 12:56:22
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -71,7 +71,7 @@ class DBBase(object):
             for sql in sqls[:-1]:
                 sql_type = self.__check_sql_type(sql)
                 result = f'{sql_type} completed !'
-                print(result)
+                # print(result)
                 if sql_type == '--':
                     pass
                 elif sql == sqls[-2] and sql_type not in ['create']:

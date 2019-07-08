@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-08 12:27:43
+@LastEditTime: 2019-07-08 13:22:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -45,9 +45,9 @@ class ResolveRedshiftData(object):
     def get_table_id(self, resolve_tablename, repair_tablename, column='id', func='max'):
         self._redshift_connect()
         if not self.resolve_tableid:
-            self.resolve_tableid = self.db.get_table_info(resolve_tablename, column=column, func=func)
+            self.resolve_tableid = self.db.sql_for_column_agg(resolve_tablename, column=column, func=func)
         if not self.repair_tableid:
-            self.repair_tableid = self.db.get_table_info(repair_tablename, column=column, func=func)
+            self.repair_tableid = self.db.sql_for_column_agg(repair_tablename, column=column, func=func)
 
     def get_non_resolve_data(self, tablename, columns, n=1000):
         '''获取没有拆解的数据'''

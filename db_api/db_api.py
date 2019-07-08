@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-03 11:40:28
+@LastEditTime: 2019-07-08 13:16:06
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -26,27 +26,6 @@ class DBFunction(DBBase):
     '''
     def __init__(self):
         self.conn = None
-    
-    def get_table_info(self, tablename, column, func='max'):
-        '''
-        获取table某列的agg值
-        '''
-        if func not in ['min', 'max', 'sum', 'count']:
-            raise "func only support 'min', 'max', 'sum', 'count'"
-        sql = self.sql_for_select(tablename=tablename, columns=[column])
-        _, result = self.sql_execute(sql)
-        if not result:
-            result = 0
-        else:
-            if func == 'min':
-                result = min(result)[0]
-            elif func == 'max':
-                result = max(result)[0]
-            elif func == 'sum':
-                result = sum(result)[0]
-            elif func == 'count':
-                result = len(result)[0]
-        return result
 
     def delete_by_id(self, tablename, id_min=None, id_max=None):
         '''

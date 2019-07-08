@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 12:28:15
+@LastEditTime: 2019-07-08 13:21:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -60,10 +60,10 @@ class RepairMysqlDataToRedshift(object):
         '''获取两个表的最大id，用于后续对比，并逐步导出'''
         self._redshift_connect()
         if not self.repair_tableid:
-            self.repair_tableid = self.redshift_db.get_table_info(repair_tablename, column=column, func=func)
+            self.repair_tableid = self.redshift_db.sql_for_column_agg(repair_tablename, column=column, func=func)
         self._mysql_connect()
         if not self.orignal_tableid:
-            self.orignal_tableid = self.mysql_db.get_table_info(orignal_tablename, column=column, func=func)
+            self.orignal_tableid = self.mysql_db.sql_for_column_agg(orignal_tablename, column=column, func=func)
 
     def get_non_repair_data(self, tablename, columns, n=1000):
         '''获取没有修复的数据'''

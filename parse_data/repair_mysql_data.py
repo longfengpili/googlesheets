@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-02 19:52:35
+@LastEditTime: 2019-07-08 13:20:08
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -46,9 +46,9 @@ class RepairMysqlData(object):
         if not self.db:
             self._mysql_connect()
         if not self.repair_tableid:
-            self.repair_tableid = self.db.get_table_info(repair_tablename, column=column, func=func)
+            self.repair_tableid = self.db.sql_for_column_agg(repair_tablename, column=column, func=func)
         if not self.orignal_tableid:
-            self.orignal_tableid = self.db.get_table_info(orignal_tablename, column=column, func=func)
+            self.orignal_tableid = self.db.sql_for_column_agg(orignal_tablename, column=column, func=func)
 
     def get_non_repair_data(self, tablename, columns, n=1000):
         '''获取没有修复的数据'''

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-08 12:56:22
+@LastEditTime: 2019-07-08 13:18:58
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -162,6 +162,15 @@ class DBBase(object):
             sql = f'''select {columns} from {self.database}.{tablename} where {contions};'''
         else:
             sql = f'''select {columns} from {self.database}.{tablename};'''
+        return sql
+
+    def sql_for_column_agg(self, tablename, column, func='max', contions=None):
+        if func not in ['min', 'max', 'sum', 'count']:
+            raise "func only support 'min', 'max', 'sum', 'count'"
+        if contions:
+            sql = f'''select {func}({column}) from {self.database}.{tablename} where {contions};'''
+        else:
+            sql = f'''select {func}({column}) from {self.database}.{tablename};'''
         return sql
 
     def sql_for_delete(self, tablename, contion):

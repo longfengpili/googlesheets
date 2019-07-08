@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-08 14:13:21
+@LastEditTime: 2019-07-08 18:25:49
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -130,7 +130,8 @@ class ResolveMysqlData(object):
         if id_min:
             self.resolve_tableid = id_min
             self.repair_tableid = self.repair_tableid if self.repair_tableid <= id_max else id_max
-        parsebi_logger.info(f'开始解析数据【[{self.resolve_tableid + 1},{self.repair_tableid}]】 ！')
+        parsebi_logger.info(
+            f'开始解析数据【[{self.resolve_tableid + 1},{self.repair_tableid}]】 , 共【{self.repair_tableid - self.resolve_tableid}】条！')
         while self.resolve_tableid < self.repair_tableid:
             #获取未修复数据
             non_resolve_data = self.get_non_resolve_data(tablename=repair_tablename, columns=self.orignal_columns, n=1000)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-05 17:43:04
+@LastEditTime: 2019-07-08 12:52:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,7 +39,11 @@ class DBBase(object):
     def __check_sql_type(self, sql):
         sql = re.sub('--.*?\n', '', sql.strip())
         result = re.search('(\D.*?) ', sql.strip())
-        return result.group(1)
+        if result:
+            result = result.group(1)
+        else:
+            result = sql
+        return result
 
     def __join_values(self, values):
         '''拼凑values, "、' 不同方式处理'''
@@ -67,7 +71,10 @@ class DBBase(object):
             for sql in sqls[:-1]:
                 sql_type = self.__check_sql_type(sql)
                 result = f'{sql_type} completed !'
-                if sql == sqls[-2] and sql_type not in ['create']:
+                print(result)
+                if sql_type == '--':
+                    pass
+                elif sql == sqls[-2] and sql_type not in ['create']:
                     cur.execute(sql)
                     change_count = cur.rowcount
                     if sql_type == 'select':

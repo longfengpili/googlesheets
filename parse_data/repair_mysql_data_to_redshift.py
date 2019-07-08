@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-03 15:26:58
+@LastEditTime: 2019-07-08 12:28:15
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -153,7 +153,7 @@ class RepairMysqlDataToRedshift(object):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-
+        parsebi_logger.info(f'开始修复丢失数据 ！')
         if id_min != None and id_max != None:
             if id_min >= id_max:
                 raise 'id_min should < id_max'

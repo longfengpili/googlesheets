@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-05 18:36:39
+@LastEditTime: 2019-07-08 12:27:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -106,6 +106,7 @@ class ResolveRedshiftData(object):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
+        parsebi_logger.info(f'开始解析丢失数据 ！')
         if id_min != None and id_max != None:
             if id_min >= id_max:
                 raise 'id_min should < id_max'

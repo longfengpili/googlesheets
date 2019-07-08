@@ -159,7 +159,7 @@ class RepairMysqlData(object):
         if id_min:
             self.repair_tableid = id_min
             self.orignal_tableid = self.orignal_tableid if self.orignal_tableid <= id_max else id_max
-        parsebi_logger.info(f'开始修复数据【[{self.repair_tableid + 1},{self.orignal_tableid}]】 , 共【{self.orignal_tableid - self.repair_tableid}】条！')
+        parsebi_logger.info(f'开始修复数据【[{self.repair_tableid + 1},{self.orignal_tableid}]】, 共【{self.orignal_tableid - self.repair_tableid}】条！')
         while self.repair_tableid < self.orignal_tableid:
             #获取未修复数据
             non_repair_data = self.get_non_repair_data(tablename=orignal_tablename, columns=self.orignal_columns, n=1000)

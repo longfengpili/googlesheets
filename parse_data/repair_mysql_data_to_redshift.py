@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 14:02:50
+@LastEditTime: 2019-07-08 14:12:15
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -158,7 +158,7 @@ class RepairMysqlDataToRedshift(object):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        parsebi_logger.info(f'开始修复丢失数据 ！')
+        parsebi_logger.info(f'开始修复数据 ！')
         if id_min != None and id_max != None:
             if id_min >= id_max:
                 raise 'id_min should < id_max'
@@ -175,7 +175,7 @@ class RepairMysqlDataToRedshift(object):
         if id_min:
             self.repair_tableid = id_min
             self.orignal_tableid = self.orignal_tableid if self.orignal_tableid <= id_max else id_max
-            parsebi_logger.info(f'开始修复丢失数据【[{self.repair_tableid + 1},{self.orignal_tableid}]】 ！')
+        parsebi_logger.info(f'开始修复数据【[{self.repair_tableid + 1},{self.orignal_tableid}]】 ！')
         while self.repair_tableid < self.orignal_tableid:
             #获取未修复数据
             non_repair_data = self.get_non_repair_data(tablename=orignal_tablename, columns=self.orignal_columns, n=1000)

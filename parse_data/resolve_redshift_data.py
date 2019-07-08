@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-08 14:14:18
+@LastEditTime: 2019-07-08 16:14:16
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -138,6 +138,7 @@ class ResolveRedshiftData(object):
             sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolveed)
             self.db.sql_execute(sql)
             parsebi_logger.info(f'本次累计解析{self.count}条数据！最大id为{self.resolve_tableid} ！')
+
 
 
 

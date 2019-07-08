@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-05 19:34:16
+@LastEditTime: 2019-07-08 16:27:55
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -55,16 +55,14 @@ class DailyMain(object):
         @return: 无
         '''
         ps = ParseSql(sqlpath=self.sqlpath)
-        files_sqls = ps.get_files_sqls(**kw)
         self._connect()
         sql_file = self.sqlpath + schema + ".sql"
-        sqls = files_sqls.get(sql_file)
+        sqls = ps.get_file_sqls(sql_file, **kw)
         for sql in sqls:
             dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
-            # dailylogger.debug(sql[1])
+            dailylogger.debug(sql[0])
             count, result = self.db.sql_execute(sql[1])
-            dailylogger.info(
-                f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
+            dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
 class DailyMainMysql(DailyMain):
     def __init__(self, host, user, password, database, sqlpath):

@@ -131,7 +131,7 @@ class ResolveMysqlData(object):
             self.resolve_tableid = id_min
             self.repair_tableid = self.repair_tableid if self.repair_tableid <= id_max else id_max
         parsebi_logger.info(
-            f'开始解析数据【[{self.resolve_tableid + 1},{self.repair_tableid}]】 , 共【{self.repair_tableid - self.resolve_tableid}】条！')
+            f'开始解析数据【[{self.resolve_tableid + 1},{self.repair_tableid}]】, 共【{self.repair_tableid - self.resolve_tableid}】条！')
         while self.resolve_tableid < self.repair_tableid:
             #获取未修复数据
             non_resolve_data = self.get_non_resolve_data(tablename=repair_tablename, columns=self.orignal_columns, n=1000)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 17:59:51
+@LastEditTime: 2019-07-08 18:02:55
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -129,13 +129,12 @@ class RepairMysqlDataToRedshift(object):
                 e_n += 1
                 if e_s and e_n == 5:  # 解析不了返回None
                     repairbi_logger.error(myjson)
+                    repairbi_logger.error('\n'.join(errors))
                     myjson = None
                     break
             myjson = myjson_
-            repairbi_logger.error('\n'.join(errors))
-            return id, myjson, errors
-        if errors:
             repairbi_logger.warning('\n'.join(errors))
+            return id, myjson, errors
         myjson = myjson_
         return id, myjson, errors
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-08 16:14:16
+@LastEditTime: 2019-07-08 17:57:47
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -72,7 +72,13 @@ class ResolveRedshiftData(object):
         # print(row)
         columns_value = []
         id, data_json = row
-        data_json = json.loads(data_json)
+        try:
+            data_json = json.loads(data_json)
+        except Exception as e:
+            resolvebi_logger.error(data_json)
+            resolvebi_logger.error(e)
+            data_json = {}
+            
         for column in self.resolve_columns:
             if column.endswith('ts'):
                 try:#解决传文本的数据

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 14:12:15
+@LastEditTime: 2019-07-08 17:53:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -132,10 +132,10 @@ class RepairMysqlDataToRedshift(object):
                     myjson = None
                     break
             myjson = myjson_
-            repairbi_logger.warning('\n'.join(errors))
+            repairbi_logger.error('\n'.join(errors))
             return id, myjson, errors
         if errors:
-            repairbi_logger.warning('\n'.join(errors))
+            repairbi_logger.error('\n'.join(errors))
         myjson = myjson_
         return id, myjson, errors
 

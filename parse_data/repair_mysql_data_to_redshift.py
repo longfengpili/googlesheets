@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 18:02:55
+@LastEditTime: 2019-07-08 18:12:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -119,6 +119,7 @@ class RepairMysqlDataToRedshift(object):
                         myjson = myjson
                 elif "Expecting ',' delimiter" in e_s:
                     myjson = myjson.replace('":"{"', '":{"').replace('}","', '},"')
+                    myjson = myjson.replace('""','"')
                     try:
                         myjson_ = myjson
                         myjson = json.loads(myjson)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-08 16:27:55
+@LastEditTime: 2019-07-09 12:58:42
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -60,7 +60,6 @@ class DailyMain(object):
         sqls = ps.get_file_sqls(sql_file, **kw)
         for sql in sqls:
             dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
-            dailylogger.debug(sql[0])
             count, result = self.db.sql_execute(sql[1])
             dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 

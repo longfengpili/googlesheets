@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-10 14:54:59
+@LastEditTime: 2019-07-10 15:50:49
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -41,7 +41,10 @@ class ParseSql(object):
         sqls = re.findall("```\n--【(.*?)】(.*?)```", sqls_txt, re.S)
         sqls = [(sql[0], re.sub('--.*?\n', '' , sql[1]).strip()) for sql in sqls]
         params = re.findall("\$(\w+)[ |\n|)|;]", sqls_txt)
-        pslogger.info(f'parse sqlile【{filename}】, params {sorted(set(params))}【{len(set(params))}】 counts, sqls 【{len(sqls)}】 counts;')
+        if params:
+            pslogger.info(f'parse sqlile【{filename}】, params {sorted(set(params))}【{len(set(params))}】 counts, sqls 【{len(sqls)}】 counts;')
+        else:
+            pslogger.info(f'parse sqlile【{filename}】, sqls 【{len(sqls)}】 counts;')
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):

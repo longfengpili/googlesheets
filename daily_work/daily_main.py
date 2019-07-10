@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-09 12:58:42
+@LastEditTime: 2019-07-10 16:03:11
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -35,12 +35,10 @@ class DailyMain(object):
         @return: 无
         '''
         ps = ParseSql(sqlpath=self.sqlpath)
-        files_sqls = ps.get_files_sqls(**kw)
-        # print(files_sqls)
         self._connect()
         for sql_file in execute_order:
             sql_file = self.sqlpath + sql_file + ".sql"
-            sqls = files_sqls.get(sql_file)
+            sqls = ps.get_file_sqls(sql_file, **kw)
             for sql in sqls:
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
                 # dailylogger.debug(sql[1])

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-07-04 16:16:54
+@LastEditTime: 2019-07-10 14:32:10
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -75,4 +75,6 @@ elif p1 == 'current':
     daily_work_single_main('current_data', set_date(p2), set_date(p3), now)
 elif p1 == 'repair':
     daily_work_single_main('repair_data', set_date(p2), set_date(p3), now)
+else:
+    daily_work_single_main('mytest', set_date(p2), set_date(p3), now)
 

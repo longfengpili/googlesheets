@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-07-05 19:34:54
+@LastEditTime: 2019-07-10 14:54:59
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,7 +39,9 @@ class ParseSql(object):
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
         sqls = re.findall("```\n--【(.*?)】(.*?)```", sqls_txt, re.S)
-        params = re.findall("\$(\w+)[ |\n|)]", sqls_txt)
+        sqls = [(sql[0], re.sub('--.*?\n', '' , sql[1]).strip()) for sql in sqls]
+        params = re.findall("\$(\w+)[ |\n|)|;]", sqls_txt)
+        pslogger.info(f'parse sqlile【{filename}】, params {sorted(set(params))}【{len(set(params))}】 counts, sqls 【{len(sqls)}】 counts;')
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):
@@ -65,6 +67,7 @@ class ParseSql(object):
                 sql_n = re.sub(f"\${param} ", f"'{kw.get(param)}' ", sql_n)
                 sql_n = re.sub(f"\${param}\)", f"'{kw.get(param)}')", sql_n)
                 sql_n = re.sub(f"\${param}\n", f"'{kw.get(param)}'\n", sql_n)
+                sql_n = re.sub(f"\${param};", f"'{kw.get(param)}';", sql_n)
             sql = [sql[0],sql_n]
             sqls_n.append(sql)
         # print(f'【{filename}】{params_d}')

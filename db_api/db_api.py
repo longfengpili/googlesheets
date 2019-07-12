@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-08 13:16:06
+@LastEditTime: 2019-07-12 19:11:16
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -25,7 +25,12 @@ class DBFunction(DBBase):
     一些共用的内容
     '''
     def __init__(self):
+        self.db = None
         self.conn = None
+
+    def create_table(self, tablename, columns):
+        sql = self.sql_for_create(tablename=tablename, columns=columns)
+        self.sql_execute(sql)
 
     def delete_by_id(self, tablename, id_min=None, id_max=None):
         '''
@@ -39,7 +44,12 @@ class DBFunction(DBBase):
             contion = f'id >= 0'
         sql = self.sql_for_delete(tablename, contion=contion)
         self.sql_execute(sql)
-        
+    
+    def get_table_id(self, tablename, column='id', func='max'):
+        sql = self.sql_for_column_agg(tablename, column=column, func=func)
+        _, result = self.sql_execute(sql)
+        result = result[0][0] if result[0][0] else 0 
+        return result
 
 class DBRedshift(DBFunction):
     def __init__(self, host=None, user=None, password=None, database=None):

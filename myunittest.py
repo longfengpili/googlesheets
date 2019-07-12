@@ -9,8 +9,8 @@
 '''
 
 import unittest
-from parse_data import RepairJsonData
-from parse_data import RepairMysqlDataToRedshift
+from parse_bi_data import RepairJsonData
+from parse_bi_data import RepairMysqlDataToRedshift
 
 
 class tasktest(unittest.TestCase):

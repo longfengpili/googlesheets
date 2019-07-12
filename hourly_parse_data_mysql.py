@@ -10,7 +10,7 @@
 
 from psetting import *
 from db_api import DBMysql
-from parse_data import RepairMysqlData, ResolveMysqlData
+from parse_bi_data import RepairMysqlData, ResolveMysqlData
 import sys
 
 import argparse

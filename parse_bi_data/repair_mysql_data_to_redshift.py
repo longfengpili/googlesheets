@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-12 14:46:31
+@LastEditTime: 2019-07-12 16:11:22
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,7 +12,7 @@ from datetime import datetime
 import json
 import re
 from db_api import DBMysql, DBRedshift
-from .repair_data import RepairJsonData
+from .repair_json import RepairJsonData
 
 import logging
 from logging import config

@@ -10,7 +10,7 @@
 
 from psetting import *
 from db_api import DBMysql, DBRedshift
-from parse_data import RepairMysqlDataToRedshift, ResolveRedshiftData
+from parse_bi_data import RepairMysqlDataToRedshift, ResolveRedshiftData
 import sys
 from sendmessage import sent_message_tousers
 from datetime import datetime

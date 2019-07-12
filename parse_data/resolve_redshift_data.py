@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-08 18:28:30
+@LastEditTime: 2019-07-12 13:16:16
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -75,8 +75,8 @@ class ResolveRedshiftData(object):
         try:
             data_json = json.loads(data_json)
         except Exception as e:
-            resolvebi_logger.error(data_json)
             resolvebi_logger.error(e)
+            resolvebi_logger.error(f'{id},{data_json}')
             data_json = {}
 
         for column in self.resolve_columns:

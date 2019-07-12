@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-08 18:27:04
+@LastEditTime: 2019-07-12 14:46:31
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,6 +12,7 @@ from datetime import datetime
 import json
 import re
 from db_api import DBMysql, DBRedshift
+from .repair_data import RepairJsonData
 
 import logging
 from logging import config
@@ -87,57 +88,23 @@ class RepairMysqlDataToRedshift(object):
 
     def repair_row(self, row):
         '''修复单行数据'''
-        e_n = 0
-        errors = []
         id, myjson = row
-        try:
-            myjson_ = myjson
-            myjson = json.loads(myjson)
-        except Exception as e:
+        rjd = RepairJsonData(myjson)
+        myjson = rjd.repair_main()
+        if rjd.error_num >= rjd.error_max:
             l = '>' * ((30 - len(str(id)))//2)
             l_ = '<' * ((30 - len(str(id)))//2)
-            msg_type = re.search('"msg_type":"(.*?)"', str(myjson))
+            msg_type = re.search('"msg_type":"(.*?)"', str(rjd.myjson_origin))
             if msg_type:
                 msg_type = msg_type.group(1)
             else:
                 msg_type = 'ERROR'
                 repairbi_logger.error(f'不存在msg_type!\n{row}')
-
-            errors.append(f'\n{l}【{msg_type}】{l_}【{id}】')
-            e_s = f'>>>>{e}'
-
-            while e_s:
-                errors.append(e_s)
-                if 'UTF-8 BOM' in e_s:
-                    myjson = myjson.encode('utf-8')[3:].decode('utf-8')
-                    try:
-                        myjson_ = myjson
-                        myjson = json.loads(myjson)
-                        e_s = None
-                    except Exception as e:
-                        e_s = f'>>>>{e}'
-                        myjson = myjson
-                elif "Expecting ',' delimiter" in e_s:
-                    myjson = myjson.replace('":"{"', '":{"').replace('}","', '},"')
-                    myjson = re.sub('(?<!\:)"","', '","', myjson)
-                    try:
-                        myjson_ = myjson
-                        myjson = json.loads(myjson)
-                        e_s = None
-                    except Exception as e:
-                        e_s = f'>>>>{e}'
-                        myjson = myjson
-                e_n += 1
-                if e_s and e_n == 5:  # 解析不了返回None
-                    repairbi_logger.error(myjson)
-                    repairbi_logger.error('\n'.join(errors))
-                    myjson = None
-                    break
-            myjson = myjson_
-            repairbi_logger.warning('\n'.join(errors))
-            return id, myjson, errors
-        myjson = myjson_
-        return id, myjson, errors
+                rjd.errors.insert(0, f'\n{l}【{msg_type}】{l_}【{id}】')
+            error = '\n'.join(rjd.errors)
+            repairbi_logger.error(f"{error}")
+                    
+        return id, myjson, rjd.errors
 
     def repair_multiple_rows(self, rows):
         repaired = []

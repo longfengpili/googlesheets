@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-08 13:18:58
+@LastEditTime: 2019-07-12 13:06:56
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -53,7 +53,7 @@ class DBBase(object):
         if not values_:
             pass
         elif search_1 and not search_2:
-            values = [[i.replace("'", '"') for i in value] for value in values]
+            values = [[str(i).replace("'", '"') for i in value] for value in values]
             values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
         elif search_2 and not search_1:
             values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])

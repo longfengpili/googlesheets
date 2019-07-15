@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-07-15 12:14:48
+@LastEditTime: 2019-07-15 16:58:41
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -35,6 +35,6 @@ rmdovo.repair_data_main(orignal_tablename=M_AD_ORIGINAL_TABLENAME,repair_tablena
 
 
 rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE, 
-                orignal_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, db_type='redshift')
+                orignal_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, db_type='redshift')
 rd.resolve_data_main(repair_tablename=R_AD_REPAIR_TABLENAME, resolve_tablename=R_AD_RESOLVE_TABLENAME, id_min=id_min, id_max=id_max)
                         

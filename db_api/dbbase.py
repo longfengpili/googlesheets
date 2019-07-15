@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-12 13:06:56
+@LastEditTime: 2019-07-15 17:34:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -10,6 +10,7 @@
 from datetime import date, timedelta, datetime
 import re
 import sys
+import json
 
 
 import logging
@@ -47,21 +48,14 @@ class DBBase(object):
 
     def __join_values(self, values):
         '''拼凑values, "、' 不同方式处理'''
-        values_ = ''.join([str(i) for value in values for i in value])
-        search_1, search_2 = re.search("'", values_), re.search('"', values_)
-        # print(search_1, search_2, values_)
-        if not values_:
-            pass
-        elif search_1 and not search_2:
-            values = [[str(i).replace("'", '"') for i in value] for value in values]
-            values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
-        elif search_2 and not search_1:
-            values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
-        elif not (search_1 and search_2):
-            values = ',\n'.join(['(' + ','.join([f"'{i}'" for i in value]) + ')' for value in values])
-        else:
-            dblogger.error(values_)
-            raise 'The values have some value use both "\'" and \'"\' !' 
+        values_ = []
+        for value in values:
+            if re.search("'", ','.join([str(i) for i in value])):
+                value = [re.sub("'", "\\'", str(i)) for i in value] #单引号问题处理
+
+            value_ = '(' + ','.join([f"'{i}'" for i in value]) + ')'   
+            values_.append(value_)
+        values = ',\n'.join(values_)
         return values
     
     def execute_multiple(self, cur, sql, count=None):

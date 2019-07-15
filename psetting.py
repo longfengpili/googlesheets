@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-05 18:47:35
+@LastEditTime: 2019-07-15 12:02:52
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -47,6 +47,10 @@ R_PASSWORD = mysetting.redshift_password
 R_REPAIR_TABLENAME = mysetting.r_repair_table
 R_RESOLVE_TABLENAME = mysetting.r_resolve_table
 R_RESOLVE_COLUMNS = mysetting.resolve_columns
+# Redshfit adjust
+R_AD_REPAIR_TABLENAME = mysetting.adjust_r_repair_table
+R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
+R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
 
 # Mysql
 M_DATABASE = mysetting.mysql_database
@@ -58,6 +62,13 @@ M_ORIGINAL_COLUMNS = mysetting.original_columns
 M_REPAIR_TABLENAME = mysetting.repair_table
 M_RESOLVE_TABLENAME = mysetting.resolve_table
 M_RESOLVE_COLUMNS = mysetting.resolve_columns
+# Mysql adjust
+M_AD_ORIGINAL_TABLENAME = mysetting.adjust_original_table
+M_AD_ORIGINAL_COLUMNS = mysetting.adjust_original_columns
+M_AD_REPAIR_TABLENAME = mysetting.adjust_repair_table
+M_AD_RESOLVE_TABLENAME = mysetting.adjust_resolve_table
+M_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
+
 # daily
 EXECUTE_ORDER = mysetting.execute_order
 SQL_PATH = mysetting.sql_path

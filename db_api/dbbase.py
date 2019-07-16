@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-16 10:27:35
+@LastEditTime: 2019-07-16 10:33:29
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -58,6 +58,7 @@ class DBBase(object):
         
         if re.search("\\\\'", values):
             values = re.sub("(?<!\w)\\\\'", '\"', values)
+            values = re.sub("\\\\'(?!\w)", '\"', values)
             # values = re.sub("{\\\\'", '{\"', values) #开头
             # values = re.sub("\\\\': \\\\'", '\": \"', values) #中间
             # values = re.sub("\\\\', \\\\'", '\", \"', values) #中间

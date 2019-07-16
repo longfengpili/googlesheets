@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-12 20:07:30
+@LastEditTime: 2019-07-16 18:28:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -50,5 +50,8 @@ class ParseBiFunc(DBFunction):
             self.count += count
             self.table2_id = end_id
         return data
+
+
+    
 
 

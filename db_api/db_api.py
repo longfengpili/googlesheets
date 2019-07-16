@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-12 19:11:16
+@LastEditTime: 2019-07-16 18:20:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -25,8 +25,7 @@ class DBFunction(DBBase):
     一些共用的内容
     '''
     def __init__(self):
-        self.db = None
-        self.conn = None
+        pass
 
     def create_table(self, tablename, columns):
         sql = self.sql_for_create(tablename=tablename, columns=columns)

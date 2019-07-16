@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-12 20:30:14
+@LastEditTime: 2019-07-16 18:49:54
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -63,9 +63,15 @@ class tasktest(unittest.TestCase):
                          orignal_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, db_type='mysql')
         rd.resolve_data_main(repair_tablename=M_REPAIR_TABLENAME, resolve_tablename=M_RESOLVE_TABLENAME, id_min=0, id_max=3000)
 
+    def test_create_in_mysql(self):
+        rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+                                   orignal_columns=M_ORIGINAL_COLUMNS)
+        # rdovo.get_tables_id_real(orignal_tablename=M_ORIGINAL_TABLENAME,repair_tablename=R_REPAIR_TABLENAME)
+        rdovo.copy_data_to_idtable(tablename=M_AD_ORIGINAL_TABLENAME)
+
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_repair_to_redshift'))
+    suite.addTest(tasktest('test_create_in_mysql'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

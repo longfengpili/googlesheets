@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-15 17:34:05
+@LastEditTime: 2019-07-16 10:13:25
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -51,11 +51,16 @@ class DBBase(object):
         values_ = []
         for value in values:
             if re.search("'", ','.join([str(i) for i in value])):
-                value = [re.sub("'", "\\'", str(i)) for i in value] #单引号问题处理
-
-            value_ = '(' + ','.join([f"'{i}'" for i in value]) + ')'   
+                value = [re.sub("'", "\\'", str(i)) for i in value] #单引号问题处理 
+            value_ = '(' + ','.join([f"'{i}'" for i in value]) + ')'
             values_.append(value_)
         values = ',\n'.join(values_)
+        
+        if re.sub("'{\\\\'", '\'{\"', values):
+            values = re.sub("{\\\\'", '{\"', values) #开头
+            values = re.sub("\\\\': \\\\'", '\": \"', values) #中间
+            values = re.sub("\\\\', \\\\'", '\", \"', values) #中间
+            values = re.sub("\\\\'}", '\"}', values) #末尾
         return values
     
     def execute_multiple(self, cur, sql, count=None):

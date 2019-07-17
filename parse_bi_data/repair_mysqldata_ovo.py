@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-17 17:36:52
+@LastEditTime: 2019-07-17 17:42:22
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -107,8 +107,6 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
         else:
             parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
-
-        return original_tablename_count - tablename_count
 
     def repair_row(self, row):
         '''修复单行数据'''

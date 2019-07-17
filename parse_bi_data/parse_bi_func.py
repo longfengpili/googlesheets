@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-16 18:28:27
+@LastEditTime: 2019-07-17 16:29:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,7 +37,7 @@ class ParseBiFunc(DBFunction):
             self.table_id = self.db.get_table_id(tablename1)
         if not self.table2_id:
             self.table2_id = self.db.get_table_id(tablename2)
-
+            
     def get_data(self, tablename1, columns, n=1000):
         self._connet()
         if self.table2_id < self.table_id:

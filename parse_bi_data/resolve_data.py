@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-12 20:27:41
+@LastEditTime: 2019-07-17 17:37:11
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -113,7 +113,7 @@ class ResolveData(ParseBiFunc):
             self.table2_id = id_min
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(
-            f'开始解析数据【[{self.table2_id + 1},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+            f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
         while self.table2_id < self.table_id:
             #获取未修复数据
             data = self.get_data(tablename1=repair_tablename, columns=self.orignal_columns, n=1000)

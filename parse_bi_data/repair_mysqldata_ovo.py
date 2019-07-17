@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-16 19:54:13
+@LastEditTime: 2019-07-17 17:36:52
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -90,18 +90,25 @@ class RepairMysqlDataOVO(ParseBiFunc):
             columns_name = self.create_table_for_auto_increment_id(tablename)
             columns_name.pop('id')
 
-            sql_trunc = f'truncate {tablename};'
-            self.db.sql_execute(sql_trunc)
+            original_tablename_count = self.db.get_table_count(tablename.split('_id')[0])
+            tablename_count = self.db.get_table_count(tablename)
+            # print(tablename_count, original_tablename_count)
 
-            sql_copy = f'''insert into {tablename}
-            ({','.join(columns_name)})
-            select ({','.join(columns_name)})
-            from {tablename.split('_id')[0]}
-            '''
-            count, _ = self.db.sql_execute(sql_copy)
-            parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,导入{count}条！')
+            if tablename_count < original_tablename_count:
+                sql_copy = f'''insert into {tablename}
+                ({','.join(columns_name)})
+                select ({','.join(columns_name)})
+                from {tablename.split('_id')[0]}
+                limit {tablename_count} , {original_tablename_count - tablename_count}
+                '''
+                count, _ = self.db.sql_execute(sql_copy)
+                parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,从【{tablename_count + 1}】开始导入{count}条！')
+            else:
+                parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
         else:
             parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
+
+        return original_tablename_count - tablename_count
 
     def repair_row(self, row):
         '''修复单行数据'''
@@ -165,7 +172,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if id_min:
             self.table2_id = id_min
             self.table_id = self.table_id if self.table_id <= id_max else id_max
-        parsebi_logger.info(f'开始修复数据【[{self.table2_id + 1},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+        parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
         while self.table2_id < self.table_id:
             #获取未修复数据
             data = self.get_data(tablename1=orignal_tablename, columns=self.orignal_columns, n=1000)

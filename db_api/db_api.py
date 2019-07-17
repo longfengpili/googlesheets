@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-16 18:20:03
+@LastEditTime: 2019-07-17 15:55:21
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -48,6 +48,12 @@ class DBFunction(DBBase):
         sql = self.sql_for_column_agg(tablename, column=column, func=func)
         _, result = self.sql_execute(sql)
         result = result[0][0] if result[0][0] else 0 
+        return result
+
+    def get_table_count(self, tablename):
+        sql = self.sql_for_column_agg(tablename=tablename)
+        _, result = self.sql_execute(sql)
+        result = result[0][0] if result[0][0] else 0
         return result
 
 class DBRedshift(DBFunction):

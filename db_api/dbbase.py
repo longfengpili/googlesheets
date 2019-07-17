@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-16 18:39:25
+@LastEditTime: 2019-07-17 15:48:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -165,7 +165,7 @@ class DBBase(object):
             sql = f'''select {columns} from {self.database}.{tablename};'''
         return sql
 
-    def sql_for_column_agg(self, tablename, column, func='max', contions=None):
+    def sql_for_column_agg(self, tablename, column='*', func='count', contions=None):
         if func not in ['min', 'max', 'sum', 'count']:
             raise "func only support 'min', 'max', 'sum', 'count'"
         if contions:

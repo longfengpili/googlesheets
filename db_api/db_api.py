@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-18 14:39:11
+@LastEditTime: 2019-07-18 16:04:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -43,6 +43,7 @@ class DBFunction(DBBase):
             contion = f'id >= 0'
         sql = self.sql_for_delete(tablename, contion=contion)
         self.sql_execute(sql)
+        dblogger.warning(f'【delete】tablename [{tablename}], contion [{contion}] !')
     
     def get_table_id(self, tablename, column='id', func='max'):
         sql = self.sql_for_column_agg(tablename, column=column, func=func)

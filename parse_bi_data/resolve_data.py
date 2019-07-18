@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-17 17:37:11
+@LastEditTime: 2019-07-18 14:52:57
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -110,7 +110,7 @@ class ResolveData(ParseBiFunc):
         if not id_max:
             id_max = self.table_id
         if id_min:
-            self.table2_id = id_min
+            self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(
             f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')

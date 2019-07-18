@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-17 17:42:22
+@LastEditTime: 2019-07-18 14:51:49
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -9,6 +9,7 @@
 '''
 
 from datetime import datetime
+import os
 import json
 import re
 from db_api import DBMysql, DBRedshift
@@ -59,7 +60,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.db2 = self.db
             self.conn2 = self.conn
 
-    def create_table_for_auto_increment_id(self, tablename):
+    def create_table_for_auto_increment_id(self, tablename, suffix='idxu'):
         '''
         only support mysql !
         '''
@@ -68,7 +69,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         _, result = self.db.sql_execute(sql)
         columns_name = dict(result)
         if not columns_name:
-            original_tablename = tablename.split('_idxu')[0]
+            original_tablename = tablename.split(f'_{suffix}')[0]
             sql = f"select column_name, column_type from information_schema.columns where table_name = '{original_tablename}';"
             _, result = self.db.sql_execute(sql)
             columns_name = dict(result)
@@ -81,32 +82,41 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 self.db.sql_execute(sql)
         return columns_name
     
-    def copy_data_to_idtable(self, tablename, suffix='idxu'):
+    def copy_data_to_idtable(self, tablename, id_min=None, suffix='idxu'):
         '''
-        涉及到truncate操作，谨慎使用！！
+        copy数据
         '''
+        count = 0
         parsebi_logger.info(f'【{tablename}】数据增加自增ID开始！ in 【{self.db_host[:16]}】')
+
+        if id_min != None and id_min >= 0:
+            self._connect()
+            self.db.delete_by_id(tablename, id_min=id_min)
+            self.db.reset_auto_increment_id(tablename)
+
         if suffix in tablename:  # 为了避免truncate错误的表
-            columns_name = self.create_table_for_auto_increment_id(tablename)
+            original_tablename = tablename.split(f'_{suffix}')[0]
+            columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')
 
-            original_tablename_count = self.db.get_table_count(tablename.split('_id')[0])
+            original_tablename_count = self.db.get_table_count(original_tablename)
             tablename_count = self.db.get_table_count(tablename)
-            # print(tablename_count, original_tablename_count)
-
+            
             if tablename_count < original_tablename_count:
                 sql_copy = f'''insert into {tablename}
                 ({','.join(columns_name)})
                 select ({','.join(columns_name)})
-                from {tablename.split('_id')[0]}
+                from {original_tablename}
                 limit {tablename_count} , {original_tablename_count - tablename_count}
                 '''
                 count, _ = self.db.sql_execute(sql_copy)
-                parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,从【{tablename_count + 1}】开始导入{count}条！')
+                parsebi_logger.info(
+                    f'【{tablename}】数据增加自增ID结束,【({tablename_count},{original_tablename_count}]】导入{count}条,！')
             else:
                 parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
         else:
             parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
+        return count
 
     def repair_row(self, row):
         '''修复单行数据'''
@@ -137,7 +147,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             repaired.append(r_l)
         return repaired
 
-    def repair_data_main(self, orignal_tablename, repair_tablename, id_min=None, id_max=None, suffix=None):
+    def repair_data_main(self, orignal_tablename, repair_tablename, id_min=None, id_max=None):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -147,10 +157,6 @@ class RepairMysqlDataOVO(ParseBiFunc):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        if suffix:
-            self.copy_data_to_idtable(tablename=orignal_tablename, suffix=suffix)
-
-
         parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
         self._connect()
         self.db2.create_table(repair_tablename, columns=self.orignal_columns)
@@ -168,7 +174,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if not id_max:
             id_max = self.table_id
         if id_min:
-            self.table2_id = id_min
+            self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
         while self.table2_id < self.table_id:
@@ -180,6 +186,25 @@ class RepairMysqlDataOVO(ParseBiFunc):
             sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.orignal_columns, values=repaired)
             self.db2.sql_execute(sql)
             parsebi_logger.info(f'本次累计修复{self.count}条数据！最大id为{self.table2_id} ！')
+
+    def repair_adjust_data_main(self, orignal_tablename, repair_tablename, id_min=None, suffix=None):
+        '''
+        @description: 处理格式并拆解
+        @param {type} 
+            orignal_tablename:原始数据表名
+            repair_tablename:修复后的数据表名
+            id_min:需要重新跑的id开始值
+            id_max:需要重新跑的id结束值
+            suffix:表名后缀，原表为去掉后缀的表名，带后缀的表名是为了增加自增id
+        @return: 修改并解析数据，无返回值
+        '''
+        
+        if suffix:
+            count = self.copy_data_to_idtable(tablename=orignal_tablename, id_min=id_min, suffix=suffix)
+            if count > 0:
+                self.repair_data_main(orignal_tablename, repair_tablename, id_min=id_min)
+            else:
+                parsebi_logger.info(f'【{orignal_tablename}】adjust new data {count} num, do nothing !')
 
 
 

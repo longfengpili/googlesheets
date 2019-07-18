@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-17 15:55:21
+@LastEditTime: 2019-07-18 14:39:11
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -36,9 +36,9 @@ class DBFunction(DBBase):
         删除数据通过ID
         '''
         if id_min and id_max:
-            contion = f'id > {id_min} and id <= {id_max}'
+            contion = f'id >= {id_min} and id <= {id_max}'
         elif id_min and not id_max:
-            contion = f'id > {id_min}'
+            contion = f'id >= {id_min}'
         else:
             contion = f'id >= 0'
         sql = self.sql_for_delete(tablename, contion=contion)
@@ -90,6 +90,13 @@ class DBMysql(DBFunction):
             self.conn = None
             dblogger.error(e)
 
+    def reset_auto_increment_id(self, tablename):
+        self.connect()
+        sql = f'ALTER  TABLE  {self.database}.{tablename} DROP id;'
+        self.sql_execute(sql)
+
+        sql = f'ALTER  TABLE  {self.database}.{tablename}  ADD id INT PRIMARY KEY NOT NULL AUTO_INCREMENT FIRST;'
+        self.sql_execute(sql)
     
 
 

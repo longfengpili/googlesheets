@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-17 16:29:44
+@LastEditTime: 2019-07-18 14:23:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -9,6 +9,11 @@
 '''
 
 from db_api import DBFunction
+import logging
+from logging import config
+
+config.fileConfig('parselog.conf')
+repairbi_logger = logging.getLogger('repairbi')
 
 
 class ParseBiFunc(DBFunction):
@@ -50,7 +55,6 @@ class ParseBiFunc(DBFunction):
             self.count += count
             self.table2_id = end_id
         return data
-
 
     
 

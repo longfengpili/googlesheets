@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-19 16:17:33
+@LastEditTime: 2019-07-19 16:42:46
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -95,7 +95,6 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if suffix in tablename:  # 为了避免truncate错误的表
             columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')
-            self.db.reset_auto_increment_id(tablename)
             original_tablename = tablename.split(f'_{suffix}')[0]
             
             original_tablename_count = self.db.get_table_count(original_tablename)
@@ -109,6 +108,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 limit {tablename_count} , {original_tablename_count - tablename_count}
                 '''
                 count, _ = self.db.sql_execute(sql_copy)
+                self.db.reset_auto_increment_id(tablename) #更新自增id
                 parsebi_logger.info(
                     f'【{tablename}】数据增加自增ID结束,【({tablename_count},{original_tablename_count}]】导入{count}条,！')
             else:

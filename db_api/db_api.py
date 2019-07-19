@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-19 13:22:07
+@LastEditTime: 2019-07-19 14:32:15
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -94,8 +94,8 @@ class DBMysql(DBFunction):
     def reset_auto_increment_id(self, tablename):
         count = self.get_table_count(tablename)
         max_id = self.get_table_id(tablename)
-        while count != max_id:
-            dblogger.warning(f'【{tablename}】 count({count}) != max_id({max_id})!')
+        while count != max_id - 1:
+            dblogger.warning(f'【{tablename}】 count({count}) != max_id({max_id - 1})!')
             sql = f'ALTER  TABLE  {self.database}.{tablename} DROP id;'
             self.sql_execute(sql)
 

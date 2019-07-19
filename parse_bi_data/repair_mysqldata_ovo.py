@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-18 14:51:49
+@LastEditTime: 2019-07-18 17:23:26
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -92,9 +92,9 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if id_min != None and id_min >= 0:
             self._connect()
             self.db.delete_by_id(tablename, id_min=id_min)
-            self.db.reset_auto_increment_id(tablename)
-
+        
         if suffix in tablename:  # 为了避免truncate错误的表
+            self.db.reset_auto_increment_id(tablename)
             original_tablename = tablename.split(f'_{suffix}')[0]
             columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')

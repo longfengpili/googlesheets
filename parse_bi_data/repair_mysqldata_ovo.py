@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-19 13:11:28
+@LastEditTime: 2019-07-19 15:49:40
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -93,11 +93,11 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.db.delete_by_id(tablename, id_min=id_min)
         
         if suffix in tablename:  # 为了避免truncate错误的表
-            self.db.reset_auto_increment_id(tablename)
-            original_tablename = tablename.split(f'_{suffix}')[0]
             columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')
-
+            self.db.reset_auto_increment_id(tablename)
+            original_tablename = tablename.split(f'_{suffix}')[0]
+            
             original_tablename_count = self.db.get_table_count(original_tablename)
             tablename_count = self.db.get_table_count(tablename)
             

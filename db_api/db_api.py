@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-18 16:04:05
+@LastEditTime: 2019-07-19 13:22:07
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -92,12 +92,15 @@ class DBMysql(DBFunction):
             dblogger.error(e)
 
     def reset_auto_increment_id(self, tablename):
-        self.connect()
-        sql = f'ALTER  TABLE  {self.database}.{tablename} DROP id;'
-        self.sql_execute(sql)
+        count = self.get_table_count(tablename)
+        max_id = self.get_table_id(tablename)
+        while count != max_id:
+            dblogger.warning(f'【{tablename}】 count({count}) != max_id({max_id})!')
+            sql = f'ALTER  TABLE  {self.database}.{tablename} DROP id;'
+            self.sql_execute(sql)
 
-        sql = f'ALTER  TABLE  {self.database}.{tablename}  ADD id INT PRIMARY KEY NOT NULL AUTO_INCREMENT FIRST;'
-        self.sql_execute(sql)
+            sql = f'ALTER  TABLE  {self.database}.{tablename}  ADD id INT PRIMARY KEY NOT NULL AUTO_INCREMENT FIRST;'
+            self.sql_execute(sql)
     
 
 

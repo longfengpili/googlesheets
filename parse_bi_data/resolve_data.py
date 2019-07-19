@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-19 18:18:36
+@LastEditTime: 2019-07-19 18:50:21
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -59,7 +59,7 @@ class ResolveData(ParseBiFunc):
         for column in self.resolve_columns:
             if column.endswith('ts') or column.endswith('_at'):
                 try:#解决传文本的数据
-                    locals()[column] = round(data_json.get(column, 0))
+                    locals()[column] = round(int(data_json.get(column, 0)))
                 except:
                     locals()[column] = 0
                 if 0 < locals()[column] <= 19912435199: #2600-12-31

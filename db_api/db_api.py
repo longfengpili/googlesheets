@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-19 16:17:23
+@LastEditTime: 2019-07-19 16:35:30
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -97,11 +97,13 @@ class DBMysql(DBFunction):
         while count != max_id:
             dblogger.warning(f'【{tablename}】 count({count}) != max_id({max_id})!')
             sql = f'''
-            alter table {tablename} drop id;
-            alter table {tablename} add id int not null first;
-            alter table {tablename} modify column id int not null auto_increment,add primary key(id);
+            alter table {tablename} modify column id int not null first, drop primary key;
+            alter table {tablename} add column id2 int null auto_increment first, add primary key (id2);
+            alter table {tablename} drop column id;
+            alter table {tablename} change column id2 id int not null auto_increment first;
             '''
             self.sql_execute(sql)
+            dblogger.warning(f'{sql}')
 
 
         

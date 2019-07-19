@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-18 14:52:57
+@LastEditTime: 2019-07-19 18:18:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -57,7 +57,7 @@ class ResolveData(ParseBiFunc):
         id, data_json = row
         data_json = json.loads(data_json)
         for column in self.resolve_columns:
-            if column.endswith('ts'):
+            if column.endswith('ts') or column.endswith('_at'):
                 try:#解决传文本的数据
                     locals()[column] = round(data_json.get(column, 0))
                 except:

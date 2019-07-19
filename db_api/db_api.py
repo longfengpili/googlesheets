@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-19 16:57:35
+@LastEditTime: 2019-07-19 17:20:07
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -93,10 +93,8 @@ class DBMysql(DBFunction):
 
     def reset_auto_increment_id(self, tablename):
         sql = f'''
-        alter table {tablename} modify column id int not null first, drop primary key;
-        alter table {tablename} add column id2 int null auto_increment first, add unique key (id2);
-        alter table {tablename} drop column id;
-        alter table {tablename} change column id2 id int not null auto_increment first;
+        alter table {tablename} drop id;
+        alter table {tablename} add id int primary key not null auto_increment first;
         '''
         self.sql_execute(sql)
         # dblogger.warning(f'{sql}')

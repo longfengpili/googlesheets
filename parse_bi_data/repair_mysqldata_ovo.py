@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-19 16:42:46
+@LastEditTime: 2019-07-22 18:42:15
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -111,10 +111,9 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 self.db.reset_auto_increment_id(tablename) #更新自增id
                 parsebi_logger.info(
                     f'【{tablename}】数据增加自增ID结束,【({tablename_count},{original_tablename_count}]】导入{count}条,！')
-            else:
-                parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
-        else:
-            parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
+                return count
+                
+        parsebi_logger.info(f'【{tablename}】数据增加自增ID结束,未进行任何操作！')
         return count
 
     def repair_row(self, row):

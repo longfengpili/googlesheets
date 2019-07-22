@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-19 18:50:21
+@LastEditTime: 2019-07-22 18:40:51
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -124,11 +124,3 @@ class ResolveData(ParseBiFunc):
             self.db.sql_execute(sql)
             parsebi_logger.info(f'本次累计解析{self.count}条数据！最大id为{self.table2_id} ！')
 
-
-
-
-
-
-
-        
-    

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-19 17:24:10
+@LastEditTime: 2019-07-23 16:26:12
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -157,8 +157,11 @@ class DBBase(object):
             # dblogger.info(sql)
         return sql
 
-    def sql_for_select(self, tablename, columns='*', contions=None):
+    def sql_for_select(self, tablename, columns=None, contions=None):
         columns = ','.join(columns)
+        if not columns:
+            columns = '*'
+            
         if contions:
             sql = f'''select {columns} from {self.database}.{tablename} where {contions};'''
         else:

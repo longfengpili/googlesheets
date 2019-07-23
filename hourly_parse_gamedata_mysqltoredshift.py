@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-07-18 11:57:16
+@LastEditTime: 2019-07-23 14:17:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -12,7 +12,6 @@ from psetting import *
 from db_api import DBMysql, DBRedshift
 from parse_bi_data import RepairMysqlDataOVO, ResolveData
 import sys
-from sendmessage import sent_message_tousers
 from datetime import datetime
 
 import argparse

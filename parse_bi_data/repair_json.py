@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-07-12 14:48:45
+@LastEditTime: 2019-07-26 10:22:39
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -21,13 +21,13 @@ class RepairJsonData(object):
     '''
     修复json数据
     '''
-    def __init__(self, myjson, error_max=5, error=None, errors=[]):
+    def __init__(self, myjson, error_max=5, error=None):
         self.myjson_origin = myjson
         self.myjson = myjson
         self.error_num = 0
         self.error_max = error_max
         self.error = error
-        self.errors = errors
+        self.errors = []
 
     def repair_for_bomerror(self):
         self.myjson = self.myjson.encode('utf-8')[3:].decode('utf-8')
@@ -41,7 +41,7 @@ class RepairJsonData(object):
 
     def repair_for_innerjson(self):
         self.myjson = self.myjson.replace('":"{"', '":{"').replace('}","', '},"') #去掉json内部json结构双引号
-        self.myjson = re.sub('(?<!\:)"","', '","', self.myjson) # 去掉多个双引号
+        self.myjson = re.sub('(?<!\:)""', '"', self.myjson) # 去掉多个双引号(前边非冒号)
         try:
             self.myjson = json.loads(self.myjson)
             self.error = None
@@ -72,7 +72,7 @@ class RepairJsonData(object):
                     # repairbi_logger.error(f"{error}")
                     # repairbi_logger.error(f'{str(self.myjson_origin)}')
                     self.error = None
-                    self.myjson = None
+                    self.myjson = {'error': self.myjson_origin}
         self.myjson = json.dumps(self.myjson)
         return self.myjson
 

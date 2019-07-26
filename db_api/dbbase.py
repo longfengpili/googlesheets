@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-23 16:26:12
+@LastEditTime: 2019-07-23 16:27:34
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -158,7 +158,9 @@ class DBBase(object):
         return sql
 
     def sql_for_select(self, tablename, columns=None, contions=None):
-        columns = ','.join(columns)
+        if columns and isinstance(columns, list):
+            columns = ','.join(columns)
+            
         if not columns:
             columns = '*'
             

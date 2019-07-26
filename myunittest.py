@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-19 17:32:28
+@LastEditTime: 2019-07-26 10:17:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -24,7 +24,7 @@ class tasktest(unittest.TestCase):
         print(f'tearDown...')
 
     def test_repair_main(self):
-        myjson = ''
+        myjson = '{"dfs":"sdf}'
         rjd = RepairJsonData(myjson)
         myjson = rjd.repair_main()
         # print(rjd.myjson_origin)
@@ -33,14 +33,13 @@ class tasktest(unittest.TestCase):
 
     def test_repair_row(self):
         # myrow = list((1,'﻿{"ts":"15655"","msg_type3":"end_up","isdds":false,"t":"d""}'))
-        myrow = list((1,'{"ts":"15655"","msg_type3":"end_up","isdds":false,"t":"d""}'))
+        myrow = list((1,'{"ts":"15655"","msg":"end_up","isdds":false,"t":"d""}'))
         rdovo = RepairMysqlDataOVO('mysql_host', 'mysql_user', 'mysql_password', 'mysql_database', 'redshift_host',
                                         'redshift_user', 'redshift_password', 'redshift_database', 'orignal_columns')
         id, myjson, errors = rdovo.repair_row(myrow)
-        # print(rjd.myjson_origin)
-        # print(id)
-        # print(myjson)
-        # print(errors)
+        print(id)
+        print(myjson)
+        print(errors)
 
     def test_repair_to_redshift(self):
         rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
@@ -84,6 +83,6 @@ class tasktest(unittest.TestCase):
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_copy_in_mysql'))
+    suite.addTest(tasktest('test_repair_row'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-07-26 10:22:39
+@LastEditTime: 2019-07-26 10:33:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -27,7 +27,7 @@ class RepairJsonData(object):
         self.error_num = 0
         self.error_max = error_max
         self.error = error
-        self.errors = []
+        self.errors = None
 
     def repair_for_bomerror(self):
         self.myjson = self.myjson.encode('utf-8')[3:].decode('utf-8')
@@ -51,6 +51,7 @@ class RepairJsonData(object):
             self.error_num += 1
 
     def repair_main(self):
+        self.error = []
         try:
             self.myjson = json.loads(self.myjson)
         except Exception as e:

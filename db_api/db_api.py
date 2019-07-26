@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-19 17:20:07
+@LastEditTime: 2019-07-26 16:30:47
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -16,6 +16,7 @@ from .dbbase import DBBase
 
 import logging
 from logging import config
+import threading
 
 config.fileConfig('parselog.conf')
 dblogger = logging.getLogger('db')
@@ -65,6 +66,7 @@ class DBRedshift(DBFunction):
         self.password = password
         self.database = database
         self.conn = None
+        self.pool = {}
 
     def connect(self):
         try:
@@ -73,6 +75,13 @@ class DBRedshift(DBFunction):
         except Exception as e:
             self.conn = None
             dblogger.error(e)
+
+    def get_conn_instance(self):
+        name = threading.current_thread().name
+        if name not in self.pool:
+            conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
+            self.pool[name] = conn
+        return self.pool[name]
 
 class DBMysql(DBFunction):
     def __init__(self, host=None, user=None, password=None, database=None):

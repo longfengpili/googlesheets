@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-26 11:06:21
+@LastEditTime: 2019-07-26 16:48:07
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -22,6 +22,12 @@ from logging import config
 config.fileConfig('parselog.conf')
 repairbi_logger = logging.getLogger('repairbi')
 parsebi_logger = logging.getLogger('parsebi')
+
+import threading
+lock = threading.Lock() #生成全局锁
+from .mythread import MyThread
+import time
+
 
 
 class RepairMysqlDataOVO(ParseBiFunc):
@@ -141,14 +147,28 @@ class RepairMysqlDataOVO(ParseBiFunc):
         return id, myjson, rjd.errors
 
     def repair_multiple_rows(self, rows):
+        st = time.time()
         repaired = []
         for row in rows:
             id, myjson, _ = self.repair_row(row)
             r_l = [id, myjson]
             # repairbi_logger.info(r_l)
             repaired.append(r_l)
+        et = time.time()
+        # parsebi_logger.info(f'cost {round(et - st, 4)} seconds')
         return repaired
-
+    
+    def repair_data_once(self, orignal_tablename, repair_tablename, n=1000):
+        #获取未修复数据
+        with lock:
+            data, start_id, end_id = self.get_data(tablename1=orignal_tablename, columns=self.orignal_columns, n=n)
+        #修复数据
+        repaired = self.repair_multiple_rows(data)
+        # print(repaired[0])
+        sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.orignal_columns, values=repaired)
+        self.sql_execute_by_instance(self.db2, sql)
+        parsebi_logger.info(f'本次累计修复【({start_id},{end_id}]】{end_id - start_id}条数据！')
+        
     def repair_data_main(self, orignal_tablename, repair_tablename, id_min=None, id_max=None):
         '''
         @description: 处理格式并拆解
@@ -160,6 +180,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         @return: 修改并解析数据，无返回值
         '''
         parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
+        n = 1000
         self._connect()
         self.db2.create_table(repair_tablename, columns=self.orignal_columns)
 
@@ -179,15 +200,20 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+        start_id = self.table2_id
         while self.table2_id < self.table_id:
-            #获取未修复数据
-            data = self.get_data(tablename1=orignal_tablename, columns=self.orignal_columns, n=1000)
-            #修复数据
-            repaired = self.repair_multiple_rows(data)
-            #插入新表
-            sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.orignal_columns, values=repaired)
-            self.db2.sql_execute(sql)
-            parsebi_logger.info(f'本次累计修复{self.count}条数据！最大id为{self.table2_id} ！')
+            # self.repair_data_once(orignal_tablename, repair_tablename, n=n)
+            threads = []
+            for i in range(10):
+                if self.table2_id + n * i < self.table_id:
+                    args = (orignal_tablename, repair_tablename)
+                    t = MyThread(self.repair_data_once, *args, n=n)
+                    threads.append(t)
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+        parsebi_logger.info(f'本次累计修复【({start_id},{self.table_id}]】, 共【{self.table_id - start_id}】条！')
 
     def repair_adjust_data_main(self, orignal_tablename, repair_tablename, id_min=None, suffix=None):
         '''

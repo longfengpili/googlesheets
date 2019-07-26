@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-23 14:17:55
+@LastEditTime: 2019-07-26 17:12:10
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -20,6 +20,11 @@ from logging import config
 config.fileConfig('parselog.conf')
 resolvebi_logger = logging.getLogger('resolvebi')
 parsebi_logger = logging.getLogger('parsebi')
+
+import threading
+lock = threading.Lock() #生成全局锁
+from .mythread import MyThread
+import time
 
 
 class ResolveData(ParseBiFunc):
@@ -83,6 +88,17 @@ class ResolveData(ParseBiFunc):
             resolved.append(row)
         return resolved
 
+    def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
+        #获取未修复数据
+        with lock:
+            data, start_id, end_id = self.get_data(tablename1=repair_tablename, columns=self.orignal_columns, n=n)
+        #修复数据
+        resolved = self.resolve_multiple_rows(data)
+        # print(resolved[0])
+        sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
+        self.sql_execute_by_instance(self.db, sql)
+        parsebi_logger.info(f'本次累计解析【({start_id},{end_id}]】{end_id - start_id}条数据！')
+
     def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
         '''
         @description: 处理格式并拆解
@@ -94,6 +110,7 @@ class ResolveData(ParseBiFunc):
         @return: 修改并解析数据，无返回值
         '''
         parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
+        n = 1000
         self._connect()
         self.db.create_table(resolve_tablename, columns=self.resolve_columns)
 
@@ -112,15 +129,19 @@ class ResolveData(ParseBiFunc):
         if id_min:
             self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
-        parsebi_logger.info(
-            f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+        parsebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+        start_id = self.table2_id
         while self.table2_id < self.table_id:
-            #获取未修复数据
-            data = self.get_data(tablename1=repair_tablename, columns=self.orignal_columns, n=1000)
-            #修复数据
-            resolveed = self.resolve_multiple_rows(data)
-            #插入新表
-            sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolveed)
-            self.db.sql_execute(sql)
-            parsebi_logger.info(f'本次累计解析{self.count}条数据！最大id为{self.table2_id} ！')
+            # self.resolve_data_once(orignal_tablename, repair_tablename, n=n)
+            threads = []
+            for i in range(10):
+                if self.table2_id + n * i < self.table_id:
+                    args = (repair_tablename, resolve_tablename)
+                    t = MyThread(self.resolve_data_once, *args, n=n)
+                    threads.append(t)
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+        parsebi_logger.info(f'本次累计解析【({start_id},{self.table_id}]】, 共【{self.table_id - start_id}】条！')
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-26 10:44:45
+@LastEditTime: 2019-07-26 14:17:31
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -11,7 +11,7 @@ from datetime import date, timedelta, datetime
 import re
 import sys
 import json
-
+import time
 
 import logging
 from logging import config
@@ -98,6 +98,7 @@ class DBBase(object):
         return change_count, result
         
     def sql_execute(self, sql, count=None):
+        st = time.time()
         if not sql:
             return None, None
         if not self.conn:
@@ -113,6 +114,8 @@ class DBBase(object):
             sys.exit()
 
         self.__close()
+        et = time.time()
+        # dblogger.info(f'{sql[:10]} execute {round(et - st, 4)} seconds')
         return change_count,result
 
     def sql_for_create(self, tablename, columns, primary_key=True):

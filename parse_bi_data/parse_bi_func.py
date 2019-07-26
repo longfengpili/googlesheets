@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-18 14:23:19
+@LastEditTime: 2019-07-26 16:47:25
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -54,8 +54,15 @@ class ParseBiFunc(DBFunction):
             count, data = self.db.sql_execute(sql)
             self.count += count
             self.table2_id = end_id
-        return data
+        return data, start_id, end_id
 
+    def sql_execute_by_instance(self, db, sql):
+        #插入新表
+        conn = db.get_conn_instance()
+        cur = conn.cursor()
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
     
 
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-26 10:16:22
+@LastEditTime: 2019-07-26 10:51:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -121,20 +121,22 @@ class RepairMysqlDataOVO(ParseBiFunc):
         id, myjson = row
         rjd = RepairJsonData(myjson)
         myjson = rjd.repair_main()
-        l = '>' * ((30 - len(str(id)))//2)
-        l_ = '<' * ((30 - len(str(id)))//2)
-        msg_type = re.search('"msg_type":"(.*?)"', str(rjd.myjson_origin))
-        if msg_type:
-            msg_type = msg_type.group(1)
-        else:
-            msg_type = 'error'
-            myjson = json.loads(myjson)
-            myjson['msg_type'] = msg_type
-            myjson = json.dumps(myjson)
-            repairbi_logger.error(f'不存在msg_type!\n{row}')
-            rjd.errors.insert(0, f'\n{l}【{msg_type}】{l_}【{id}】')
-        error = '\n'.join(rjd.errors)
-        repairbi_logger.error(f"{error}")
+        if rjd.error_num >= rjd.error_max:  # 如果超过错误报警
+            l = '>' * ((30 - len(str(id)))//2)
+            l_ = '<' * ((30 - len(str(id)))//2)
+            msg_type = re.search('"msg_type":"(.*?)"', str(rjd.myjson_origin))
+            if msg_type:
+                msg_type = msg_type.group(1)
+            else:
+                msg_type = 'error'
+                myjson = json.loads(myjson)
+                myjson['msg_type'] = msg_type
+                myjson = json.dumps(myjson)
+                repairbi_logger.error(f'不存在msg_type!\n{row}')
+                rjd.errors.insert(0, f'\n{l}【{msg_type}】{l_}【{id}】')
+
+            error = '\n'.join(rjd.errors)
+            repairbi_logger.error(f"{error}")
                     
         return id, myjson, rjd.errors
 

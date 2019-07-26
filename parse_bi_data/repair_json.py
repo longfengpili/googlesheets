@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-07-26 10:33:03
+@LastEditTime: 2019-07-26 10:40:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -51,7 +51,7 @@ class RepairJsonData(object):
             self.error_num += 1
 
     def repair_main(self):
-        self.error = []
+        self.errors = []
         try:
             self.myjson = json.loads(self.myjson)
         except Exception as e:

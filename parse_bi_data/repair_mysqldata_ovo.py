@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-26 10:51:36
+@LastEditTime: 2019-07-26 10:55:59
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -133,7 +133,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 myjson['msg_type'] = msg_type
                 myjson = json.dumps(myjson)
                 repairbi_logger.error(f'不存在msg_type!\n{row}')
-                rjd.errors.insert(0, f'\n{l}【{msg_type}】{l_}【{id}】')
+                rjd.errors.insert(0, f'\n{l}【{msg_type}】{l_}【{id}】\n{myjson}')
 
             error = '\n'.join(rjd.errors)
             repairbi_logger.error(f"{error}")

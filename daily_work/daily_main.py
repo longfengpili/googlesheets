@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-10 16:03:11
+@LastEditTime: 2019-07-29 15:05:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -77,7 +77,7 @@ class DailyMainMysql(DailyMain):
             self.db = DBMysql(host=self.host, user=self.user,
                               password=self.password, database=self.database)
         if not self.conn:
-            self.conn = self.db.connect()
+            self.conn = self.db._connect()
 
 class DailyMainRedshift(DailyMain):
     def __init__(self, host, user, password, database, sqlpath):
@@ -95,4 +95,4 @@ class DailyMainRedshift(DailyMain):
             self.db = DBRedshift(host=self.host, user=self.user,
                               password=self.password, database=self.database)
         if not self.conn:
-            self.conn = self.db.connect()
+            self.conn = self.db._connect()

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-02 11:41:25
-@LastEditTime: 2019-07-03 15:44:13
+@LastEditTime: 2019-07-29 14:08:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -79,7 +79,7 @@ class SaveSpreadSheetToMysql(SaveSpreadSheet):
             self.db = DBMysql(host=self.host, user=self.user,
                               password=self.password, database=self.database)
         if not self.conn:
-            self.conn = self.db.connect()
+            self.conn = self.db._connect()
 
 class SaveSpreadSheetToRedshift(SaveSpreadSheet):
     def __init__(self, host, user, password, database, spreadsheet_id):
@@ -100,7 +100,7 @@ class SaveSpreadSheetToRedshift(SaveSpreadSheet):
             self.db = DBRedshift(host=self.host, user=self.user,
                               password=self.password, database=self.database)
         if not self.conn:
-            self.conn = self.db.connect()
+            self.conn = self.db._connect()
 
 
 

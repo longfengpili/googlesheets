@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-26 16:47:25
+@LastEditTime: 2019-07-29 09:55:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -60,9 +60,14 @@ class ParseBiFunc(DBFunction):
         #插入新表
         conn = db.get_conn_instance()
         cur = conn.cursor()
-        cur.execute(sql)
-        conn.commit()
+        try:
+            cur.execute(sql)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            repairbi_logger.error(e)
+            repairbi_logger.error(sql)
         conn.close()
-    
+        
 
 

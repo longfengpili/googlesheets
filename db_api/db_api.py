@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-26 16:30:47
+@LastEditTime: 2019-07-29 09:49:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -13,6 +13,7 @@ from datetime import date, timedelta, datetime
 import re
 import sys
 from .dbbase import DBBase
+import time
 
 import logging
 from logging import config
@@ -79,7 +80,13 @@ class DBRedshift(DBFunction):
     def get_conn_instance(self):
         name = threading.current_thread().name
         if name not in self.pool:
-            conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
+            try:
+                conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
+            except Exception as e:
+                dblogger.error(e)
+                while not conn:
+                    time.sleep(1)
+                    conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
             self.pool[name] = conn
         return self.pool[name]
 

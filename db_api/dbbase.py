@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-29 12:02:54
+@LastEditTime: 2019-07-29 18:09:39
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -97,13 +97,17 @@ class DBBase(object):
                     result = cur.fetchall()
         return change_count, result
         
-    def sql_execute(self, sql, count=None):
+    def sql_execute(self, sql, conn=None, count=None):
         st = time.time()
         if not sql:
             return None, None
 
-        if not self.conn:
-            self._connect()
+        if conn:
+            self.conn = conn
+        elif not self.conn:
+            while not self.conn:
+                self._connect()
+                time.sleep(1)
         cursor = self.conn.cursor()
         try:
             change_count, result = self.execute_multiple(cursor, sql)

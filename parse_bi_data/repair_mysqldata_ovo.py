@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-29 12:04:13
+@LastEditTime: 2019-07-29 12:38:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -85,6 +85,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 columns_name = dict(zip(keys, values))
                 sql = self.db.sql_for_create(
                     tablename=tablename, columns=columns_name)
+                # print(sql)
                 self.db.sql_execute(sql)
         return columns_name
     

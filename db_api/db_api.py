@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-29 12:03:41
+@LastEditTime: 2019-07-29 12:37:46
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -84,6 +84,7 @@ class DBRedshift(DBFunction):
                 conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
             except Exception as e:
                 dblogger.error(e)
+                conn = None
                 while not conn:
                     time.sleep(1)
                     conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-26 10:17:19
+@LastEditTime: 2019-07-29 12:59:26
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -80,9 +80,15 @@ class tasktest(unittest.TestCase):
             if result != temp1:
                 print(f'=========={i}============'*5)
             temp1 = result
+
+    def test_create_in_mysql(self):
+        rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+                                   orignal_columns=M_ORIGINAL_COLUMNS)
+        rdovo.copy_data_to_idtable(tablename=M_AD_ORIGINAL_TABLENAME)
+
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_repair_row'))
+    suite.addTest(tasktest('test_create_in_mysql'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

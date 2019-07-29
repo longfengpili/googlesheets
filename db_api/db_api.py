@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-29 09:49:05
+@LastEditTime: 2019-07-29 12:03:41
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -69,7 +69,7 @@ class DBRedshift(DBFunction):
         self.conn = None
         self.pool = {}
 
-    def connect(self):
+    def _connect(self):
         try:
             self.conn = psycopg2.connect(
                 database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
@@ -88,6 +88,8 @@ class DBRedshift(DBFunction):
                     time.sleep(1)
                     conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
             self.pool[name] = conn
+        # print(self.pool)
+        # print(name)
         return self.pool[name]
 
 class DBMysql(DBFunction):
@@ -99,7 +101,7 @@ class DBMysql(DBFunction):
         self.database = database
         self.conn = None
 
-    def connect(self):
+    def _connect(self):
         try:
             self.conn = pymysql.connect(
                 db=self.database, user=self.user, password=self.password, host=self.host, port=self.port)

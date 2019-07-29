@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-29 10:30:45
+@LastEditTime: 2019-07-29 11:47:48
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -50,14 +50,25 @@ class ParseBiFunc(DBFunction):
             end_id = self.table2_id + n
             if end_id >= self.table_id:
                 end_id = self.table_id
+            self.table2_id = end_id
             sql = self.db.sql_for_select(tablename=tablename1, columns=columns, contions=f'id > {start_id} and id <= {end_id}')
             count, data = self.db.sql_execute(sql)
             self.count += count
-            self.table2_id = end_id
+            
         return data, start_id, end_id
 
     def sql_execute_by_instance(self, db, sql):
         #插入新表
         conn = db.get_conn_instance()
-        self.sql_execute(sql, conn= conn)
+        cur = conn.cursor()
+        try:
+            cur.execute(sql)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            repairbi_logger.error(e)
+            repairbi_logger.error(sql)
+        conn.close()
         
+
+

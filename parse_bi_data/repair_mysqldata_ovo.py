@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-26 16:48:07
+@LastEditTime: 2019-07-29 12:04:13
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -54,14 +54,14 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.db = DBMysql(host=self.db_host, user=self.db_user,
                               password=self.db_password, database=self.db_database)
         if not self.conn:
-            self.conn = self.db.connect()
+            self.conn = self.db._connect()
 
         if self.db2_host:  
             if not self.db2:
                 self.db2 = DBRedshift(host=self.db2_host, user=self.db2_user,
                                     password=self.db2_password, database=self.db2_database)
             if not self.conn2:
-                self.conn2 = self.db2.connect()
+                self.conn2 = self.db2._connect()
         else:
             self.db2 = self.db
             self.conn2 = self.conn

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-26 17:12:10
+@LastEditTime: 2019-07-29 12:04:35
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -48,13 +48,13 @@ class ResolveData(ParseBiFunc):
                 self.db = DBMysql(host=self.host, user=self.user,
                                 password=self.password, database=self.database)
             if not self.conn:
-                self.conn = self.db.connect()
+                self.conn = self.db._connect()
         elif self.db_type == 'redshift':
             if not self.db:
                 self.db = DBRedshift(host=self.host, user=self.user,
                                      password=self.password, database=self.database)
             if not self.conn:
-                self.conn = self.db.connect()
+                self.conn = self.db._connect()
 
     def resolve_row(self,row):
         # print(row)

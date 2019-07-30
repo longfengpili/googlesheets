@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-29 13:36:26
+@LastEditTime: 2019-07-30 11:40:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -90,8 +90,8 @@ class ResolveData(ParseBiFunc):
 
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
         #获取未修复数据
-        with lock:
-            data, start_id, end_id = self.get_data(tablename1=repair_tablename, columns=self.orignal_columns, n=n)
+        # with lock:
+        data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.orignal_columns, n=n)
         #修复数据
         resolved = self.resolve_multiple_rows(data)
         # print(resolved[0])
@@ -118,7 +118,7 @@ class ResolveData(ParseBiFunc):
             if id_min >= id_max:
                 raise 'id_min should < id_max'
         if id_min != None:
-            id_min -= 1  # 左开右闭
+            id_min -= 0  # 左开右闭
             #删除resolve表数据
             self.db.delete_by_id(tablename=resolve_tablename, id_min=id_min, id_max=id_max)
 

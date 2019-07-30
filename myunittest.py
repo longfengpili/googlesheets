@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-29 12:59:26
+@LastEditTime: 2019-07-30 11:08:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -85,6 +85,11 @@ class tasktest(unittest.TestCase):
         rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
                                    orignal_columns=M_ORIGINAL_COLUMNS)
         rdovo.copy_data_to_idtable(tablename=M_AD_ORIGINAL_TABLENAME)
+
+    def test_threading(self):
+        rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+                                   orignal_columns=M_ORIGINAL_COLUMNS)
+        print(rdovo._connect)
 
 if __name__ == '__main__':
     # unittest.main()

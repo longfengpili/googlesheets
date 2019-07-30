@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-29 18:09:39
+@LastEditTime: 2019-07-30 12:45:19
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -15,6 +15,7 @@ import time
 
 import logging
 from logging import config
+import threading
 
 config.fileConfig('parselog.conf')
 dblogger = logging.getLogger('db')
@@ -32,9 +33,10 @@ class DBBase(object):
     def _connect(self):
         pass
 
-    def __close(self):
-        if self.conn:
-            self.conn.close()
+    def __close(self, conn=None):
+        if conn or self.conn:
+            conn.close()
+            conn = None
             self.conn = None
 
     def __check_sql_type(self, sql):
@@ -101,24 +103,30 @@ class DBBase(object):
         st = time.time()
         if not sql:
             return None, None
-
         if conn:
-            self.conn = conn
-        elif not self.conn:
+            conn = conn
+        else:
             while not self.conn:
                 self._connect()
                 time.sleep(1)
-        cursor = self.conn.cursor()
+            conn = self.conn
+        # try:
+        #     conn.ping(reconnect=True)
+        # except:
+        #     pass
         try:
+            cursor = conn.cursor()
             change_count, result = self.execute_multiple(cursor, sql)
-            self.conn.commit()
+            # name = threading.current_thread().name
+            # print(name, change_count, result[0][0], self.conn)
+            conn.commit()
         except Exception as e:
-            self.conn.rollback()
+            conn.rollback()
             dblogger.error(e)
-            dblogger.error(sql)
+            # dblogger.error(sql)
             sys.exit()
 
-        self.__close()
+        self.__close(conn=conn)
         et = time.time()
         # dblogger.info(f'{sql[:10]} execute {round(et - st, 4)} seconds')
         return change_count,result

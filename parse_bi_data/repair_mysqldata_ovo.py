@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-07-29 12:59:21
+@LastEditTime: 2019-07-30 12:34:28
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -161,8 +161,8 @@ class RepairMysqlDataOVO(ParseBiFunc):
     
     def repair_data_once(self, orignal_tablename, repair_tablename, n=1000):
         #获取未修复数据
-        with lock:
-            data, start_id, end_id = self.get_data(tablename1=orignal_tablename, columns=self.orignal_columns, n=n)
+        # with lock:
+        data, start_id, end_id = self.get_data(db=self.db, tablename1=orignal_tablename, columns=self.orignal_columns, n=n)
         #修复数据
         repaired = self.repair_multiple_rows(data)
         # print(repaired[0])
@@ -189,7 +189,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             if id_min >= id_max:
                 raise 'id_min should < id_max'
         if id_min != None:
-            id_min -= 1  # 左开右闭
+            id_min -= 0  # 左开右闭
             #删除repair表数据
             self.db2.delete_by_id(tablename=repair_tablename, id_min=id_min, id_max=id_max)
         

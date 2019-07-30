@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-07-15 12:02:52
+@LastEditTime: 2019-07-30 16:35:20
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -38,6 +38,12 @@ R_FUNNEL_TABLENAME = mysetting.r_funnel_table
 FUNNEL_COLUMNS = mysetting.funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 FUNNEL_SHEETNAME = mysetting.funnel_sheetname
+#load_funnel_info
+LOAD_FUNNEL_TABLENAME = mysetting.load_funnel_table
+R_LOAD_FUNNEL_TABLENAME = mysetting.r_load_funnel_table
+LOAD_FUNNEL_COLUMNS = mysetting.load_funnel_columns
+FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
+LOAD_FUNNEL_SHEETNAME = mysetting.load_funnel_sheetname
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

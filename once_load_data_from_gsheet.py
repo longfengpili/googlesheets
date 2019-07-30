@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-07-26 18:40:58
+@LastEditTime: 2019-07-30 16:38:40
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -35,6 +35,6 @@ elif load == '2':
 elif load == '3':
     save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=FUNNEL_SHEETNAME, tablename=R_FUNNEL_TABLENAME, columns=FUNNEL_COLUMNS, primary_key=True)
 elif load == '4':
-    save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=FUNNEL_SHEETNAME, tablename=R_FUNNEL_TABLENAME, columns=FUNNEL_COLUMNS, primary_key=True)
+    save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=LOAD_FUNNEL_SHEETNAME, tablename=R_LOAD_FUNNEL_TABLENAME, columns=LOAD_FUNNEL_COLUMNS, primary_key=True)
 
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-30 16:52:11
+@LastEditTime: 2019-07-31 16:28:37
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,7 +37,8 @@ class DBBase(object):
         if conn:
             conn.close()
             conn = None
-        if self.conn:
+            self.conn = None
+        elif self.conn:
             self.conn.close()
             self.conn = None
 

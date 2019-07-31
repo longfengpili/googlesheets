@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-30 12:45:19
+@LastEditTime: 2019-07-30 16:52:11
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -34,9 +34,11 @@ class DBBase(object):
         pass
 
     def __close(self, conn=None):
-        if conn or self.conn:
+        if conn:
             conn.close()
             conn = None
+        if self.conn:
+            self.conn.close()
             self.conn = None
 
     def __check_sql_type(self, sql):

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-07-30 11:40:03
+@LastEditTime: 2019-08-01 12:20:12
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -96,8 +96,11 @@ class ResolveData(ParseBiFunc):
         resolved = self.resolve_multiple_rows(data)
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
-        self.sql_execute_by_instance(self.db, sql)
-        parsebi_logger.info(f'本次累计解析【({start_id},{end_id}]】{end_id - start_id}条数据！')
+        count, data = self.sql_execute_by_instance(self.db, sql)
+        if count:
+            parsebi_logger.info(f'本次累计解析【({start_id},{end_id}]】{end_id - start_id}条数据！')
+        else:
+            parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')
 
     def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
         '''

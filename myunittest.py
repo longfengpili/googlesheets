@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-30 11:08:27
+@LastEditTime: 2019-08-05 10:36:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -33,7 +33,7 @@ class tasktest(unittest.TestCase):
 
     def test_repair_row(self):
         # myrow = list((1,'﻿{"ts":"15655"","msg_type3":"end_up","isdds":false,"t":"d""}'))
-        myrow = list((1,'{"ts":"15655"","msg":"end_up","isdds":false,"t":"d""}'))
+        myrow = list((1, '{"ts":1564727341,"'))
         rdovo = RepairMysqlDataOVO('mysql_host', 'mysql_user', 'mysql_password', 'mysql_database', 'redshift_host',
                                         'redshift_user', 'redshift_password', 'redshift_database', 'orignal_columns')
         id, myjson, errors = rdovo.repair_row(myrow)
@@ -94,6 +94,6 @@ class tasktest(unittest.TestCase):
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_create_in_mysql'))
+    suite.addTest(tasktest('test_repair_row'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

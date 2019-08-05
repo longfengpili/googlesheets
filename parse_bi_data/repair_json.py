@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-07-26 10:40:37
+@LastEditTime: 2019-08-05 10:15:26
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -51,7 +51,8 @@ class RepairJsonData(object):
             self.error_num += 1
 
     def repair_main(self):
-        self.errors = []
+        if not self.errors:
+            self.errors = []
         try:
             self.myjson = json.loads(self.myjson)
         except Exception as e:
@@ -64,6 +65,7 @@ class RepairJsonData(object):
                 elif "Expecting ',' delimiter" in self.error:
                     self.repair_for_innerjson()
                 else:
+                    self.errors.append(self.error)
                     repairbi_logger.error(f'{self.myjson}')
                     repairbi_logger.error(f'{self.error}')
                     self.error_num += 1
@@ -73,7 +75,7 @@ class RepairJsonData(object):
                     # repairbi_logger.error(f"{error}")
                     # repairbi_logger.error(f'{str(self.myjson_origin)}')
                     self.error = None
-                    self.myjson = {'error': self.myjson_origin}
+                    self.myjson = {'error': f'{self.myjson_origin}'}
         self.myjson = json.dumps(self.myjson)
         return self.myjson
 

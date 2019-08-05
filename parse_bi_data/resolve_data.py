@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-05 12:06:09
+@LastEditTime: 2019-08-05 12:18:23
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -56,7 +56,7 @@ class ResolveData(ParseBiFunc):
             if not self.conn:
                 self.conn = self.db._connect()
 
-    def resolve_row(self,row):
+    def resolve_row(self,row,ischeck=True):
         # print(row)
         columns_value = []
         id, data_json = row
@@ -79,27 +79,28 @@ class ResolveData(ParseBiFunc):
         row = columns_value
         # print(row)
 
-        keys = set(data_json) - set(self.resolve_columns)
-        if keys:
-            key_ = {}
-            for key in keys:
-                key_[key] = data_json.get(key)
-            parsebi_logger.error(f'【{key_}】 do not parse, if need please change your resolve columns !')
+        if ischeck:
+            keys = set(data_json) - set(self.resolve_columns)
+            if keys:
+                key_ = {}
+                for key in keys:
+                    key_[key] = data_json.get(key)
+                parsebi_logger.error(f'【{key_}】 do not parse, if need please change your resolve columns !')
         return row
 
-    def resolve_multiple_rows(self,rows):
+    def resolve_multiple_rows(self,rows,ischeck=True):
         resolved = []
         for row in rows:
-            row = self.resolve_row(row)
+            row = self.resolve_row(row,ischeck=ischeck)
             resolved.append(row)
         return resolved
 
-    def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
+    def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000,ischeck=True):
         #获取未修复数据
         # with lock:
         data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.orignal_columns, n=n)
         #修复数据
-        resolved = self.resolve_multiple_rows(data)
+        resolved = self.resolve_multiple_rows(data,ischeck=ischeck)
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
         count, data = self.sql_execute_by_instance(self.db, sql)
@@ -108,7 +109,7 @@ class ResolveData(ParseBiFunc):
         else:
             parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')
 
-    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
+    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None,ischeck=True):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -146,7 +147,7 @@ class ResolveData(ParseBiFunc):
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:
                     args = (repair_tablename, resolve_tablename)
-                    t = MyThread(self.resolve_data_once, *args, n=n)
+                    t = MyThread(self.resolve_data_once, *args, n=n, ischeck=ischeck)
                     threads.append(t)
             for t in threads:
                 t.start()

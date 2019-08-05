@@ -45,6 +45,9 @@ LOAD_FUNNEL_COLUMNS = mysetting.load_funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 LOAD_FUNNEL_SHEETNAME = mysetting.load_funnel_sheetname
 
+#DB
+NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
+
 # Redshift
 R_DATABASE = mysetting.redshift_database
 R_HOST = mysetting.redshift_host

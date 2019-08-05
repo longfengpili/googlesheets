@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-05 12:18:23
+@LastEditTime: 2019-08-05 14:21:38
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -28,7 +28,7 @@ import time
 
 
 class ResolveData(ParseBiFunc):
-    def __init__(self, host, user, password, database, orignal_columns, resolve_columns, db_type):
+    def __init__(self, host, user, password, database, orignal_columns, resolve_columns, no_resolve_columns, db_type):
         self.table_id = None
         self.table2_id = None
         self.count = 0
@@ -40,6 +40,7 @@ class ResolveData(ParseBiFunc):
         self.database = database
         self.orignal_columns = orignal_columns
         self.resolve_columns = resolve_columns
+        self.no_resolve_columns = no_resolve_columns
         self.db_type = db_type
 
     def _connect(self):
@@ -56,7 +57,7 @@ class ResolveData(ParseBiFunc):
             if not self.conn:
                 self.conn = self.db._connect()
 
-    def resolve_row(self,row,ischeck=True):
+    def resolve_row(self,row):
         # print(row)
         columns_value = []
         id, data_json = row
@@ -79,37 +80,37 @@ class ResolveData(ParseBiFunc):
         row = columns_value
         # print(row)
 
-        if ischeck:
-            keys = set(data_json) - set(self.resolve_columns)
-            if keys:
-                key_ = {}
-                for key in keys:
-                    key_[key] = data_json.get(key)
-                parsebi_logger.error(f'【{key_}】 do not parse, if need please change your resolve columns !')
+        keys = set(data_json) - set(self.resolve_columns) - set(self.no_resolve_columns)
+        if keys:
+            key_ = {}
+            for key in keys:
+                key_[key] = data_json.get(key)
+            parsebi_logger.error(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
         return row
 
-    def resolve_multiple_rows(self,rows,ischeck=True):
+    def resolve_multiple_rows(self,rows):
         resolved = []
         for row in rows:
-            row = self.resolve_row(row,ischeck=ischeck)
+            row = self.resolve_row(row)
             resolved.append(row)
         return resolved
 
-    def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000,ischeck=True):
+    def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
         #获取未修复数据
         # with lock:
         data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.orignal_columns, n=n)
         #修复数据
-        resolved = self.resolve_multiple_rows(data,ischeck=ischeck)
+        resolved = self.resolve_multiple_rows(data)
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
         count, data = self.sql_execute_by_instance(self.db, sql)
-        if count >= 1:
-            parsebi_logger.info(f'本次累计解析【({start_id},{end_id}]】{end_id - start_id}条数据！')
+        if data:
+            self.count += count
+            parsebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！')
         else:
             parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')
 
-    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None,ischeck=True):
+    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -147,11 +148,11 @@ class ResolveData(ParseBiFunc):
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:
                     args = (repair_tablename, resolve_tablename)
-                    t = MyThread(self.resolve_data_once, *args, n=n, ischeck=ischeck)
+                    t = MyThread(self.resolve_data_once, *args, n=n)
                     threads.append(t)
             for t in threads:
                 t.start()
             for t in threads:
                 t.join()
-        parsebi_logger.info(f'本次累计解析【({start_id},{self.table_id}]】, 共【{self.table_id - start_id}】条！')
+        parsebi_logger.info(f'本次累计解析【({start_id},{self.table_id}]】, 共【{self.count}】条！')
 

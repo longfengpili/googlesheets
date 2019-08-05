@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 18:04:02
-@LastEditTime: 2019-07-30 12:37:54
+@LastEditTime: 2019-08-05 14:25:08
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -25,7 +25,6 @@ class ParseBiFunc(DBFunction):
         self.db2 = None
         self.conn2 = None
         self.table2_id = None
-        self.count = 0
 
     def _connect(self):
         pass
@@ -57,7 +56,6 @@ class ParseBiFunc(DBFunction):
             sql = db.sql_for_select(tablename=tablename1, columns=columns, contions=f'id > {start_id} and id <= {end_id}')
             conn = db.get_conn_instance()
             count, data = db.sql_execute(sql, conn=conn)
-            self.count += count
             
         return data, start_id, end_id
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-05 11:24:11
+@LastEditTime: 2019-08-05 11:32:46
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -130,7 +130,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         myjson = rjd.repair_main()
         if rjd.error_num >= rjd.error_max:  # 如果超过错误报警
             myjson = json.loads(myjson)
-            myjson['id'] = id
+            myjson['id_index'] = id
             myjson = json.dumps(myjson)
 
             error = '\n'.join(rjd.errors)

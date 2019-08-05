@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-08-05 12:43:07
+@LastEditTime: 2019-08-05 15:45:03
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -25,6 +25,9 @@ id_max = args.id_max
 R_AD_REPAIR_TABLENAME = R_AD_REPAIR_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据不同的数据库创建不同的表
 R_AD_RESOLVE_TABLENAME = R_AD_RESOLVE_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据不同的数据库创建不同的表
 
+if id_max:
+    print('id_max do not effect, becouse the orignal_tablename have no id !')
+
 
 rmdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
                             db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
@@ -34,6 +37,6 @@ rmdovo.repair_adjust_data_main(orignal_tablename=M_AD_ORIGINAL_TABLENAME,
 
 if rmdovo.count > 0:
     rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE, 
-                     orignal_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, no_resolve_columns=NO_RESOLVE_COLUMNS, db_type='redshift')
-    rd.resolve_data_main(repair_tablename=R_AD_REPAIR_TABLENAME, resolve_tablename=R_AD_RESOLVE_TABLENAME, id_min=id_min, id_max=id_max)
+                     orignal_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, no_resolve_columns=R_AD_NO_RESOLVE_COLUMNS, db_type='redshift')
+    rd.resolve_data_main(repair_tablename=R_AD_REPAIR_TABLENAME, resolve_tablename=R_AD_RESOLVE_TABLENAME, id_min=id_min)
                         

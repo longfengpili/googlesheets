@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-30 12:34:17
+@LastEditTime: 2019-08-05 15:30:55
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -37,7 +37,7 @@ class DBFunction(DBBase):
         '''
         删除数据通过ID
         '''
-        if id_min and id_max:
+        if id_min >= 0 and id_max:
             contion = f'id >= {id_min} and id <= {id_max}'
         elif id_min and not id_max:
             contion = f'id >= {id_min}'

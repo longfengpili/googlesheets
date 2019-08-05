@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-05 14:21:38
+@LastEditTime: 2019-08-05 15:50:17
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -129,15 +129,16 @@ class ResolveData(ParseBiFunc):
             if id_min >= id_max:
                 raise 'id_min should < id_max'
         if id_min != None:
-            id_min -= 0  # 左开右闭
             #删除resolve表数据
             self.db.delete_by_id(tablename=resolve_tablename, id_min=id_min, id_max=id_max)
+            id_min -= 1  # 左开右闭
+            
 
         # resolve_table
         self.get_tables_id_single_db(tablename1=repair_tablename, tablename2=resolve_tablename)
         if not id_max:
             id_max = self.table_id
-        if id_min:
+        if id_min or id_min == 0:
             self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')

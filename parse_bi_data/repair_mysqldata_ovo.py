@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-05 14:25:45
+@LastEditTime: 2019-08-05 15:52:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -183,15 +183,16 @@ class RepairMysqlDataOVO(ParseBiFunc):
             if id_min >= id_max:
                 raise 'id_min should < id_max'
         if id_min != None:
-            id_min -= 0  # 左开右闭
             #删除repair表数据
             self.db2.delete_by_id(tablename=repair_tablename, id_min=id_min, id_max=id_max)
+            id_min -= 1  # 左开右闭
+            
         
         # repair_table
         self.get_tables_id_double_db(tablename1=orignal_tablename, tablename2=repair_tablename)
         if not id_max:
             id_max = self.table_id
-        if id_min:
+        if id_min or id_min == 0:
             self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
@@ -217,7 +218,6 @@ class RepairMysqlDataOVO(ParseBiFunc):
             orignal_tablename:原始数据表名
             repair_tablename:修复后的数据表名
             id_min:需要重新跑的id开始值
-            id_max:需要重新跑的id结束值
             suffix:表名后缀，原表为去掉后缀的表名，带后缀的表名是为了增加自增id
         @return: 修改并解析数据，无返回值
         '''

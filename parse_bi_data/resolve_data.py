@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-01 12:20:12
+@LastEditTime: 2019-08-05 12:06:09
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -74,11 +74,17 @@ class ResolveData(ParseBiFunc):
             else:
                 locals()[column] = data_json.get(column, None)
                 if not locals()[column]:
-                    locals()[column] = 'Null'
-                    
+                    locals()[column] = 'Null'        
             columns_value.append(str(locals()[column]))
         row = columns_value
         # print(row)
+
+        keys = set(data_json) - set(self.resolve_columns)
+        if keys:
+            key_ = {}
+            for key in keys:
+                key_[key] = data_json.get(key)
+            parsebi_logger.error(f'【{key_}】 do not parse, if need please change your resolve columns !')
         return row
 
     def resolve_multiple_rows(self,rows):
@@ -97,7 +103,7 @@ class ResolveData(ParseBiFunc):
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
         count, data = self.sql_execute_by_instance(self.db, sql)
-        if count:
+        if count >= 1:
             parsebi_logger.info(f'本次累计解析【({start_id},{end_id}]】{end_id - start_id}条数据！')
         else:
             parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')

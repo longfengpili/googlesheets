@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-08-05 11:27:43
+@LastEditTime: 2019-08-05 12:05:52
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,6 +39,14 @@ class tasktest(unittest.TestCase):
         id, myjson, errors = rdovo.repair_row(myrow)
         print(id)
         print(myjson)
+
+    def test_resolve_row(self):
+        # myrow = list((1,'﻿{"ts":"15655"","msg_type3":"end_up","isdds":false,"t":"d""}'))
+        myrow = list((1, '{"ts":1564727341,"error":"err","errr2":"33","b":33}'))
+        rd = ResolveData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE,
+                         orignal_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, db_type='mysql')
+        row = rd.resolve_row(myrow)
+        print(row)
 
     def test_repair_to_redshift(self):
         rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
@@ -93,6 +101,6 @@ class tasktest(unittest.TestCase):
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_repair_row'))
+    suite.addTest(tasktest('test_resolve_row'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

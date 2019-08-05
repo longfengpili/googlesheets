@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-08-05 10:36:36
+@LastEditTime: 2019-08-05 11:27:43
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -39,7 +39,6 @@ class tasktest(unittest.TestCase):
         id, myjson, errors = rdovo.repair_row(myrow)
         print(id)
         print(myjson)
-        print(errors)
 
     def test_repair_to_redshift(self):
         rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,

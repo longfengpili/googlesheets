@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-08-05 10:52:19
+@LastEditTime: 2019-08-05 11:26:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -66,17 +66,25 @@ class RepairJsonData(object):
                     self.repair_for_innerjson()
                 else:
                     self.errors.append(self.error)
-                    repairbi_logger.error(f'{self.myjson}')
-                    repairbi_logger.error(f'{self.error}')
+                    # repairbi_logger.error(f'{self.myjson}')
+                    # repairbi_logger.error(f'{self.error}')
                     self.error_num += 1
                 
                 if self.error_num >= self.error_max:
-                    # error = '\n'.join(self.errors)
-                    # repairbi_logger.error(f"{error}")
-                    # repairbi_logger.error(f'{str(self.myjson_origin)}')
+                    error_json = {}
+                    msg_type = re.search('"msg_type":"(.*?)"', str(self.myjson_origin))
+                    if msg_type:
+                        msg_type = msg_type.group(1)
+                    else:
+                        l = '>' * ((30 - len(str(id)))//2)
+                        l_ = '<' * ((30 - len(str(id)))//2)
+                        msg_type = 'error'
+                        self.errors.insert(0, f'\n{l}【{msg_type}】{l_}\n{self.myjson_origin}')
+
+                    error_json['msg_type'] = msg_type
+                    error_json['error_status'] = 'error'
                     self.error = None
-                    myjson = self.myjson_origin.replace('"', "'")
-                    self.myjson = {'error': f'{myjson}'}
+                    self.myjson = error_json
         self.myjson = json.dumps(self.myjson)
         return self.myjson
 

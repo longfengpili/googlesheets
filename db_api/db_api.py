@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-08-05 15:30:55
+@LastEditTime: 2019-08-07 12:37:32
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -89,6 +89,25 @@ class DBRedshift(DBFunction):
                 conn = psycopg2.connect(database=self.database, user=self.user, password=self.password, host=self.host, port=self.port)
                 time.sleep(1)
         return conn
+
+    def get_table_columns(self, tablename):
+        sql = f"""
+        select column_name
+        from information_schema.columns
+        where table_schema = '{tablename.split('.')[0]}'
+        and table_name = '{tablename.split('.')[1]}';
+        """
+        counts, result = self.sql_execute(sql)
+        columns = [column[0] for column in result]
+        return columns
+
+    def alter_table_columns(self, tablename, columns):
+        original_columns = self.get_table_columns(tablename)
+        for k, v in columns.items():
+            if k not in original_columns:
+                sql = f'alter table {tablename} add column {k} {v + "(128)" if v == "varchar" else v};'
+                self.sql_execute(sql)
+                print(f'add {k} success !')
 
 class DBMysql(DBFunction):
     def __init__(self, host=None, user=None, password=None, database=None):

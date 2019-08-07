@@ -28,7 +28,7 @@ import time
 
 
 class ResolveData(ParseBiFunc):
-    def __init__(self, host, user, password, database, orignal_columns, resolve_columns, no_resolve_columns, db_type):
+    def __init__(self, host, user, password, database, original_columns, resolve_columns, no_resolve_columns, db_type):
         self.table_id = None
         self.table2_id = None
         self.count = 0
@@ -38,7 +38,7 @@ class ResolveData(ParseBiFunc):
         self.user = user
         self.password = password
         self.database = database
-        self.orignal_columns = orignal_columns
+        self.original_columns = original_columns
         self.resolve_columns = resolve_columns
         self.no_resolve_columns = no_resolve_columns
         self.db_type = db_type
@@ -98,7 +98,7 @@ class ResolveData(ParseBiFunc):
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
         #获取未修复数据
         # with lock:
-        data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.orignal_columns, n=n)
+        data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.original_columns, n=n)
         #修复数据
         resolved = self.resolve_multiple_rows(data)
         # print(resolved[0])
@@ -144,7 +144,7 @@ class ResolveData(ParseBiFunc):
         parsebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
-            # self.resolve_data_once(orignal_tablename, repair_tablename, n=n)
+            # self.resolve_data_once(original_tablename, repair_tablename, n=n)
             threads = []
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:

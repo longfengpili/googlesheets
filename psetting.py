@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-08-05 15:16:49
+@LastEditTime: 2019-08-07 11:34:36
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -44,9 +44,6 @@ R_LOAD_FUNNEL_TABLENAME = mysetting.r_load_funnel_table
 LOAD_FUNNEL_COLUMNS = mysetting.load_funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 LOAD_FUNNEL_SHEETNAME = mysetting.load_funnel_sheetname
-
-#DB
-NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

@@ -31,7 +31,7 @@ import time
 
 
 class RepairMysqlDataOVO(ParseBiFunc):
-    def __init__(self, db_host, db_user, db_password, db_database, orignal_columns, db2_host=None, db2_user=None, db2_password=None, db2_database=None):
+    def __init__(self, db_host, db_user, db_password, db_database, original_columns, db2_host=None, db2_user=None, db2_password=None, db2_database=None):
         self.db = None
         self.conn = None
         self.table_id = None
@@ -47,7 +47,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         self.db2_user = db2_user
         self.db2_password = db2_password
         self.db2_database = db2_database
-        self.orignal_columns = orignal_columns
+        self.original_columns = original_columns
 
     def _connect(self):
         if not self.db:
@@ -149,14 +149,14 @@ class RepairMysqlDataOVO(ParseBiFunc):
         # parsebi_logger.info(f'cost {round(et - st, 4)} seconds')
         return repaired
     
-    def repair_data_once(self, orignal_tablename, repair_tablename, n=1000):
+    def repair_data_once(self, original_tablename, repair_tablename, n=1000):
         #获取未修复数据
         # with lock:
-        data, start_id, end_id = self.get_data(db=self.db, tablename1=orignal_tablename, columns=self.orignal_columns, n=n)
+        data, start_id, end_id = self.get_data(db=self.db, tablename1=original_tablename, columns=self.original_columns, n=n)
         #修复数据
         repaired = self.repair_multiple_rows(data)
         # print(repaired[0])
-        sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.orignal_columns, values=repaired)
+        sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.original_columns, values=repaired)
         count, data = self.sql_execute_by_instance(self.db2, sql)
         if data:
             self.count += count
@@ -164,11 +164,11 @@ class RepairMysqlDataOVO(ParseBiFunc):
         else:
             parsebi_logger.error(f'本次修复【({start_id},{end_id}]】失败！')
         
-    def repair_data_main(self, orignal_tablename, repair_tablename, id_min=None, id_max=None):
+    def repair_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None):
         '''
         @description: 处理格式并拆解
         @param {type} 
-            orignal_tablename:原始数据表名
+            original_tablename:原始数据表名
             repair_tablename:修复后的数据表名
             id_min:需要重新跑的id开始值
             id_max:需要重新跑的id结束值
@@ -177,7 +177,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
         n = 1000
         self._connect()
-        self.db2.create_table(repair_tablename, columns=self.orignal_columns)
+        self.db2.create_table(repair_tablename, columns=self.original_columns)
 
         if id_min != None and id_max != None:
             if id_min >= id_max:
@@ -189,7 +189,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             
         
         # repair_table
-        self.get_tables_id_double_db(tablename1=orignal_tablename, tablename2=repair_tablename)
+        self.get_tables_id_double_db(tablename1=original_tablename, tablename2=repair_tablename)
         if not id_max:
             id_max = self.table_id
         if id_min or id_min == 0:
@@ -198,11 +198,11 @@ class RepairMysqlDataOVO(ParseBiFunc):
         parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
-            # self.repair_data_once(orignal_tablename, repair_tablename, n=n)
+            # self.repair_data_once(original_tablename, repair_tablename, n=n)
             threads = []
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:
-                    args = (orignal_tablename, repair_tablename)
+                    args = (original_tablename, repair_tablename)
                     t = MyThread(self.repair_data_once, *args, n=n)
                     threads.append(t)
             for t in threads:
@@ -211,11 +211,11 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 t.join()
         parsebi_logger.info(f'本次累计修复【({start_id},{self.table_id}]】, 共【{self.count}】条！')
 
-    def repair_adjust_data_main(self, orignal_tablename, repair_tablename, id_min=None, suffix=None):
+    def repair_adjust_data_main(self, original_tablename, repair_tablename, id_min=None, suffix=None):
         '''
         @description: 处理格式并拆解
         @param {type} 
-            orignal_tablename:原始数据表名
+            original_tablename:原始数据表名
             repair_tablename:修复后的数据表名
             id_min:需要重新跑的id开始值
             suffix:表名后缀，原表为去掉后缀的表名，带后缀的表名是为了增加自增id
@@ -223,11 +223,11 @@ class RepairMysqlDataOVO(ParseBiFunc):
         '''
         
         if suffix:
-            count = self.copy_data_to_idtable(tablename=orignal_tablename, id_min=id_min, suffix=suffix)
+            count = self.copy_data_to_idtable(tablename=original_tablename, id_min=id_min, suffix=suffix)
             if count > 0:
-                self.repair_data_main(orignal_tablename, repair_tablename, id_min=id_min)
+                self.repair_data_main(original_tablename, repair_tablename, id_min=id_min)
             else:
-                parsebi_logger.info(f'【{orignal_tablename}】adjust new data {count} num, do nothing !')
+                parsebi_logger.info(f'【{original_tablename}】adjust new data {count} num, do nothing !')
 
 
 

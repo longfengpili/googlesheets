@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-08-12 17:43:46
+@LastEditTime: 2019-08-12 17:47:31
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -40,7 +40,7 @@ class ParseSql(object):
             sqls_txt = f.read()
 
         params = re.findall("\$(\w+)[ |\n|)|;]", re.sub('--.*?\n','\n',sqls_txt))
-            
+
         sqls = re.findall("###\n--【(.*?)】(.*?)###", sqls_txt, re.S)
         sqls = [(sql[0], re.sub('--.*?\n', '\n' , sql[1]).strip()) for sql in sqls]
         sqls = [(sql[0], re.sub('\n{2,}', '\n' , sql[1])) for sql in sqls]
@@ -74,9 +74,9 @@ class ParseSql(object):
             sqls_n.append(sql)
 
         if params:
-            pslogger.info(f'parse sqlile【{filename}】, params 【{len(set(params))}】 counts : {params_d}, sqls 【{len(sqls)}】 counts;')
+            pslogger.info(f'parse sqlfile【{filename}】, params 【{len(set(params))}】 counts : {params_d}, sqls 【{len(sqls)}】 counts;')
         else:
-            pslogger.info(f'parse sqlile【{filename}】, sqls 【{len(sqls)}】 counts;')
+            pslogger.info(f'parse sqlfile【{filename}】, sqls 【{len(sqls)}】 counts;')
         return sqls_n
     
     def get_files_sqls(self, **kw):

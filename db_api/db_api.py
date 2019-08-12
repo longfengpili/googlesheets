@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-08-07 12:37:32
+@LastEditTime: 2019-08-12 18:10:18
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -103,6 +103,7 @@ class DBRedshift(DBFunction):
 
     def alter_table_columns(self, tablename, columns):
         original_columns = self.get_table_columns(tablename)
+        print(f'{tablename} already have {original_columns} !')
         for k, v in columns.items():
             if k not in original_columns:
                 sql = f'alter table {tablename} add column {k} {v + "(128)" if v == "varchar" else v};'

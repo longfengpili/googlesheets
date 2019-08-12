@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-05 15:52:05
+@LastEditTime: 2019-08-12 18:23:13
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -195,7 +195,9 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if id_min or id_min == 0:
             self.table2_id = id_min if id_min >= 0 else 0
             self.table_id = self.table_id if self.table_id <= id_max else id_max
-        parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{self.table_id - self.table2_id}】条！')
+
+        counts = self.table_id - self.table2_id
+        parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
             # self.repair_data_once(original_tablename, repair_tablename, n=n)
@@ -209,7 +211,10 @@ class RepairMysqlDataOVO(ParseBiFunc):
                 t.start()
             for t in threads:
                 t.join()
-        parsebi_logger.info(f'本次累计修复【({start_id},{self.table_id}]】, 共【{self.count}】条！')
+        if counts == self.count:
+            parsebi_logger.info(f'本次累计修复【({start_id},{self.table_id}]】, 共【{self.count}】条！')
+        else:
+            parsebi_logger.error(f'本次累计修复【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
 
     def repair_adjust_data_main(self, original_tablename, repair_tablename, id_min=None, suffix=None):
         '''

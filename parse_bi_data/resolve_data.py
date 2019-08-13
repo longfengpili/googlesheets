@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-12 18:22:10
+@LastEditTime: 2019-08-13 18:04:12
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -74,7 +74,9 @@ class ResolveData(ParseBiFunc):
                     locals()[column] = 'Null'
             else:
                 locals()[column] = data_json.get(column, None)
-                if not locals()[column]:
+                if not locals()[column] and column == 'device_id': #解决adjustBI传的问题
+                    locals()[column] = data_json.get('client_uuid',None)
+                if not locals()[column]:                  
                     locals()[column] = 'Null'        
             columns_value.append(str(locals()[column]))
         row = columns_value

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-08-07 12:35:57
+@LastEditTime: 2019-08-14 16:12:04
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -104,10 +104,14 @@ class tasktest(unittest.TestCase):
         dbr.alter_table_columns(tablename=R_REPAIR_TABLENAME, columns=R_RESOLVE_COLUMNS)
         # dbr.get_table_columns(tablename=R_REPAIR_TABLENAME)
 
+    def test_resolve_in_redshift(self):
+        rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE,
+                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='redshift')
+        rd.resolve_data_main(repair_tablename=R_REPAIR_TABLENAME, resolve_tablename=R_RESOLVE_TABLENAME, id_min=0, n=10000)
 
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_alter_table_columns'))
+    suite.addTest(tasktest('test_resolve_in_redshift'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

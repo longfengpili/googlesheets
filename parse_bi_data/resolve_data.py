@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-14 14:44:35
+@LastEditTime: 2019-08-14 16:11:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -112,7 +112,7 @@ class ResolveData(ParseBiFunc):
         else:
             parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')
 
-    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None):
+    def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None, n=1000):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -123,7 +123,6 @@ class ResolveData(ParseBiFunc):
         @return: 修改并解析数据，无返回值
         '''
         parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
-        n = 1000
         self._connect()
         self.db.create_table(resolve_tablename, columns=self.resolve_columns)
 

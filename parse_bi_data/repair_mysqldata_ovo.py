@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-12 18:23:13
+@LastEditTime: 2019-08-14 16:11:44
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -164,7 +164,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         else:
             parsebi_logger.error(f'本次修复【({start_id},{end_id}]】失败！')
         
-    def repair_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None):
+    def repair_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, n=1000):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -175,7 +175,6 @@ class RepairMysqlDataOVO(ParseBiFunc):
         @return: 修改并解析数据，无返回值
         '''
         parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
-        n = 1000
         self._connect()
         self.db2.create_table(repair_tablename, columns=self.original_columns)
 

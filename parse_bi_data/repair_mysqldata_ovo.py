@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-16 11:12:22
+@LastEditTime: 2019-08-16 11:21:59
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -96,11 +96,13 @@ class RepairMysqlDataOVO(ParseBiFunc):
         count = 0
         parsebi_logger.info(f'【{tablename}】数据增加自增ID开始！ in 【{self.db_host[:16]}】')
         self._connect()
+        columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
+        
         if id_min != None and id_min >= 0:
             self.db.delete_by_id(tablename, id_min=id_min)
         
         if suffix in tablename:  # 为了避免truncate错误的表
-            columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
+            # columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')
             original_tablename = tablename.split(f'_{suffix}')[0]
             

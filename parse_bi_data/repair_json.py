@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-08-05 11:26:05
+@LastEditTime: 2019-08-20 11:45:32
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -29,8 +29,7 @@ class RepairJsonData(object):
         self.error = error
         self.errors = None
 
-    def repair_for_bomerror(self):
-        self.myjson = self.myjson.encode('utf-8')[3:].decode('utf-8')
+    def loads_json(self):
         try:
             self.myjson = json.loads(self.myjson)
             self.error = None
@@ -39,16 +38,19 @@ class RepairJsonData(object):
             self.errors.append(self.error)
             self.error_num += 1
 
+    def repair_for_bomerror(self):
+        self.myjson = self.myjson.encode('utf-8')[3:].decode('utf-8')
+        self.loads_json()
+
     def repair_for_innerjson(self):
         self.myjson = self.myjson.replace('":"{"', '":{"').replace('}","', '},"') #去掉json内部json结构双引号
         self.myjson = re.sub('(?<!\:)""', '"', self.myjson) # 去掉多个双引号(前边非冒号)
-        try:
-            self.myjson = json.loads(self.myjson)
-            self.error = None
-        except Exception as e:
-            self.error = f'>>>>{e}'
-            self.errors.append(self.error)
-            self.error_num += 1
+        self.loads_json()
+
+    def repair_for_errprefix(self):
+        result = re.search('{' , self.myjson)
+        self.myjson = self.myjson[result.span()[0]:]
+        self.loads_json()
 
     def repair_main(self):
         if not self.errors:
@@ -64,6 +66,8 @@ class RepairJsonData(object):
                     self.repair_for_bomerror()
                 elif "Expecting ',' delimiter" in self.error:
                     self.repair_for_innerjson()
+                elif "line 1 column 1 (char 0)" in self.error:
+                    self.repair_for_errprefix()
                 else:
                     self.errors.append(self.error)
                     # repairbi_logger.error(f'{self.myjson}')
@@ -76,10 +80,10 @@ class RepairJsonData(object):
                     if msg_type:
                         msg_type = msg_type.group(1)
                     else:
-                        l = '>' * ((30 - len(str(id)))//2)
-                        l_ = '<' * ((30 - len(str(id)))//2)
                         msg_type = 'error'
-                        self.errors.insert(0, f'\n{l}【{msg_type}】{l_}\n{self.myjson_origin}')
+                        
+                    msg_type = f'{msg_type}'.center(30, '>')
+                    self.errors.insert(0, f'【{msg_type}】\n{self.myjson_origin}')
 
                     error_json['msg_type'] = msg_type
                     error_json['error_status'] = 'error'

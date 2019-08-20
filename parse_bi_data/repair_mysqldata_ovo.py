@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-16 11:21:59
+@LastEditTime: 2019-08-20 11:45:01
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -136,7 +136,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             myjson = json.dumps(myjson)
 
             error = '\n'.join(rjd.errors)
-            error = error.replace('【error】',f'【error】【{id}】')
+            error = re.subn('】', f'】【{id}】', error, 1)[0]
             repairbi_logger.error(f"{error}")
         return id, myjson, rjd.errors
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-08-14 16:11:27
+@LastEditTime: 2019-08-23 12:24:14
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -106,7 +106,7 @@ class ResolveData(ParseBiFunc):
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
         count, data = self.sql_execute_by_instance(self.db, sql)
-        if data:
+        if count > 0:
             self.count += count
             parsebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！')
         else:

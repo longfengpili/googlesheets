@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-23 12:24:27
+@LastEditTime: 2019-08-27 16:23:26
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -66,7 +66,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.db2 = self.db
             self.conn2 = self.conn
 
-    def create_table_for_auto_increment_id(self, tablename, suffix='idxu'):
+    def create_table_add_id(self, tablename, suffix='idxu'):
         '''
         only support mysql !
         '''
@@ -81,7 +81,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             columns_name = dict(result)
             if 'id' not in columns_name:
                 keys = ['id'] + list(columns_name.keys())
-                values = ['int auto_increment'] + list(columns_name.values())
+                values = ['int'] + list(columns_name.values())
                 columns_name = dict(zip(keys, values))
                 sql = self.db.sql_for_create(
                     tablename=tablename, columns=columns_name)
@@ -96,13 +96,12 @@ class RepairMysqlDataOVO(ParseBiFunc):
         count = 0
         parsebi_logger.info(f'【{tablename}】数据增加自增ID开始！ in 【{self.db_host[:16]}】')
         self._connect()
-        columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
+        columns_name = self.create_table_add_id(tablename, suffix=suffix)
         
         if id_min != None and id_min >= 0:
             self.db.delete_by_id(tablename, id_min=id_min)
         
         if suffix in tablename:  # 为了避免truncate错误的表
-            # columns_name = self.create_table_for_auto_increment_id(tablename, suffix=suffix)
             columns_name.pop('id')
             original_tablename = tablename.split(f'_{suffix}')[0]
             
@@ -110,14 +109,15 @@ class RepairMysqlDataOVO(ParseBiFunc):
             tablename_count = self.db.get_table_count(tablename)
             
             if tablename_count < original_tablename_count:
-                sql_copy = f'''insert into {tablename}
-                ({','.join(columns_name)})
-                select ({','.join(columns_name)})
+                sql_copy = f'''
+                set @num = {tablename_count};
+                insert into {tablename}
+                (id, {','.join(columns_name)})
+                select (@num:=@num+1), {','.join(columns_name)}
                 from {original_tablename}
-                limit {tablename_count} , {original_tablename_count - tablename_count}
+                limit {tablename_count} , {original_tablename_count - tablename_count};
                 '''
                 count, _ = self.db.sql_execute(sql_copy)
-                self.db.reset_auto_increment_id(tablename) #更新自增id
                 parsebi_logger.info(
                     f'【{tablename}】数据增加自增ID结束,【({tablename_count},{original_tablename_count}]】导入{count}条,！')
                 return count

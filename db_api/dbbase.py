@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-07-31 16:28:37
+@LastEditTime: 2019-08-27 16:08:52
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -126,7 +126,7 @@ class DBBase(object):
         except Exception as e:
             conn.rollback()
             dblogger.error(e)
-            # dblogger.error(sql)
+            dblogger.error(sql[:300])
             sys.exit()
 
         self.__close(conn=conn)

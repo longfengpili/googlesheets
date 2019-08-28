@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-27 16:23:26
+@LastEditTime: 2019-08-28 11:48:27
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -161,7 +161,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         # print(repaired[0])
         sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.original_columns, values=repaired)
         count, data = self.sql_execute_by_instance(self.db2, sql)
-        if count > 0:
+        if count != None and count > 0:
             self.count += count
             parsebi_logger.info(f'本次修复【({start_id},{end_id}]】{count}条数据！')
         else:

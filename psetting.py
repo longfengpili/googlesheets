@@ -2,7 +2,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:34:00
-@LastEditTime: 2019-08-15 15:39:04
+@LastEditTime: 2019-09-02 18:59:13
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -44,6 +44,12 @@ R_FUNNEL_TABLENAME_NEW = mysetting.r_funnel_table_new
 FUNNEL_COLUMNS_NEW = mysetting.funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 FUNNEL_SHEETNAME_NEW = mysetting.funnel_sheetname_new
+#funnel_info_new0902
+FUNNEL_TABLENAME_NEW0902 = mysetting.funnel_table_new0902
+R_FUNNEL_TABLENAME_NEW0902 = mysetting.r_funnel_table_new0902
+FUNNEL_COLUMNS_NEW0902 = mysetting.funnel_columns
+FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
+FUNNEL_SHEETNAME_NEW0902 = mysetting.funnel_sheetname_new0902
 #load_funnel_info
 LOAD_FUNNEL_TABLENAME = mysetting.load_funnel_table
 R_LOAD_FUNNEL_TABLENAME = mysetting.r_load_funnel_table

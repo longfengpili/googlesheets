@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-08-15 15:40:11
+@LastEditTime: 2019-09-02 19:01:50
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -23,9 +23,10 @@ load = input(f'''
 please choice reload data !!!!
 1. reload item info
 2. reload bi table
-3. reload new user funnel
+3. reload new user funnel (0.0.16)
 4. reload user load funnel
-5. reload new user funnel (new)
+5. reload new user funnel (0.0.21)
+6. reload new user funnel (new0902)
 
 you want run :''')
 
@@ -39,5 +40,6 @@ elif load == '4':
     save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=LOAD_FUNNEL_SHEETNAME, tablename=R_LOAD_FUNNEL_TABLENAME, columns=LOAD_FUNNEL_COLUMNS, primary_key=True)
 elif load == '5':
     save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=FUNNEL_SHEETNAME_NEW, tablename=R_FUNNEL_TABLENAME_NEW, columns=FUNNEL_COLUMNS_NEW, primary_key=True)
-
+elif load == '6':
+    save_main(spreadsheet_id=FUNNEL_SPREADSHEET_ID, sheetname=FUNNEL_SHEETNAME_NEW0902, tablename=R_FUNNEL_TABLENAME_NEW0902, columns=FUNNEL_COLUMNS_NEW0902, primary_key=True)
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-03 10:42:05
+@LastEditTime: 2019-09-03 14:16:59
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -35,8 +35,8 @@ class RepairJsonData(object):
             self.error = None
         except Exception as e:
             self.error = f'>>>>>>>>{e}'
-            repairbi_logger.error(f'{self.error}')
-            repairbi_logger.error(f'{self.myjson}')
+            # repairbi_logger.error(f'{self.error}')
+            # repairbi_logger.error(f'{self.myjson}')
             self.errors.append(self.error)
             self.error_num += 1
 

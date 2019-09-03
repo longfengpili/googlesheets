@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-08-20 11:45:32
+@LastEditTime: 2019-09-03 10:42:05
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -34,7 +34,9 @@ class RepairJsonData(object):
             self.myjson = json.loads(self.myjson)
             self.error = None
         except Exception as e:
-            self.error = f'>>>>{e}'
+            self.error = f'>>>>>>>>{e}'
+            repairbi_logger.error(f'{self.error}')
+            repairbi_logger.error(f'{self.myjson}')
             self.errors.append(self.error)
             self.error_num += 1
 
@@ -44,6 +46,7 @@ class RepairJsonData(object):
 
     def repair_for_innerjson(self):
         self.myjson = self.myjson.replace('":"{"', '":{"').replace('}","', '},"') #去掉json内部json结构双引号
+        self.myjson = self.myjson.replace('}"}', '}}') # 去掉结尾的双引号
         self.myjson = re.sub('(?<!\:)""', '"', self.myjson) # 去掉多个双引号(前边非冒号)
         self.loads_json()
 
@@ -58,7 +61,7 @@ class RepairJsonData(object):
         try:
             self.myjson = json.loads(self.myjson)
         except Exception as e:
-            self.error = f'>>>>{e}'
+            self.error = f'>>>>>>>>{e}'
             self.errors.append(self.error)
             self.error_num += 1
             while self.error:
@@ -70,8 +73,6 @@ class RepairJsonData(object):
                     self.repair_for_errprefix()
                 else:
                     self.errors.append(self.error)
-                    # repairbi_logger.error(f'{self.myjson}')
-                    # repairbi_logger.error(f'{self.error}')
                     self.error_num += 1
                 
                 if self.error_num >= self.error_max:

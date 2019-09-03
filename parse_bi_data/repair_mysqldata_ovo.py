@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-27 14:41:34
-@LastEditTime: 2019-08-28 11:48:27
+@LastEditTime: 2019-09-03 19:00:07
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -109,6 +109,8 @@ class RepairMysqlDataOVO(ParseBiFunc):
             tablename_count = self.db.get_table_count(tablename)
             
             if tablename_count < original_tablename_count:
+                parsebi_logger.info(
+                    f'【{tablename}】数据需要增加,【({tablename_count},{original_tablename_count}]】, 预计导入{original_tablename_count - tablename_count}条,！')
                 sql_copy = f'''
                 set @num = {tablename_count};
                 insert into {tablename}

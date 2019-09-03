@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-09-03 18:33:40
+@LastEditTime: 2019-09-03 19:04:14
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -77,6 +77,7 @@ class DBBase(object):
         sqls = sqls[:-1] if sqls[-1] == '' else sqls
 
         for sql in sqls:
+            dblogger.info(sql)
             self.error_sql = sql
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'

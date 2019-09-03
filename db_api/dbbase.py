@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-09-03 19:04:14
+@LastEditTime: 2019-09-03 19:08:34
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -74,10 +74,10 @@ class DBBase(object):
     def execute_multiple(self, cur, sql, count=None):
         change_count = 0
         sqls = sql.split(';')
-        sqls = sqls[:-1] if sqls[-1] == '' else sqls
+        sqls = sqls[:-1] if sqls[-1].strip() == '' else sqls
 
         for sql in sqls:
-            dblogger.info(sql)
+            # dblogger.info(sql)
             self.error_sql = sql
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'

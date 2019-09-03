@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-08-27 16:08:52
+@LastEditTime: 2019-09-03 18:33:40
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -29,6 +29,7 @@ class DBBase(object):
         self.password = password
         self.database = database
         self.conn = None
+        self.error_sql = None
     
     def _connect(self):
         pass
@@ -73,33 +74,25 @@ class DBBase(object):
     def execute_multiple(self, cur, sql, count=None):
         change_count = 0
         sqls = sql.split(';')
-        if len(sqls) > 2:
-            for sql in sqls[:-1]:
-                sql_type = self.__check_sql_type(sql)
-                result = f'{sql_type} completed !'
-                # print(result)
-                if sql_type == '--':
-                    pass
-                elif sql == sqls[-2] and sql_type not in ['create']:
-                    cur.execute(sql)
-                    change_count = cur.rowcount
-                    if sql_type == 'select':
-                        if count:
-                            result = cur.fetchmany(sql)
-                        else:
-                            result = cur.fetchall()
-                else:
-                    cur.execute(sql)
-        else:
+        sqls = sqls[:-1] if sqls[-1] == '' else sqls
+
+        for sql in sqls:
+            self.error_sql = sql
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'
-            cur.execute(sql)
-            change_count = cur.rowcount
-            if sql_type == 'select':
-                if count:
-                    result = cur.fetchmany(sql)
-                else:
-                    result = cur.fetchall()
+            # print(result)
+            if sql_type == '--':
+                pass
+            elif sql == sqls[-1] and sql_type not in ['create']:
+                cur.execute(sql)
+                change_count = cur.rowcount
+                if sql_type == 'select':
+                    if count:
+                        result = cur.fetchmany(sql)
+                    else:
+                        result = cur.fetchall()
+            else:
+                cur.execute(sql)
         return change_count, result
         
     def sql_execute(self, sql, conn=None, count=None):
@@ -126,7 +119,8 @@ class DBBase(object):
         except Exception as e:
             conn.rollback()
             dblogger.error(e)
-            dblogger.error(sql[:300])
+            dblogger.error(self.error_sql)
+            self.__close(conn=conn)
             sys.exit()
 
         self.__close(conn=conn)

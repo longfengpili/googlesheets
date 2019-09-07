@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-20 12:37:41
-@LastEditTime: 2019-09-03 19:08:34
+@LastEditTime: 2019-09-06 19:14:09
 @coding: 
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -71,14 +71,17 @@ class DBBase(object):
             # values = re.sub("\\\\'}", '\"}', values) #末尾
         return values
     
-    def execute_multiple(self, cur, sql, count=None):
+    def execute_multiple(self, cur, sql, count=None, progress=None):
         change_count = 0
         sqls = sql.split(';')
         sqls = sqls[:-1] if sqls[-1].strip() == '' else sqls
 
-        for sql in sqls:
-            # dblogger.info(sql)
-            self.error_sql = sql
+        for id, sql in enumerate(sqls):
+            if progress:
+                tablenames = re.findall('table (.*?) [(|as|\n]', sql)
+                tablename = tablenames[0] if tablenames else sql
+                dblogger.info(f'【{id}】{tablename}\n')
+            self.error_sql = sql.strip()
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'
             # print(result)
@@ -96,7 +99,7 @@ class DBBase(object):
                 cur.execute(sql)
         return change_count, result
         
-    def sql_execute(self, sql, conn=None, count=None):
+    def sql_execute(self, sql, conn=None, count=None, progress=None):
         st = time.time()
         if not sql:
             return None, None
@@ -113,7 +116,7 @@ class DBBase(object):
         #     pass
         try:
             cursor = conn.cursor()
-            change_count, result = self.execute_multiple(cursor, sql)
+            change_count, result = self.execute_multiple(cursor, sql, progress=progress)
             # name = threading.current_thread().name
             # print(name, change_count, result[0][0], self.conn)
             conn.commit()

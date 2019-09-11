@@ -1,12 +1,12 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-01 14:17:52
+@LastEditTime: 2019-09-11 14:34:55
 @github: https://github.com/longfengpili
 '''
 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+#!/usr/bin/env python3
+#-*- coding:utf-8 -*-
 
 
 from db_api import DBMysql, DBRedshift

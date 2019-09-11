@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-02 11:41:25
-@LastEditTime: 2019-07-29 14:08:43
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-07-02 11:41:25
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 
 from googlesheet import Spreadsheet
 from db_api import DBMysql, DBRedshift

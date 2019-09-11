@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-26 11:34:31
-@LastEditTime: 2019-07-26 11:34:54
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-07-26 11:34:31
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 
 from threading import Thread
 

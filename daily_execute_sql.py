@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
-@Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-07-10 14:32:10
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@Date: 2019-07-10 20:15:58
+@LastEditTime: 2019-07-10 20:15:58
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 import sys
 from daily_work import DailyMainRedshift
 from psetting import *
@@ -28,10 +30,10 @@ def daily_work_main(date_min, date_max, now, **kw):
     dm.daily_execute_all(execute_order=EXECUTE_ORDER, date_min=date_min, date_max=date_max, now=now, **kw)
 
 
-def daily_work_single_main(schema, date_min, date_max, now, **kw):
+def daily_work_single_main(file, date_min, date_max, now, **kw):
     dm = DailyMainRedshift(host=R_HOST, user=R_USER,
                            password=R_PASSWORD, database=R_DATABASE, sqlpath=SQL_PATH)
-    dm.daily_execute_single(schema=schema, date_min=date_min, date_max=date_max, now=now, **kw)
+    dm.daily_execute_single(file=file, date_min=date_min, date_max=date_max, now=now, **kw)
 
 
 params = sys.argv

@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-07-29 15:05:03
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-07-01 14:17:52
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 from db_api import DBMysql, DBRedshift
 from .parse_sql import ParseSql
 import os
@@ -45,20 +47,21 @@ class DailyMain(object):
                 count, result = self.db.sql_execute(sql[1])
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
-    def daily_execute_single(self, schema, **kw):
+    def daily_execute_single(self, file, progress=None, ** kw):
         '''
         @description: 执行所有的sql文件，按照顺序
         @param {type} 
             kw:sql中需要设定的参数
         @return: 无
         '''
+        progress = True if file.endswith('test') else progress
         ps = ParseSql(sqlpath=self.sqlpath)
         self._connect()
-        sql_file = self.sqlpath + schema + ".sql"
+        sql_file = self.sqlpath + file + ".sql"
         sqls = ps.get_file_sqls(sql_file, **kw)
         for sql in sqls:
             dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
-            count, result = self.db.sql_execute(sql[1])
+            count, result = self.db.sql_execute(sql[1], progress=progress)
             dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
 class DailyMainMysql(DailyMain):

@@ -1,12 +1,13 @@
 '''
 @Author: longfengpili
-@Date: 2019-06-19 15:39:37
-@LastEditTime: 2019-09-02 19:01:50
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@Date: 2019-07-10 20:15:58
+@LastEditTime: 2019-07-10 20:15:58
 @github: https://github.com/longfengpili
 '''
+
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 from googlesheet import SaveSpreadSheetToRedshift
 from psetting import *

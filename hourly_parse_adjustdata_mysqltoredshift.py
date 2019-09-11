@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
-@Date: 2019-07-01 11:59:54
-@LastEditTime: 2019-08-05 15:45:03
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@Date: 2019-07-15 12:03:41
+@LastEditTime: 2019-07-15 12:03:41
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 
 from psetting import *
 from db_api import DBMysql, DBRedshift

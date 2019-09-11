@@ -1,12 +1,13 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-03 10:42:05
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-07-12 10:51:48
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
 
 import json
 import re

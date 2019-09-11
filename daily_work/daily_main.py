@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-09-06 18:09:46
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-07-01 14:17:52
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 from db_api import DBMysql, DBRedshift
 from .parse_sql import ParseSql
 import os

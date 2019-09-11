@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
-@Date: 2019-07-01 14:11:55
-@LastEditTime: 2019-09-06 17:57:44
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@Date: 2019-07-10 20:15:58
+@LastEditTime: 2019-07-10 20:15:58
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 import sys
 from daily_work import DailyMainRedshift
 from psetting import *

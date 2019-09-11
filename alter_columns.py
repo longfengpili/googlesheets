@@ -1,12 +1,14 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-12 17:57:20
-@LastEditTime: 2019-08-12 18:09:12
-@coding: 
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
+@LastEditTime: 2019-08-12 17:57:20
 @github: https://github.com/longfengpili
 '''
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
 
 from db_api import DBRedshift
 from psetting import *

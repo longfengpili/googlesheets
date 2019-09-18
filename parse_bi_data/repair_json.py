@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-11 14:12:07
+@LastEditTime: 2019-09-16 09:48:51
 @github: https://github.com/longfengpili
 '''
 
@@ -49,6 +49,7 @@ class RepairJsonData(object):
         self.myjson = self.myjson.replace('":"{"', '":{"').replace('}","', '},"') #去掉json内部json结构双引号
         self.myjson = self.myjson.replace('}"}', '}}') # 去掉结尾的双引号
         self.myjson = re.sub('(?<!\:)""', '"', self.myjson) # 去掉多个双引号(前边非冒号)
+        self.myjson = self.myjson.replace('"[', '[').replace(']"', ']') #数组后的双引号
         self.loads_json()
 
     def repair_for_errprefix(self):

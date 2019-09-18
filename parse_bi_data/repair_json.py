@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-16 09:48:51
+@LastEditTime: 2019-09-18 14:49:13
 @github: https://github.com/longfengpili
 '''
 
@@ -53,45 +53,40 @@ class RepairJsonData(object):
         self.loads_json()
 
     def repair_for_errprefix(self):
-        result = re.search('{' , self.myjson)
-        self.myjson = self.myjson[result.span()[0]:]
+        self.myjson = self.myjson.strip()
         self.loads_json()
 
     def repair_main(self):
         if not self.errors:
             self.errors = []
-        try:
-            self.myjson = json.loads(self.myjson)
-        except Exception as e:
-            self.error = f'>>>>>>>>{e}'
-            self.errors.append(self.error)
-            self.error_num += 1
-            while self.error:
-                if 'UTF-8 BOM' in self.error:
-                    self.repair_for_bomerror()
-                elif "Expecting ',' delimiter" in self.error:
-                    self.repair_for_innerjson()
-                elif "line 1 column 1 (char 0)" in self.error:
-                    self.repair_for_errprefix()
+        self.loads_json()
+        
+        while self.error:
+            if 'UTF-8 BOM' in self.error:
+                self.repair_for_bomerror()
+            elif "Expecting ',' delimiter" in self.error:
+                self.repair_for_innerjson()
+            elif "line 1 column 1 (char 0)" in self.error:
+                self.repair_for_errprefix()
+            else:
+                self.errors.append(self.error)
+                self.error_num += 1
+            
+            if self.error_num >= self.error_max:
+                error_json = {}
+                msg_type = re.search('"msg_type":"(.*?)"', str(self.myjson_origin))
+                if msg_type:
+                    msg_type = msg_type.group(1)
                 else:
-                    self.errors.append(self.error)
-                    self.error_num += 1
-                
-                if self.error_num >= self.error_max:
-                    error_json = {}
-                    msg_type = re.search('"msg_type":"(.*?)"', str(self.myjson_origin))
-                    if msg_type:
-                        msg_type = msg_type.group(1)
-                    else:
-                        msg_type = 'error'
-                        
-                    msg_type = f'{msg_type}'.center(30, '>')
-                    self.errors.insert(0, f'【{msg_type}】\n{self.myjson_origin}')
+                    msg_type = 'error'
+                    
+                msg_type = f'{msg_type}'.center(30, '>')
+                self.errors.insert(0, f'【{msg_type}】\n{self.myjson_origin}')
 
-                    error_json['msg_type'] = msg_type
-                    error_json['error_status'] = 'error'
-                    self.error = None
-                    self.myjson = error_json
+                error_json['msg_type'] = msg_type
+                error_json['error_status'] = 'error'
+                self.error = None
+                self.myjson = error_json
         self.myjson = json.dumps(self.myjson)
         return self.myjson
 

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-18 14:49:13
+@LastEditTime: 2019-09-19 09:55:12
 @github: https://github.com/longfengpili
 '''
 
@@ -52,7 +52,7 @@ class RepairJsonData(object):
         self.myjson = self.myjson.replace('"[', '[').replace(']"', ']') #数组后的双引号
         self.loads_json()
 
-    def repair_for_errprefix(self):
+    def repair_for_preerror(self):
         self.myjson = self.myjson.strip()
         self.loads_json()
 
@@ -67,7 +67,7 @@ class RepairJsonData(object):
             elif "Expecting ',' delimiter" in self.error:
                 self.repair_for_innerjson()
             elif "line 1 column 1 (char 0)" in self.error:
-                self.repair_for_errprefix()
+                self.repair_for_preerror()
             else:
                 self.errors.append(self.error)
                 self.error_num += 1

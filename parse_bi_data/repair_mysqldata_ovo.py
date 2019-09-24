@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-08-01 12:22:23
+@LastEditTime: 2019-09-24 17:47:58
 @github: https://github.com/longfengpili
 '''
 
@@ -183,6 +183,8 @@ class RepairMysqlDataOVO(ParseBiFunc):
         '''
         parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
         self._connect()
+        if id_min != None and id_min <= 1:
+            self.db2.drop_table(repair_tablename)
         self.db2.create_table(repair_tablename, columns=self.original_columns)
 
         if id_min != None and id_max != None:

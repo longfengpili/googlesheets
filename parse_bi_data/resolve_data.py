@@ -127,7 +127,7 @@ class ResolveData(ParseBiFunc):
         '''
         parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
         self._connect()
-        if id_min and id_min <= 1:
+        if id_min != None and id_min <= 1:
             self.db.drop_table(resolve_tablename)
         self.db.create_table(resolve_tablename, columns=self.resolve_columns)
 

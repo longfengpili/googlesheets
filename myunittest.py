@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-07-12 11:05:28
+@LastEditTime: 2019-09-24 16:05:00
 @github: https://github.com/longfengpili
 '''
 
@@ -113,6 +113,6 @@ class tasktest(unittest.TestCase):
 if __name__ == '__main__':
     # unittest.main()
     suite = unittest.TestSuite()  # 创建测试套件
-    suite.addTest(tasktest('test_repair_row'))
+    suite.addTest(tasktest('test_resolve_in_redshift'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-06-28 11:05:49
+@LastEditTime: 2019-09-24 17:38:03
 @github: https://github.com/longfengpili
 '''
 
@@ -58,44 +58,46 @@ class ResolveData(ParseBiFunc):
             if not self.conn:
                 self.conn = self.db._connect()
 
+
+    def get_field_value(self, log, field):
+        value = log.get(field, 'Null')
+        value = 'Null' if value == '' else value
+        if field.endswith('ts') or field.endswith('_at'):
+            value_ = int(str(value)[:10]) if len(str(value)) > 10 else value
+            if isinstance(value_, int):
+                value = datetime.utcfromtimestamp(value_)
+        return value
+
     def resolve_row(self,row):
         # print(row)
         columns_value = []
+        need_columns = set()
         id, data_json = row
+        columns_value.append(id)
         data_json = json.loads(data_json)
         for column in self.resolve_columns:
-            if column.endswith('ts') or column.endswith('_at'):
-                try:#解决传文本的数据
-                    locals()[column] = round(float(data_json.get(column, 0)))
-                except:
-                    locals()[column] = 0
-                if 0 < locals()[column] <= 19912435199: #2600-12-31
-                    locals()[column] = datetime.utcfromtimestamp(locals()[column]).strftime('%Y-%m-%d %H:%M:%S')
-                else:
-                    locals()[column] = 'Null'
-            else:
-                locals()[column] = data_json.get(column, None)
-                if not locals()[column] and column == 'device_id': #解决adjustBI传的问题
-                    locals()[column] = data_json.get('client_uuid',None)
-                if not locals()[column] and locals()[column] != 0:
-                    locals()[column] = 'Null'        
-            columns_value.append(str(locals()[column]))
-        row = columns_value
-        # print(row)
-
+            if column != 'id':
+                value = self.get_field_value(data_json, column)
+                columns_value.append(value)
+                
         keys = set(data_json) - set(self.resolve_columns) - set(self.no_resolve_columns)
         if keys:
             key_ = {}
             for key in keys:
+                need_columns.add(key)
                 key_[key] = data_json.get(key)
             parsebi_logger.error(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
-        return row
+        return need_columns, columns_value
 
     def resolve_multiple_rows(self,rows):
         resolved = []
+        need_columns_all = set()
         for row in rows:
-            row = self.resolve_row(row)
+            need_columns, row = self.resolve_row(row)
             resolved.append(row)
+            need_columns_all.update(need_columns)
+        if need_columns_all:
+            parsebi_logger.error('\n' + '⭐'*40 + f'\n【{need_columns_all}】 do not parse, if need please change your resolve columns !\n' + '⭐'*40)
         return resolved
 
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
@@ -125,6 +127,8 @@ class ResolveData(ParseBiFunc):
         '''
         parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
         self._connect()
+        if id_min and id_min <= 1:
+            self.db.drop_table(resolve_tablename)
         self.db.create_table(resolve_tablename, columns=self.resolve_columns)
 
         if id_min != None and id_max != None:

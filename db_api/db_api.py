@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-07-01 10:11:18
+@LastEditTime: 2019-09-24 17:03:41
 @github: https://github.com/longfengpili
 '''
 
@@ -34,6 +34,11 @@ class DBFunction(DBBase):
     def create_table(self, tablename, columns):
         sql = self.sql_for_create(tablename=tablename, columns=columns)
         self.sql_execute(sql)
+    
+    def drop_table(self, tablename):
+        sql = self.sql_for_drop(tablename=tablename)
+        self.sql_execute(sql)
+        dblogger.warning(f'【drop】tablename [{tablename}] !')
 
     def delete_by_id(self, tablename, id_min=None, id_max=None):
         '''

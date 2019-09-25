@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-09-25 10:53:17
+@LastEditTime: 2019-09-25 15:09:58
 @github: https://github.com/longfengpili
 '''
 
@@ -63,7 +63,8 @@ class ResolveData(ParseBiFunc):
         value = log.get(field, 'Null')
         value = 'Null' if value in ['', None] else value
         if field.endswith('ts') or field.endswith('_at'):
-            value = int(str(value)[:10]) if len(str(value)) > 10 else 'Null' if value == 0 else value
+            # parsebi_logger.info(field, value)
+            value = int(str(value)[:10]) if len(str(value)) > 10 else 'Null' if value == 0 else int(value)
             if isinstance(value, int):
                 value = datetime.utcfromtimestamp(value)
         elif field not in ['price'] and isinstance(value, float): #解决非price的float问题

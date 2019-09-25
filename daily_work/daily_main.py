@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-09-11 14:34:55
+@LastEditTime: 2019-09-25 17:13:01
 @github: https://github.com/longfengpili
 '''
 
@@ -47,7 +47,7 @@ class DailyMain(object):
                 count, result = self.db.sql_execute(sql[1])
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
-    def daily_execute_single(self, file, progress=None, ** kw):
+    def daily_execute_single(self, file, progress=False, ** kw):
         '''
         @description: 执行所有的sql文件，按照顺序
         @param {type} 

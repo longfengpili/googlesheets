@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-07-01 10:11:18
+@LastEditTime: 2019-09-25 17:13:43
 @github: https://github.com/longfengpili
 '''
 
@@ -73,7 +73,7 @@ class DBBase(object):
             # values = re.sub("\\\\'}", '\"}', values) #末尾
         return values
     
-    def execute_multiple(self, cur, sql, count=None, progress=None):
+    def execute_multiple(self, cur, sql, count=None, progress=False):
         change_count = 0
         sqls = sql.split(';')
         sqls = sqls[:-1] if sqls[-1].strip() == '' else sqls
@@ -101,7 +101,7 @@ class DBBase(object):
                 cur.execute(sql)
         return change_count, result
         
-    def sql_execute(self, sql, conn=None, count=None, progress=None):
+    def sql_execute(self, sql, conn=None, count=None, progress=False):
         st = time.time()
         if not sql:
             return None, None

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-09-25 17:13:01
+@LastEditTime: 2019-09-25 17:17:28
 @github: https://github.com/longfengpili
 '''
 
@@ -12,6 +12,7 @@
 from db_api import DBMysql, DBRedshift
 from .parse_sql import ParseSql
 import os
+from pandas import DataFrame
 
 import logging
 from logging import config
@@ -47,7 +48,7 @@ class DailyMain(object):
                 count, result = self.db.sql_execute(sql[1])
                 dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
-    def daily_execute_single(self, file, progress=False, ** kw):
+    def daily_execute_single(self, file, progress=True, ** kw):
         '''
         @description: 执行所有的sql文件，按照顺序
         @param {type} 
@@ -62,6 +63,7 @@ class DailyMain(object):
         for sql in sqls:
             dailylogger.info(f'【{sql_file}】【{sql[0]}】begin execute！')
             count, result = self.db.sql_execute(sql[1], progress=progress)
+            # print(f'{DataFrame(result)}')
             dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
 class DailyMainMysql(DailyMain):

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-09-25 17:13:43
+@LastEditTime: 2019-09-25 17:22:21
 @github: https://github.com/longfengpili
 '''
 
@@ -80,9 +80,13 @@ class DBBase(object):
 
         for id, sql in enumerate(sqls):
             if progress:
+                if id == 0:
+                    print('='*100)
                 tablenames = re.findall('table (.*?) [(|as|\n]', sql)
-                tablename = tablenames[0] if tablenames else sql
-                dblogger.info(f'【{id}】{tablename}\n')
+                tablename = tablenames[0] if tablenames else sql.rstrip()
+                dblogger.info(f'【{id}】{tablename}')
+                if id == len(sqls) - 1:
+                    print('='*100)
             self.error_sql = sql.strip()
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'

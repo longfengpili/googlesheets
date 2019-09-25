@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-09-24 21:30:17
+@LastEditTime: 2019-09-25 10:53:17
 @github: https://github.com/longfengpili
 '''
 
@@ -61,11 +61,11 @@ class ResolveData(ParseBiFunc):
 
     def get_field_value(self, log, field):
         value = log.get(field, 'Null')
-        value = 'Null' if value in ['', 'None'] else value
+        value = 'Null' if value in ['', None] else value
         if field.endswith('ts') or field.endswith('_at'):
-            value_ = int(str(value)[:10]) if len(str(value)) > 10 else value
-            if isinstance(value_, int):
-                value = datetime.utcfromtimestamp(value_)
+            value = int(str(value)[:10]) if len(str(value)) > 10 else 'Null' if value == 0 else value
+            if isinstance(value, int):
+                value = datetime.utcfromtimestamp(value)
         elif field not in ['price'] and isinstance(value, float): #解决非price的float问题
             value = int(value)
         return value
@@ -129,7 +129,7 @@ class ResolveData(ParseBiFunc):
         '''
         parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
         self._connect()
-        if id_min != None and id_min <= 1:
+        if id_min != None and id_min <= 1 and not id_max:
             self.db.drop_table(resolve_tablename)
         self.db.create_table(resolve_tablename, columns=self.resolve_columns)
 

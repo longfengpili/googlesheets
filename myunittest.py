@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-09-24 21:19:44
+@LastEditTime: 2019-09-25 10:06:15
 @github: https://github.com/longfengpili
 '''
 
@@ -108,7 +108,7 @@ class tasktest(unittest.TestCase):
     def test_resolve_in_redshift(self):
         rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE,
                          original_columns=M_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='redshift')
-        rd.resolve_data_main(repair_tablename=R_REPAIR_TABLENAME, resolve_tablename=R_RESOLVE_TABLENAME, id_min=0, n=1000)
+        rd.resolve_data_main(repair_tablename=R_REPAIR_TABLENAME, resolve_tablename=R_RESOLVE_TABLENAME, id_min=0, id_max=4, n=1000)
 
 if __name__ == '__main__':
     # unittest.main()

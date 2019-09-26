@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:52
-@LastEditTime: 2019-09-26 12:49:12
+@LastEditTime: 2019-09-26 17:18:19
 @github: https://github.com/longfengpili
 '''
 
@@ -43,11 +43,10 @@ class DailyMain(object):
             sql_file = self.sqlpath + sql_file + ".sql"
             sqls = ps.get_file_sqls(sql_file, **kw)
             for sql in sqls:
-                dailylogger.info('\n' + f'【{sql_file}】【{sql[0]}】begin execute！'.center(140, '='))
+                dailylogger.info(f'【start】【{sql_file}】【{sql[0]}】begin execute！')
                 # dailylogger.debug(sql[1])
                 count, result = self.db.sql_execute(sql[1])
-                dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！\n' + 
-                                f'【end】【{sql[0]}】 effect 【{count}】【end】'.center(140, '='))
+                dailylogger.info(f'【end】【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
     def daily_execute_single(self, file, progress=True, ** kw):
         '''
@@ -62,11 +61,10 @@ class DailyMain(object):
         sql_file = self.sqlpath + file + ".sql"
         sqls = ps.get_file_sqls(sql_file, **kw)
         for sql in sqls:
-            dailylogger.info('\n' + f'【{sql_file}】【{sql[0]}】begin execute！'.center(140, '='))
+            dailylogger.info(f'【start】【{sql_file}】【{sql[0]}】begin execute！')
             count, result = self.db.sql_execute(sql[1], progress=progress)
             # print(f'{DataFrame(result)}')
-            dailylogger.info(f'【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！\n' +
-                             f'【end】【{sql[0]}】 effect 【{count}】【end】'.center(140, '='))
+            dailylogger.info(f'【end】【{sql_file}】【{sql[0]}】executed！effect 【{count}】 rows！')
 
 class DailyMainMysql(DailyMain):
     def __init__(self, host, user, password, database, sqlpath):

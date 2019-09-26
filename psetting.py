@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-09-25 14:50:28
+@LastEditTime: 2019-09-26 12:00:33
 @github: https://github.com/longfengpili
 '''
 
@@ -39,24 +39,6 @@ R_FUNNEL_TABLENAME = mysetting.r_funnel_table
 FUNNEL_COLUMNS = mysetting.funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 FUNNEL_SHEETNAME = mysetting.funnel_sheetname
-#funnel_info_new
-FUNNEL_TABLENAME_NEW = mysetting.funnel_table_new
-R_FUNNEL_TABLENAME_NEW = mysetting.r_funnel_table_new
-FUNNEL_COLUMNS_NEW = mysetting.funnel_columns
-FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
-FUNNEL_SHEETNAME_NEW = mysetting.funnel_sheetname_new
-#funnel_info_new0902
-FUNNEL_TABLENAME_NEW0902 = mysetting.funnel_table_new0902
-R_FUNNEL_TABLENAME_NEW0902 = mysetting.r_funnel_table_new0902
-FUNNEL_COLUMNS_NEW0902 = mysetting.funnel_columns
-FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
-FUNNEL_SHEETNAME_NEW0902 = mysetting.funnel_sheetname_new0902
-#load_funnel_info
-LOAD_FUNNEL_TABLENAME = mysetting.load_funnel_table
-R_LOAD_FUNNEL_TABLENAME = mysetting.r_load_funnel_table
-LOAD_FUNNEL_COLUMNS = mysetting.load_funnel_columns
-FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
-LOAD_FUNNEL_SHEETNAME = mysetting.load_funnel_sheetname
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-09-25 15:04:46
+@LastEditTime: 2019-09-26 11:20:13
 @github: https://github.com/longfengpili
 '''
 
@@ -108,16 +108,16 @@ class tasktest(unittest.TestCase):
         # dbr.get_table_columns(tablename=R_REPAIR_TABLENAME)
 
     def test_resolve_in_redshift(self):
-        repair_tablename = R_AD_REPAIR_TABLENAME
-        resolve_tablename = R_AD_RESOLVE_TABLENAME
-        original_columns = M_AD_ORIGINAL_COLUMNS
-        resolve_columns = R_AD_RESOLVE_COLUMNS
-        no_resolve_columns = R_AD_NO_RESOLVE_COLUMNS
-        # repair_tablename = R_REPAIR_TABLENAME
-        # resolve_tablename = R_RESOLVE_TABLENAME
-        # original_columns = M_ORIGINAL_COLUMNS
-        # resolve_columns = R_RESOLVE_COLUMNS
-        # no_resolve_columns = R_NO_RESOLVE_COLUMNS
+        # repair_tablename = R_AD_REPAIR_TABLENAME
+        # resolve_tablename = R_AD_RESOLVE_TABLENAME
+        # original_columns = M_AD_ORIGINAL_COLUMNS
+        # resolve_columns = R_AD_RESOLVE_COLUMNS
+        # no_resolve_columns = R_AD_NO_RESOLVE_COLUMNS
+        repair_tablename = R_REPAIR_TABLENAME
+        resolve_tablename = R_RESOLVE_TABLENAME
+        original_columns = M_ORIGINAL_COLUMNS
+        resolve_columns = R_RESOLVE_COLUMNS
+        no_resolve_columns = R_NO_RESOLVE_COLUMNS
         rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE,
                          original_columns=original_columns, resolve_columns=resolve_columns, no_resolve_columns=no_resolve_columns, db_type='redshift')
         rd.resolve_data_main(repair_tablename=repair_tablename, resolve_tablename=resolve_tablename, id_min=0, n=1000)

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-09-26 12:00:33
+@LastEditTime: 2019-09-28 16:13:02
 @github: https://github.com/longfengpili
 '''
 
@@ -50,6 +50,11 @@ R_RESOLVE_TABLENAME = mysetting.r_resolve_table
 R_RESOLVE_COLUMNS = mysetting.resolve_columns
 R_NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
 # Redshfit adjust
+R_AD_REPAIR_TABLENAME = mysetting.adjust_r_repair_table
+R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
+R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
+R_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
+# Redshfit sdk
 R_AD_REPAIR_TABLENAME = mysetting.adjust_r_repair_table
 R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
 R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns

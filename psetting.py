@@ -55,10 +55,10 @@ R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
 R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
 R_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
 # Redshfit sdk
-R_AD_REPAIR_TABLENAME = mysetting.adjust_r_repair_table
-R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
-R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
-R_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
+SDK_REDSHIFT_DATABASE = mysetting.sdk_redshift_database
+SDK_REDSHIFT_HOST = mysetting.sdk_redshift_host
+SDK_REDSHIFT_USER = mysetting.sdk_redshift_user
+SDK_REDSHIFT_PASSWORD = mysetting.sdk_redshift_password
 
 # Mysql
 M_DATABASE = mysetting.mysql_database

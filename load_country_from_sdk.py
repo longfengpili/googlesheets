@@ -13,7 +13,7 @@ from psetting import *
 
 
 db1 = DBRedshift(host=SDK_REDSHIFT_HOST, user=SDK_REDSHIFT_USER, password=SDK_REDSHIFT_PASSWORD, database=SDK_REDSHIFT_DATABASE)
-sql = 'select distinct fpid, country from animatch_bi.event_kpi_login;'
+sql = 'select distinct fpid, country from animatch_bi.d_adjust;'
 count, result = db1.sql_execute(sql)
 
 db2 = DBRedshift(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE)

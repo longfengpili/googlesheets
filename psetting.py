@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-09-28 16:13:02
+@LastEditTime: 2019-10-09 11:08:49
 @github: https://github.com/longfengpili
 '''
 
@@ -39,6 +39,12 @@ R_FUNNEL_TABLENAME = mysetting.r_funnel_table
 FUNNEL_COLUMNS = mysetting.funnel_columns
 FUNNEL_SPREADSHEET_ID = mysetting.funnel_spreadsheet_id
 FUNNEL_SHEETNAME = mysetting.funnel_sheetname
+#quest_info
+QUEST_TABLENAME = mysetting.quest_table
+R_QUEST_TABLENAME = mysetting.r_quest_table
+QUEST_COLUMNS = mysetting.quest_columns
+QUEST_SPREADSHEET_ID = mysetting.quest_spreadsheet_id
+QUEST_SHEETNAME = mysetting.quest_sheetname
 
 # Redshift
 R_DATABASE = mysetting.redshift_database

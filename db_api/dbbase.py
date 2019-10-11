@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-09-26 12:36:56
+@LastEditTime: 2019-10-11 10:50:59
 @github: https://github.com/longfengpili
 '''
 
@@ -79,14 +79,19 @@ class DBBase(object):
         sqls = sqls[:-1] if sqls[-1].strip() == '' else sqls
 
         for id, sql in enumerate(sqls):
-            if progress:
-                tablenames = re.findall('table (.*?) [(|as|\n]', sql)
-                tablename = tablenames[0] if tablenames else sql.rstrip()
-                dblogger.info(f'【{id}】{tablename}')
-            self.error_sql = sql.strip()
             sql_type = self.__check_sql_type(sql)
             result = f'{sql_type} completed !'
-            # print(result)
+            
+            if progress:
+                tablenames = re.findall('table (.*?) [(|as|\n]', sql)
+                if not tablenames and 'update' in sql:
+                    tablenames = re.findall('update (.*?)[ |\n]', sql)
+                elif not tablenames and 'insert into' in sql:
+                    tablenames = re.findall('insert into (.*?)[ |\n]', sql)
+                tablename = tablenames[0] if tablenames else sql.rstrip()
+                dblogger.info(f'【{id}】【{sql_type}】{tablename}')
+            self.error_sql = sql.strip()
+            
             if sql_type == '--':
                 pass
             elif sql == sqls[-1] and sql_type not in ['create']:

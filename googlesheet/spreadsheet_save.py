@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-02 11:41:25
-@LastEditTime: 2019-07-02 11:41:25
+@LastEditTime: 2019-10-11 17:00:57
 @github: https://github.com/longfengpili
 '''
 
@@ -52,7 +52,7 @@ class SaveSpreadSheet(Spreadsheet):
         self.db.sql_execute(sql)
         spreadsheet_logger.info(f'【{self.database}.{tablename}】, dropped !')
         sql = self.db.sql_for_create(
-            tablename=tablename, columns=columns, primary_key=primary_key)
+            tablename=tablename, columns=columns)
         self.db.sql_execute(sql)
         spreadsheet_logger.info(f'【{self.database}.{tablename}】, created !')
         sql = self.db.sql_for_insert(

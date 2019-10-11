@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-09-28 14:27:57
+@LastEditTime: 2019-10-11 17:02:19
 @github: https://github.com/longfengpili
 '''
 
@@ -25,6 +25,6 @@ db2 = DBRedshift(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATAB
 tablename = 'fact_data_aniland.sdk_country'
 columns={'fpid': 'varchar', 'country':'varchar'}
 db2.drop_table(tablename)
-db2.create_table(tablename, columns=columns)
+db2.create_table(tablename, columns=columns, index=['fpid'])
 sql = db2.sql_for_insert(tablename, columns, result)
 db2.sql_execute(sql)

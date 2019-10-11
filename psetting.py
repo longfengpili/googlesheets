@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-10-09 11:08:49
+@LastEditTime: 2019-10-11 17:22:51
 @github: https://github.com/longfengpili
 '''
 
@@ -54,11 +54,13 @@ R_PASSWORD = mysetting.redshift_password
 R_REPAIR_TABLENAME = mysetting.r_repair_table
 R_RESOLVE_TABLENAME = mysetting.r_resolve_table
 R_RESOLVE_COLUMNS = mysetting.resolve_columns
+R_RESOLVE_INDEX = mysetting.resolve_index
 R_NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
 # Redshfit adjust
 R_AD_REPAIR_TABLENAME = mysetting.adjust_r_repair_table
 R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
 R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
+R_AD_RESOLVE_INDEX = mysetting.adjust_resolve_index
 R_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
 # Redshfit sdk
 SDK_REDSHIFT_DATABASE = mysetting.sdk_redshift_database

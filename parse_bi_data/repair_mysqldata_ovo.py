@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-09-25 10:01:50
+@LastEditTime: 2019-10-11 16:30:44
 @github: https://github.com/longfengpili
 '''
 
@@ -33,7 +33,7 @@ import time
 
 
 class RepairMysqlDataOVO(ParseBiFunc):
-    def __init__(self, db_host, db_user, db_password, db_database, original_columns, db2_host=None, db2_user=None, db2_password=None, db2_database=None):
+    def __init__(self, db_type, db_host, db_user, db_password, db_database, original_columns, db2_type=None, db2_host=None, db2_user=None, db2_password=None, db2_database=None):
         self.db = None
         self.conn = None
         self.table_id = None
@@ -41,28 +41,41 @@ class RepairMysqlDataOVO(ParseBiFunc):
         self.conn2 = None
         self.table2_id = None
         self.count = 0
+        self.db_type = db_type
         self.db_host = db_host
         self.db_user = db_user
         self.db_password = db_password
         self.db_database = db_database
+        self.db2_type = db2_type
         self.db2_host = db2_host
         self.db2_user = db2_user
         self.db2_password = db2_password
         self.db2_database = db2_database
         self.original_columns = original_columns
 
+    def __get_db(self, db_type, db_id):
+        if db_type == 'mysql':
+            if db_id == 1:
+                db = DBMysql(host=self.db_host, user=self.db_user,password=self.db_password, database=self.db_database)
+            elif db_id == 2:
+                db = DBMysql(host=self.db2_host, user=self.db2_user,password=self.db2_password, database=self.db2_database)
+        elif db_type == 'redshift':
+            if db_id == 1:
+                db = DBRedshift(host=self.db_host, user=self.db_user,password=self.db_password, database=self.db_database)
+            elif db_id == 2:
+                db = DBRedshift(host=self.db2_host, user=self.db2_user,password=self.db2_password, database=self.db2_database)
+        else:
+            raise 'error'
+        return db
+
     def _connect(self):
         if not self.db:
-            self.db = DBMysql(host=self.db_host, user=self.db_user,
-                              password=self.db_password, database=self.db_database)
-        if not self.conn:
+            self.db = self.__get_db(self.db_type, 1)
             self.conn = self.db._connect()
 
         if self.db2_host:  
             if not self.db2:
-                self.db2 = DBRedshift(host=self.db2_host, user=self.db2_user,
-                                    password=self.db2_password, database=self.db2_database)
-            if not self.conn2:
+                self.db2 = self.__get_db(self.db2_type, 2)
                 self.conn2 = self.db2._connect()
         else:
             self.db2 = self.db

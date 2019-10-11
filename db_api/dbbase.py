@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-10-11 10:50:59
+@LastEditTime: 2019-10-11 16:59:48
 @github: https://github.com/longfengpili
 '''
 
@@ -139,27 +139,26 @@ class DBBase(object):
         # dblogger.info(f'{sql[:10]} execute {round(et - st, 4)} seconds')
         return change_count,result
 
-    def sql_for_create(self, tablename, columns, primary_key=True):
+    def sql_for_create(self, tablename, columns, index=None):
         if not isinstance(columns, dict):
             raise 'colums must be a dict ! example:{"column_name":"column_type"}'
 
         if '.' in tablename: #redshift
-            if primary_key:
+            if index:
                 sql = f'''create table if not exists {self.database}.{tablename}
-                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
-                        unique({list(columns.keys())[0]})) sortkey({list(columns.keys())[0]});'''
+                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])})
+                        interleaved sortkey({','.join(index)});'''
             else:
                 sql = f'''create table if not exists {self.database}.{tablename}
                         ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])});'''
         else:
-            if primary_key:
+            if index:
                 sql = f'''create table if not exists {self.database}.{tablename}
-                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])},
-                        primary key ({list(columns.keys())[0]} asc)
-                        ) CHARSET=utf8;'''
+                    ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])})
+                    partition by {','.join(index)} CHARSET=utf8;'''
             else:
                 sql = f'''create table if not exists {self.database}.{tablename}
-                        ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])}) CHARSET=utf8;'''
+                    ({','.join([k.lower() + ' '+ f"{'varchar(128)' if v == 'varchar' else v}" for k, v in columns.items()])}) CHARSET=utf8;'''
 
         sql = re.sub('\s{2,}', '\n', sql)
         return sql

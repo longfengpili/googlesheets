@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-15 12:03:41
-@LastEditTime: 2019-07-15 12:03:41
+@LastEditTime: 2019-10-11 17:17:44
 @github: https://github.com/longfengpili
 '''
 
@@ -31,14 +31,15 @@ if id_max:
     print('id_max do not effect, becouse the original_tablename have no id !')
 
 
-rmdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
-                            db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
+rmdovo = RepairMysqlDataOVO(db_type='mysql', db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+                            db2_type='redshift', db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
                             original_columns=M_AD_ORIGINAL_COLUMNS)
 rmdovo.repair_adjust_data_main(original_tablename=M_AD_ORIGINAL_TABLENAME,
                                repair_tablename=R_AD_REPAIR_TABLENAME, id_min=id_min, suffix='idxu')
 
 if rmdovo.count > 0:
     rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE, 
-                     original_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, no_resolve_columns=R_AD_NO_RESOLVE_COLUMNS, db_type='redshift')
+                     original_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, resolve_index=R_AD_RESOLVE_INDEX,
+                     no_resolve_columns=R_AD_NO_RESOLVE_COLUMNS, db_type='redshift')
     rd.resolve_data_main(repair_tablename=R_AD_REPAIR_TABLENAME, resolve_tablename=R_AD_RESOLVE_TABLENAME, id_min=id_min)
                         

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-09-24 17:03:41
+@LastEditTime: 2019-10-11 17:00:38
 @github: https://github.com/longfengpili
 '''
 
@@ -31,8 +31,8 @@ class DBFunction(DBBase):
     def __init__(self):
         pass
 
-    def create_table(self, tablename, columns):
-        sql = self.sql_for_create(tablename=tablename, columns=columns)
+    def create_table(self, tablename, columns, index=None):
+        sql = self.sql_for_create(tablename=tablename, columns=columns, index=index)
         self.sql_execute(sql)
     
     def drop_table(self, tablename):

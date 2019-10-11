@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-09-26 11:20:13
+@LastEditTime: 2019-10-11 17:23:54
 @github: https://github.com/longfengpili
 '''
 
@@ -48,7 +48,8 @@ class tasktest(unittest.TestCase):
         # myrow = list((1,'﻿{"ts":"15655"","msg_type3":"end_up","isdds":false,"t":"d""}'))
         myrow = list((1, '{"ts":1564727341,"error":"err","errr2":"33","b":33}'))
         rd = ResolveData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE,
-                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='mysql')
+                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, resolve_index=R_RESOLVE_INDEX,
+                         no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='mysql')
         row = rd.resolve_row(myrow)
         print(row)
 
@@ -60,7 +61,8 @@ class tasktest(unittest.TestCase):
         rdovo.repair_data_main(original_tablename=M_ORIGINAL_TABLENAME,
                                repair_tablename=R_REPAIR_TABLENAME, id_min=28000)
         rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE, 
-                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='redshift')
+                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, resolve_index=R_RESOLVE_INDEX,
+                         no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='redshift')
         rd.resolve_data_main(repair_tablename=R_REPAIR_TABLENAME, resolve_tablename=R_RESOLVE_TABLENAME)
 
     def test_repair_to_mysql(self):
@@ -70,7 +72,8 @@ class tasktest(unittest.TestCase):
         rdovo.repair_data_main(original_tablename=M_ORIGINAL_TABLENAME, repair_tablename=M_REPAIR_TABLENAME, id_min=0, id_max=3000)
         
         rd = ResolveData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE,
-                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='mysql')
+                         original_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, resolve_index=R_RESOLVE_INDEX,
+                         no_resolve_columns=R_NO_RESOLVE_COLUMNS, db_type='mysql')
         rd.resolve_data_main(repair_tablename=M_REPAIR_TABLENAME, resolve_tablename=M_RESOLVE_TABLENAME, id_min=0, id_max=3000)
 
     def test_copy_in_mysql(self):
@@ -119,7 +122,8 @@ class tasktest(unittest.TestCase):
         resolve_columns = R_RESOLVE_COLUMNS
         no_resolve_columns = R_NO_RESOLVE_COLUMNS
         rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE,
-                         original_columns=original_columns, resolve_columns=resolve_columns, no_resolve_columns=no_resolve_columns, db_type='redshift')
+                         original_columns=original_columns, resolve_columns=resolve_columns, resolve_index=R_RESOLVE_INDEX,
+                         no_resolve_columns=no_resolve_columns, db_type='redshift')
         rd.resolve_data_main(repair_tablename=repair_tablename, resolve_tablename=resolve_tablename, id_min=0, n=1000)
 
 if __name__ == '__main__':

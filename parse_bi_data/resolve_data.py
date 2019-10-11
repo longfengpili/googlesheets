@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-09-25 20:47:44
+@LastEditTime: 2019-10-11 17:14:09
 @github: https://github.com/longfengpili
 '''
 
@@ -29,7 +29,7 @@ import time
 
 
 class ResolveData(ParseBiFunc):
-    def __init__(self, host, user, password, database, original_columns, resolve_columns, no_resolve_columns, db_type):
+    def __init__(self, host, user, password, database, original_columns, resolve_columns, resolve_index, no_resolve_columns, db_type):
         self.table_id = None
         self.table2_id = None
         self.count = 0
@@ -41,6 +41,7 @@ class ResolveData(ParseBiFunc):
         self.database = database
         self.original_columns = original_columns
         self.resolve_columns = resolve_columns
+        self.resolve_index = resolve_index
         self.no_resolve_columns = no_resolve_columns
         self.db_type = db_type
 
@@ -49,13 +50,11 @@ class ResolveData(ParseBiFunc):
             if not self.db:
                 self.db = DBMysql(host=self.host, user=self.user,
                                 password=self.password, database=self.database)
-            if not self.conn:
                 self.conn = self.db._connect()
         elif self.db_type == 'redshift':
             if not self.db:
                 self.db = DBRedshift(host=self.host, user=self.user,
                                      password=self.password, database=self.database)
-            if not self.conn:
                 self.conn = self.db._connect()
 
 
@@ -132,7 +131,7 @@ class ResolveData(ParseBiFunc):
         self._connect()
         if id_min != None and id_min <= 1 and not id_max:
             self.db.drop_table(resolve_tablename)
-        self.db.create_table(resolve_tablename, columns=self.resolve_columns)
+        self.db.create_table(resolve_tablename, columns=self.resolve_columns, index=self.resolve_index)
 
         if id_min != None and id_max != None:
             if id_min >= id_max:

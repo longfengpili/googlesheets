@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 11:05:28
-@LastEditTime: 2019-10-11 17:23:54
+@LastEditTime: 2019-10-11 19:06:02
 @github: https://github.com/longfengpili
 '''
 
@@ -58,7 +58,7 @@ class tasktest(unittest.TestCase):
                                           db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
                                           original_columns=M_ORIGINAL_COLUMNS)
         # rdovo.get_tables_id_real(original_tablename=M_ORIGINAL_TABLENAME,repair_tablename=R_REPAIR_TABLENAME)
-        rdovo.repair_data_main(original_tablename=M_ORIGINAL_TABLENAME,
+        rdovo.copy_game_data_main(original_tablename=M_ORIGINAL_TABLENAME,
                                repair_tablename=R_REPAIR_TABLENAME, id_min=28000)
         rd = ResolveData(host=R_HOST, user=R_USER, password=R_PASSWORD, database=R_DATABASE, 
                          original_columns=M_ORIGINAL_COLUMNS, resolve_columns=R_RESOLVE_COLUMNS, resolve_index=R_RESOLVE_INDEX,
@@ -69,7 +69,7 @@ class tasktest(unittest.TestCase):
         rdovo = RepairMysqlDataOVO(db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
                                    original_columns=M_ORIGINAL_COLUMNS)
         # rdovo.get_tables_id_real(original_tablename=M_ORIGINAL_TABLENAME,repair_tablename=R_REPAIR_TABLENAME)
-        rdovo.repair_data_main(original_tablename=M_ORIGINAL_TABLENAME, repair_tablename=M_REPAIR_TABLENAME, id_min=0, id_max=3000)
+        rdovo.copy_game_data_main(original_tablename=M_ORIGINAL_TABLENAME, repair_tablename=M_REPAIR_TABLENAME, id_min=0, id_max=3000)
         
         rd = ResolveData(host=M_HOST, user=M_USER, password=M_PASSWORD, database=M_DATABASE,
                          original_columns=M_ORIGINAL_COLUMNS, resolve_columns=M_RESOLVE_COLUMNS, resolve_index=R_RESOLVE_INDEX,

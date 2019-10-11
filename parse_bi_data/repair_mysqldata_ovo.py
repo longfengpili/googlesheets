@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-11 16:30:44
+@LastEditTime: 2019-10-11 19:04:48
 @github: https://github.com/longfengpili
 '''
 
@@ -169,12 +169,15 @@ class RepairMysqlDataOVO(ParseBiFunc):
         # parsebi_logger.info(f'cost {round(et - st, 4)} seconds')
         return repaired
     
-    def repair_data_once(self, original_tablename, repair_tablename, n=1000):
+    def repair_data_once(self, original_tablename, repair_tablename, n=1000, is_repair=True):
         #获取未修复数据
         # with lock:
         data, start_id, end_id = self.get_data(db=self.db, tablename1=original_tablename, columns=self.original_columns, n=n)
-        #修复数据
-        repaired = self.repair_multiple_rows(data)
+        #修复数据(修复和不修复)
+        if is_repair:
+            repaired = self.repair_multiple_rows(data)
+        else:
+            repaired = data
         # print(repaired[0])
         sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.original_columns, values=repaired)
         count, data = self.sql_execute_by_instance(self.db2, sql)
@@ -184,7 +187,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         else:
             parsebi_logger.error(f'本次修复【({start_id},{end_id}]】失败！')
         
-    def repair_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, n=1000):
+    def copy_game_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, n=1000, is_repair=True):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -194,7 +197,8 @@ class RepairMysqlDataOVO(ParseBiFunc):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        parsebi_logger.info(f'开始修复数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
+        copy_info = '修复' if is_repair else '复制'
+        parsebi_logger.info(f'开始{copy_info}数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
         self._connect()
         if id_min != None and id_min <= 1 and not id_max:
             self.db2.drop_table(repair_tablename)
@@ -218,7 +222,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
             self.table_id = self.table_id if self.table_id <= id_max else id_max
 
         counts = self.table_id - self.table2_id
-        parsebi_logger.info(f'开始修复数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
+        parsebi_logger.info(f'开始{copy_info}数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
             # self.repair_data_once(original_tablename, repair_tablename, n=n)
@@ -226,18 +230,18 @@ class RepairMysqlDataOVO(ParseBiFunc):
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:
                     args = (original_tablename, repair_tablename)
-                    t = MyThread(self.repair_data_once, *args, n=n)
+                    t = MyThread(self.repair_data_once, *args, n=n, is_repair=is_repair)
                     threads.append(t)
             for t in threads:
                 t.start()
             for t in threads:
                 t.join()
         if counts == self.count:
-            parsebi_logger.info(f'本次累计修复【({start_id},{self.table_id}]】, 共【{self.count}】条！')
+            parsebi_logger.info(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 共【{self.count}】条！')
         else:
-            parsebi_logger.error(f'本次累计修复【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
+            parsebi_logger.error(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
 
-    def repair_adjust_data_main(self, original_tablename, repair_tablename, id_min=None, suffix=None):
+    def copy_adjust_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, suffix=None):
         '''
         @description: 处理格式并拆解
         @param {type} 
@@ -251,7 +255,7 @@ class RepairMysqlDataOVO(ParseBiFunc):
         if suffix:
             count = self.copy_data_to_idtable(tablename=original_tablename, id_min=id_min, suffix=suffix)
             if count > 0:
-                self.repair_data_main(original_tablename, repair_tablename, id_min=id_min)
+                self.copy_game_data_main(original_tablename, repair_tablename, id_min=id_min, id_max=id_max)
             else:
                 parsebi_logger.info(f'【{original_tablename}】adjust new data {count} num, do nothing !')
 

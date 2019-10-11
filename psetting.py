@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-10-11 17:22:51
+@LastEditTime: 2019-10-11 20:18:19
 @github: https://github.com/longfengpili
 '''
 
@@ -79,6 +79,17 @@ M_REPAIR_TABLENAME = mysetting.repair_table
 M_RESOLVE_TABLENAME = mysetting.resolve_table
 M_RESOLVE_COLUMNS = mysetting.resolve_columns
 M_NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
+# Mysql bakeup
+M_BUKEUP_DATABASE = mysetting.mysql_database
+M_BUKEUP_HOST = mysetting.bakeup_host
+M_BUKEUP_USER = mysetting.mysql_user
+M_BUKEUP_PASSWORD = mysetting.bakeup_password
+M_BUKEUP_GAME_TABLENAME = mysetting.original_table
+M_BUKEUP_GAME_COLUMNS = mysetting.original_columns
+M_BUKEUP_ADJUST_TABLENAME = mysetting.adjust_original_table
+M_BUKEUP_ADJUST_COLUMNS = mysetting.adjust_original_columns
+
+
 # Mysql adjust
 M_AD_ORIGINAL_TABLENAME = mysetting.adjust_original_table
 M_AD_ORIGINAL_COLUMNS = mysetting.adjust_original_columns

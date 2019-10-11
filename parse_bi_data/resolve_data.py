@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-10-11 17:14:09
+@LastEditTime: 2019-10-11 20:58:03
 @github: https://github.com/longfengpili
 '''
 
@@ -103,6 +103,7 @@ class ResolveData(ParseBiFunc):
         return resolved
 
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
+        st = time.time()
         #获取未修复数据
         # with lock:
         data, start_id, end_id = self.get_data(db=self.db, tablename1=repair_tablename, columns=self.original_columns, n=n)
@@ -111,11 +112,12 @@ class ResolveData(ParseBiFunc):
         # print(resolved[0])
         sql = self.db.sql_for_insert(tablename=resolve_tablename, columns=self.resolve_columns, values=resolved)
         count, data = self.sql_execute_by_instance(self.db, sql)
+        et = time.time()
         if count != None and count > 0:
             self.count += count
-            parsebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！')
+            parsebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
         else:
-            parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！')
+            parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
 
     def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None, n=1000):
         '''

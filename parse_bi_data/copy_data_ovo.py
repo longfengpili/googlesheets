@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-11 20:38:47
+@LastEditTime: 2019-10-11 20:57:26
 @github: https://github.com/longfengpili
 '''
 
@@ -170,6 +170,7 @@ class CopyDataOVO(ParseBiFunc):
         return repaired
     
     def repair_data_once(self, original_tablename, repair_tablename, n=1000, is_repair=True):
+        st = time.time()
         copy_info = '修复' if is_repair else '复制'
         #获取未修复数据
         # with lock:
@@ -182,11 +183,12 @@ class CopyDataOVO(ParseBiFunc):
         # print(repaired[0])
         sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.original_columns, values=repaired)
         count, data = self.sql_execute_by_instance(self.db2, sql)
+        et = time.time()
         if count != None and count > 0:
             self.count += count
-            parsebi_logger.info(f'本次{copy_info}【({start_id},{end_id}]】{count}条数据！')
+            parsebi_logger.info(f'本次{copy_info}【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
         else:
-            parsebi_logger.error(f'本次{copy_info}【({start_id},{end_id}]】失败！')
+            parsebi_logger.error(f'本次{copy_info}【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
         
     def copy_game_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, n=1000, is_repair=True):
         '''

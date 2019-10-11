@@ -11,7 +11,7 @@
 
 from psetting import *
 from db_api import DBMysql, DBRedshift
-from parse_bi_data import RepairMysqlDataOVO, ResolveData
+from parse_bi_data import CopyDataOVO, ResolveData
 import sys
 from datetime import datetime
 
@@ -28,7 +28,7 @@ R_REPAIR_TABLENAME = R_REPAIR_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据�
 R_RESOLVE_TABLENAME = R_RESOLVE_TABLENAME + '_' + M_HOST.split('.')[-1]  # 根据不同的数据库创建不同的表
 
 
-rmdovo = RepairMysqlDataOVO(db_type='mysql', db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+rmdovo = CopyDataOVO(db_type='mysql', db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
                             db2_type='redshift', db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
                             original_columns=M_ORIGINAL_COLUMNS)
 rmdovo.copy_game_data_main(original_tablename=M_ORIGINAL_TABLENAME,repair_tablename=R_REPAIR_TABLENAME, id_min=id_min, id_max=id_max)

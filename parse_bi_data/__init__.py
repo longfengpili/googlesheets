@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-07-01 10:11:18
+@LastEditTime: 2019-10-11 19:56:12
 @github: https://github.com/longfengpili
 '''
 
@@ -11,9 +11,9 @@
 
 
 from .resolve_data import ResolveData
-from .repair_mysqldata_ovo import RepairMysqlDataOVO
+from .copy_data_ovo import CopyDataOVO
 from .repair_json import RepairJsonData
 from .parse_bi_func import ParseBiFunc
 
-__all__ = ['ResolveData', 'RepairMysqlDataOVO',
+__all__ = ['ResolveData', 'CopyDataOVO',
            'RepairJsonData', 'ParseBiFunc']

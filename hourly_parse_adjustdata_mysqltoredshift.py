@@ -12,7 +12,7 @@
 
 from psetting import *
 from db_api import DBMysql, DBRedshift
-from parse_bi_data import RepairMysqlDataOVO, ResolveData
+from parse_bi_data import CopyDataOVO, ResolveData
 import sys
 from datetime import datetime
 
@@ -31,7 +31,7 @@ if id_max:
     print('id_max do not effect, becouse the original_tablename have no id !')
 
 
-rmdovo = RepairMysqlDataOVO(db_type='mysql', db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
+rmdovo = CopyDataOVO(db_type='mysql', db_host=M_HOST, db_user=M_USER, db_password=M_PASSWORD, db_database=M_DATABASE,
                             db2_type='redshift', db2_host=R_HOST, db2_user=R_USER, db2_password=R_PASSWORD, db2_database=R_DATABASE,
                             original_columns=M_AD_ORIGINAL_COLUMNS)
 rmdovo.copy_adjust_data_main(original_tablename=M_AD_ORIGINAL_TABLENAME,

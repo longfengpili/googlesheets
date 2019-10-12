@@ -1,20 +1,16 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-10-11 20:18:19
+@LastEditTime: 2019-10-12 10:34:50
 @github: https://github.com/longfengpili
 '''
 
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 
-
-
-
 import sys
 sys.path.append('..')
 import mysetting
-
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -62,11 +58,6 @@ R_AD_RESOLVE_TABLENAME = mysetting.adjust_r_resolve_table
 R_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
 R_AD_RESOLVE_INDEX = mysetting.adjust_resolve_index
 R_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
-# Redshfit sdk
-SDK_REDSHIFT_DATABASE = mysetting.sdk_redshift_database
-SDK_REDSHIFT_HOST = mysetting.sdk_redshift_host
-SDK_REDSHIFT_USER = mysetting.sdk_redshift_user
-SDK_REDSHIFT_PASSWORD = mysetting.sdk_redshift_password
 
 # Mysql
 M_DATABASE = mysetting.mysql_database
@@ -79,17 +70,6 @@ M_REPAIR_TABLENAME = mysetting.repair_table
 M_RESOLVE_TABLENAME = mysetting.resolve_table
 M_RESOLVE_COLUMNS = mysetting.resolve_columns
 M_NO_RESOLVE_COLUMNS = mysetting.no_resolve_columns
-# Mysql bakeup
-M_BUKEUP_DATABASE = mysetting.mysql_database
-M_BUKEUP_HOST = mysetting.bakeup_host
-M_BUKEUP_USER = mysetting.mysql_user
-M_BUKEUP_PASSWORD = mysetting.bakeup_password
-M_BUKEUP_GAME_TABLENAME = mysetting.original_table
-M_BUKEUP_GAME_COLUMNS = mysetting.original_columns
-M_BUKEUP_ADJUST_TABLENAME = mysetting.adjust_original_table
-M_BUKEUP_ADJUST_COLUMNS = mysetting.adjust_original_columns
-
-
 # Mysql adjust
 M_AD_ORIGINAL_TABLENAME = mysetting.adjust_original_table
 M_AD_ORIGINAL_COLUMNS = mysetting.adjust_original_columns
@@ -97,6 +77,14 @@ M_AD_REPAIR_TABLENAME = mysetting.adjust_repair_table
 M_AD_RESOLVE_TABLENAME = mysetting.adjust_resolve_table
 M_AD_RESOLVE_COLUMNS = mysetting.adjust_resolve_columns
 M_AD_NO_RESOLVE_COLUMNS = mysetting.adjust_no_resolve_columns
+# Mysql bakeup
+M_BUKEUP_DATABASE = mysetting.bakeup_database
+M_BUKEUP_USER = mysetting.bakeup_user
+M_BUKEUP_FROM_HOST = mysetting.bakeup_from_host
+M_BUKEUP_FROM_PASSWORD = mysetting.bakeup_from_password
+M_BUKEUP_TO_HOST = mysetting.bakeup_to_host
+M_BUKEUP_TO_PASSWORD = mysetting.bakeup_to_password
+M_BUKEUP_TABLE = mysetting.bakeup_table
 
 # daily
 EXECUTE_ORDER = mysetting.execute_order

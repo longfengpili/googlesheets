@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-10-11 20:58:03
+@LastEditTime: 2019-10-12 10:10:50
 @github: https://github.com/longfengpili
 '''
 
@@ -143,7 +143,6 @@ class ResolveData(ParseBiFunc):
             self.db.delete_by_id(tablename=resolve_tablename, id_min=id_min, id_max=id_max)
             id_min -= 1  # 左开右闭
             
-
         # resolve_table
         self.get_tables_id_single_db(tablename1=repair_tablename, tablename2=resolve_tablename)
         if not id_max:
@@ -156,7 +155,6 @@ class ResolveData(ParseBiFunc):
         parsebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
-            # self.resolve_data_once(original_tablename, repair_tablename, n=n)
             threads = []
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:

@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-11 20:57:26
+@LastEditTime: 2019-10-12 10:11:05
 @github: https://github.com/longfengpili
 '''
 
@@ -215,7 +215,6 @@ class CopyDataOVO(ParseBiFunc):
             self.db2.delete_by_id(tablename=repair_tablename, id_min=id_min, id_max=id_max)
             id_min -= 1  # 左开右闭
             
-        
         # repair_table
         self.get_tables_id_double_db(tablename1=original_tablename, tablename2=repair_tablename)
         if not id_max:
@@ -228,7 +227,6 @@ class CopyDataOVO(ParseBiFunc):
         parsebi_logger.info(f'开始{copy_info}数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
-            # self.repair_data_once(original_tablename, repair_tablename, n=n)
             threads = []
             for i in range(10):
                 if self.table2_id + n * i < self.table_id:

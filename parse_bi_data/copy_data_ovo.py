@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-12 13:36:32
+@LastEditTime: 2019-10-12 16:44:16
 @github: https://github.com/longfengpili
 '''
 
@@ -24,6 +24,7 @@ from logging import config
 config.fileConfig('parselog.conf')
 repairbi_logger = logging.getLogger('repairbi')
 parsebi_logger = logging.getLogger('parsebi')
+bakeup_logger = logging.getLogger('bakeup')
 
 import threading
 lock = threading.Lock() #生成全局锁
@@ -172,6 +173,7 @@ class CopyDataOVO(ParseBiFunc):
     def repair_data_once(self, original_tablename, repair_tablename, n=1000, is_repair=True):
         st = time.time()
         copy_info = '修复' if is_repair else '复制'
+        logger_t = repairbi_logger if is_repair else bakeup_logger
         #获取未修复数据
         # with lock:
         data, start_id, end_id = self.get_data(db=self.db, tablename1=original_tablename, columns=self.original_columns, n=n)
@@ -186,9 +188,11 @@ class CopyDataOVO(ParseBiFunc):
         et = time.time()
         if count != None and count > 0:
             self.count += count
-            parsebi_logger.info(f'本次{copy_info}【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
+            logger_t.info(
+                f'本次{copy_info}【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
         else:
-            parsebi_logger.error(f'本次{copy_info}【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
+            logger_t.error(
+                f'本次{copy_info}【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
         
     def copy_game_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, n=1000, is_repair=True):
         '''
@@ -201,7 +205,9 @@ class CopyDataOVO(ParseBiFunc):
         @return: 修改并解析数据，无返回值
         '''
         copy_info = '修复' if is_repair else '复制'
-        parsebi_logger.info(f'开始{copy_info}数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
+        logger_t = repairbi_logger if is_repair else bakeup_logger
+        print(logger_t)
+        logger_t.info(f'开始{copy_info}数据 ！ 【{self.db_host[:16]}】 to 【{(self.db2_host if self.db2_host else self.db_host)[:16]}】')
         self._connect()
         if id_min != None and id_min <= 1 and not id_max:
             self.db2.drop_table(repair_tablename)
@@ -224,7 +230,7 @@ class CopyDataOVO(ParseBiFunc):
             self.table_id = self.table_id if self.table_id <= id_max else id_max
 
         counts = self.table_id - self.table2_id
-        parsebi_logger.info(f'开始{copy_info}数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
+        logger_t.info(f'开始{copy_info}数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
             threads = []
@@ -238,9 +244,9 @@ class CopyDataOVO(ParseBiFunc):
             for t in threads:
                 t.join()
         if counts == self.count:
-            parsebi_logger.info(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 共【{self.count}】条！')
+            logger_t.info(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 共【{self.count}】条！')
         else:
-            parsebi_logger.error(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
+            logger_t.error(f'本次累计{copy_info}【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
 
     def copy_adjust_data_main(self, original_tablename, repair_tablename, id_min=None, id_max=None, suffix=None):
         '''

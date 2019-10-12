@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-09-24 17:39:42
+@LastEditTime: 2019-10-12 16:39:16
 @github: https://github.com/longfengpili
 '''
 
@@ -55,6 +55,10 @@ class RepairJsonData(object):
 
     def repair_for_preerror(self):
         self.myjson = self.myjson.strip()
+        result = re.search('\{', self.myjson)
+        if result:
+            prenumber = result.span()[0]
+            self.myjson = self.myjson[prenumber:]
         self.loads_json()
 
     def repair_main(self):

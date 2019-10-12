@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-10-12 10:10:50
+@LastEditTime: 2019-10-12 16:54:23
 @github: https://github.com/longfengpili
 '''
 
@@ -20,7 +20,6 @@ from logging import config
 
 config.fileConfig('parselog.conf')
 resolvebi_logger = logging.getLogger('resolvebi')
-parsebi_logger = logging.getLogger('parsebi')
 
 import threading
 lock = threading.Lock() #生成全局锁
@@ -62,7 +61,7 @@ class ResolveData(ParseBiFunc):
         value = log.get(field, 'Null')
         value = 'Null' if value in ['', None] else value
         if field.endswith('ts') or field.endswith('_at'):
-            # parsebi_logger.info(field, value)
+            # resolvebi_logger.info(field, value)
             value = int(str(value)[:10]) if len(str(value)) >= 10 else 'Null' if value == 0 else value
             if isinstance(value, int):
                 value = datetime.utcfromtimestamp(value)
@@ -88,7 +87,7 @@ class ResolveData(ParseBiFunc):
             for key in keys:
                 need_columns.add(key)
                 key_[key] = data_json.get(key)
-            parsebi_logger.error(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
+            resolvebi_logger.error(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
         return need_columns, columns_value
 
     def resolve_multiple_rows(self,rows):
@@ -99,7 +98,7 @@ class ResolveData(ParseBiFunc):
             resolved.append(row)
             need_columns_all.update(need_columns)
         if need_columns_all:
-            parsebi_logger.error('\n' + '⭐'*40 + f'\n【{need_columns_all}】 do not parse, if need please change your resolve columns !\n' + '⭐'*40)
+            resolvebi_logger.error('\n' + '⭐'*40 + f'\n【{need_columns_all}】 do not parse, if need please change your resolve columns !\n' + '⭐'*40)
         return resolved
 
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):
@@ -115,9 +114,9 @@ class ResolveData(ParseBiFunc):
         et = time.time()
         if count != None and count > 0:
             self.count += count
-            parsebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
+            resolvebi_logger.info(f'本次解析【({start_id},{end_id}]】{count}条数据！用时{round(et-st, 2)}秒！')
         else:
-            parsebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
+            resolvebi_logger.error(f'本次解析【({start_id},{end_id}]】失败！用时{round(et-st, 2)}秒！')
 
     def resolve_data_main(self, repair_tablename, resolve_tablename, id_min=None, id_max=None, n=1000):
         '''
@@ -129,7 +128,7 @@ class ResolveData(ParseBiFunc):
             id_max:需要重新跑的id结束值
         @return: 修改并解析数据，无返回值
         '''
-        parsebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
+        resolvebi_logger.info(f'开始解析数据 ！on 【{self.host[:16]}】')
         self._connect()
         if id_min != None and id_min <= 1 and not id_max:
             self.db.drop_table(resolve_tablename)
@@ -152,7 +151,7 @@ class ResolveData(ParseBiFunc):
             self.table_id = self.table_id if self.table_id <= id_max else id_max
         
         counts = self.table_id - self.table2_id
-        parsebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
+        resolvebi_logger.info(f'开始解析数据【({self.table2_id},{self.table_id}]】, 共【{counts}】条！')
         start_id = self.table2_id
         while self.table2_id < self.table_id:
             threads = []
@@ -167,7 +166,7 @@ class ResolveData(ParseBiFunc):
                 t.join()
         
         if counts == self.count:
-            parsebi_logger.info(f'本次累计解析【({start_id},{self.table_id}]】, 共【{self.count}】条！')
+            resolvebi_logger.info(f'本次累计解析【({start_id},{self.table_id}]】, 共【{self.count}】条！')
         else:
-            parsebi_logger.error(f'本次累计解析【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
+            resolvebi_logger.error(f'本次累计解析【({start_id},{self.table_id}]】, 预计【{counts}】条，实际【{self.count}】条！')
             

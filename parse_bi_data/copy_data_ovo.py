@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-12 10:11:05
+@LastEditTime: 2019-10-12 13:36:32
 @github: https://github.com/longfengpili
 '''
 
@@ -180,7 +180,7 @@ class CopyDataOVO(ParseBiFunc):
             repaired = self.repair_multiple_rows(data)
         else:
             repaired = data
-        # print(repaired[0])
+        # print(repaired)
         sql = self.db2.sql_for_insert(tablename=repair_tablename, columns=self.original_columns, values=repaired)
         count, data = self.sql_execute_by_instance(self.db2, sql)
         et = time.time()

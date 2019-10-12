@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-10-12 10:48:05
+@LastEditTime: 2019-10-12 12:57:01
 @github: https://github.com/longfengpili
 '''
 
@@ -36,5 +36,6 @@ for tablename, columns in M_BUKEUP_TABLE.items():
                                 db2_type='mysql', db2_host=M_BUKEUP_TO_HOST, db2_user=M_BUKEUP_USER, db2_password=M_BUKEUP_TO_PASSWORD, db2_database=M_BUKEUP_DATABASE,
                                 original_columns=columns)
     rmdovo.copy_game_data_main(original_tablename=tablename, repair_tablename=to_tablename, id_min=id_min, id_max=id_max, is_repair=False)
+    bakeup_logger.info(f'\n' + f"备份{tablename}结束！".center(80, '='))
 
                    

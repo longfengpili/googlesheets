@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 10:11:18
-@LastEditTime: 2019-10-11 16:59:48
+@LastEditTime: 2019-10-12 13:25:57
 @github: https://github.com/longfengpili
 '''
 
@@ -75,7 +75,7 @@ class DBBase(object):
     
     def execute_multiple(self, cur, sql, count=None, progress=False):
         change_count = 0
-        sqls = sql.split(';')
+        sqls = sql.split(';\n')
         sqls = sqls[:-1] if sqls[-1].strip() == '' else sqls
 
         for id, sql in enumerate(sqls):
@@ -107,6 +107,8 @@ class DBBase(object):
         return change_count, result
         
     def sql_execute(self, sql, conn=None, count=None, progress=False):
+        change_count = 0
+        result = ''
         st = time.time()
         if not sql:
             return None, None
@@ -127,14 +129,14 @@ class DBBase(object):
             # name = threading.current_thread().name
             # print(name, change_count, result[0][0], self.conn)
             conn.commit()
+            self.__close(conn=conn)
         except Exception as e:
             conn.rollback()
             dblogger.error(e)
             dblogger.error(self.error_sql)
             self.__close(conn=conn)
-            sys.exit()
-
-        self.__close(conn=conn)
+            # sys.exit()
+        
         et = time.time()
         # dblogger.info(f'{sql[:10]} execute {round(et - st, 4)} seconds')
         return change_count,result

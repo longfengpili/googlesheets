@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-10-12 16:54:23
+@LastEditTime: 2019-10-15 14:49:42
 @github: https://github.com/longfengpili
 '''
 
@@ -57,7 +57,7 @@ class ResolveData(ParseBiFunc):
                 self.conn = self.db._connect()
 
 
-    def get_field_value(self, log, field):
+    def get_field_value(self, log, field, field_type):
         value = log.get(field, 'Null')
         value = 'Null' if value in ['', None] else value
         if field.endswith('ts') or field.endswith('_at'):
@@ -67,6 +67,13 @@ class ResolveData(ParseBiFunc):
                 value = datetime.utcfromtimestamp(value)
         elif field not in ['price'] and isinstance(value, float): #解决非price的float问题
             value = int(value)
+
+        if 'varchar' in field_type:
+            value_len = re.findall('varchar\((.*?)\)', field_type)
+            value_len = int(value_len[0]) if value_len else 128
+            if len(str(value)) > value_len:
+                resolvebi_logger.error(f'【{field}】长度出问题，暂时取{value_len}长度， 具体日志：{log}')
+                value = str(value)[:128]
         return value
 
     def resolve_row(self,row):
@@ -76,9 +83,9 @@ class ResolveData(ParseBiFunc):
         id, data_json = row
         columns_value.append(id)
         data_json = json.loads(data_json)
-        for column in self.resolve_columns:
+        for column, col_type in self.resolve_columns.items():
             if column != 'id':
-                value = self.get_field_value(data_json, column)
+                value = self.get_field_value(data_json, column, col_type)
                 columns_value.append(value)
                 
         keys = set(data_json) - set(self.resolve_columns) - set(self.no_resolve_columns)

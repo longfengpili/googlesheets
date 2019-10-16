@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-02 11:41:25
-@LastEditTime: 2019-10-11 17:00:57
+@LastEditTime: 2019-10-16 15:06:21
 @github: https://github.com/longfengpili
 '''
 
@@ -43,7 +43,7 @@ class SaveSpreadSheet(Spreadsheet):
             self.spreadsheet_id, sheetname=sheetname, columns=columns)
         return values
 
-    def save_values(self, sheetname, tablename, columns, primary_key=True):
+    def save_values(self, sheetname, tablename, columns):
         spreadsheet_logger.info(f'【{sheetname}】,start load value !')
         values = self._get_spreadsheet_value(sheetname, columns)
         spreadsheet_logger.info(f'【{sheetname}】,end load value !')

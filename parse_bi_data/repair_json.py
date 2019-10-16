@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-10-12 16:39:16
+@LastEditTime: 2019-10-16 15:46:55
 @github: https://github.com/longfengpili
 '''
 
@@ -85,11 +85,12 @@ class RepairJsonData(object):
                 else:
                     msg_type = 'error'
                     
-                msg_type = f'{msg_type}'.center(30, '>')
+                msg_type = f'{msg_type}'
                 self.errors.insert(0, f'【{msg_type}】\n{self.myjson_origin}')
 
                 error_json['msg_type'] = msg_type
                 error_json['error_status'] = 'error'
+                error_json['error_content'] = self.myjson_origin
                 self.error = None
                 self.myjson = error_json
         self.myjson = json.dumps(self.myjson)

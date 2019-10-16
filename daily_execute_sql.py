@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-07-10 20:15:58
+@LastEditTime: 2019-10-16 18:35:02
 @github: https://github.com/longfengpili
 '''
 
@@ -44,10 +44,11 @@ if not params:
     params = input(f'''every params please add blank !
 【PARAM_1】which sqlfile?
     【all】     ：all
+    【repair】  ：repair_data
     【raw】     ：raw_data
     【fact】    ：fact_data
     【report】  ：reprot_data
-    【current】 ：current_data
+    【funnel】  ：funnel_data
 【PARAM_2】from begin days? 
     example:today is 0, yesterday is -1
 【PARAM_3】to end days?
@@ -73,8 +74,8 @@ elif p1 == 'fact':
     daily_work_single_main('fact_data', set_date(p2), set_date(p3), now)
 elif p1 == 'report':
     daily_work_single_main('report_data', set_date(p2), set_date(p3), now)
-elif p1 == 'current':
-    daily_work_single_main('current_data', set_date(p2), set_date(p3), now)
+elif p1 == 'funnel':
+    daily_work_single_main('funnel_data', set_date(p2), set_date(p3), now)
 elif p1 == 'repair':
     daily_work_single_main('repair_data', set_date(p2), set_date(p3), now)
 else:

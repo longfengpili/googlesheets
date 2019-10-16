@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-10 20:15:58
-@LastEditTime: 2019-10-16 18:35:02
+@LastEditTime: 2019-10-16 18:53:32
 @github: https://github.com/longfengpili
 '''
 
@@ -56,16 +56,13 @@ if not params:
 请选择要执行的内容：''')
     params = params.split(' ')
 
-if 1 <= len(params) < 3:
-    for i in range(3 - len(params)):
-        params.append('0')
-
-params_execute = ' '.join(params)
-if not params_execute:
-    p1, p2, p3 = 'all', '0', '0'
+if params and len(params) <= 3 and params[0] == 'all':
+    p1, p2, p3 = 'all', '-100', '0'
+elif params and len(params) == 3:
+    p1, p2, p3 = params
 else:
-    p1, p2, p3 = params_execute.split(' ')
-# print(p1,p2,p3)
+    raise 'please input according to the rule!'
+
 if p1 == 'all':
     daily_work_main(set_date(p2), set_date(p3), now)
 elif p1 == 'raw':
@@ -78,6 +75,6 @@ elif p1 == 'funnel':
     daily_work_single_main('funnel_data', set_date(p2), set_date(p3), now)
 elif p1 == 'repair':
     daily_work_single_main('repair_data', set_date(p2), set_date(p3), now)
-else:
+elif p1 == 'mytest':
     daily_work_single_main('mytest', set_date(p2), set_date(p3), now)
 

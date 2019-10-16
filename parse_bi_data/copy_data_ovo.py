@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-08-01 12:22:23
-@LastEditTime: 2019-10-12 17:00:15
+@LastEditTime: 2019-10-16 11:27:01
 @github: https://github.com/longfengpili
 '''
 
@@ -260,10 +260,7 @@ class CopyDataOVO(ParseBiFunc):
         
         if suffix:
             count = self.copy_data_to_idtable(tablename=original_tablename, id_min=id_min, suffix=suffix)
-            if count > 0:
-                self.copy_game_data_main(original_tablename, repair_tablename, id_min=id_min, id_max=id_max)
-            else:
-                parsebi_logger.info(f'【{original_tablename}】adjust new data {count} num, do nothing !')
+            self.copy_game_data_main(original_tablename, repair_tablename, id_min=id_min, id_max=id_max)
 
 
 

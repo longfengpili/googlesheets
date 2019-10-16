@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-15 12:03:41
-@LastEditTime: 2019-10-16 10:45:07
+@LastEditTime: 2019-10-16 11:15:06
 @github: https://github.com/longfengpili
 '''
 
@@ -45,7 +45,7 @@ def resolve_data(id_min, id_max):
                      original_columns=M_AD_ORIGINAL_COLUMNS, resolve_columns=R_AD_RESOLVE_COLUMNS, resolve_index=R_AD_RESOLVE_INDEX,
                      no_resolve_columns=R_AD_NO_RESOLVE_COLUMNS, db_type='redshift')
     rd.resolve_data_main(repair_tablename=R_AD_REPAIR_TABLENAME, resolve_tablename=R_AD_RESOLVE_TABLENAME, id_min=id_min, id_max=id_max)
-                        
+                  
 if execute == 'repair':
     copy_adjust_data(id_min, id_max)
 elif execute == 'resolve':

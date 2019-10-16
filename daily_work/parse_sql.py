@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-01 14:17:41
-@LastEditTime: 2019-09-11 13:58:27
+@LastEditTime: 2019-10-16 17:13:57
 @github: https://github.com/longfengpili
 '''
 
@@ -41,11 +41,25 @@ class ParseSql(object):
         with open(filename, 'r', encoding='utf-8') as f:
             sqls_txt = f.read()
 
-        params = re.findall("\$(\w+)[ |\n|)|;]", re.sub('--.*?\n','\n',sqls_txt))
+        sqls_txt_ = re.sub('--.*?\n', '\n', sqls_txt) #去掉注释的代码（re.sub）
+        params = re.findall("\$(\w+)[ |\n|)|;]", sqls_txt_) 
+        
+        sqls_find = re.findall('###\n(.*?)###', sqls_txt, re.S)
+        sqls = []
+        for sql in sqls_find:
+            sql_des = re.search('--【(.*?)】', sql)
+            sql_des = sql_des.group(1) if sql_des else 'No Description'
+            sql = re.split('--【.*?】', sql)
+            sql = sql[0] if len(sql) == 1 else sql[1] if len(sql) == 2 else 'error'
+            sql = re.sub('--.*?\n', '\n', sql)
+            sql = re.sub('\n{2,}', '\n', sql).strip()
+            sql = (sql_des, sql)
+            sqls.append(sql)
 
-        sqls = re.findall("###\n--【(.*?)】(.*?)###", sqls_txt, re.S)
-        sqls = [(sql[0], re.sub('--.*?\n', '\n' , sql[1]).strip()) for sql in sqls]
-        sqls = [(sql[0], re.sub('\n{2,}', '\n' , sql[1])) for sql in sqls]
+        # sqls = re.findall("###\n--【(.*?)】(.*?)###", sqls_txt, re.S)
+        # sqls = [(sql[0], re.sub('--.*?\n', '\n' , sql[1]).strip()) for sql in sqls]
+        # sqls = [(sql[0], re.sub('\n{2,}', '\n' , sql[1])) for sql in sqls]
+        
         return params, sqls
 
     def get_file_sqls(self,filename, **kw):

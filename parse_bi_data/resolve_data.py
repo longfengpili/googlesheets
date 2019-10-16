@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-06-28 11:05:49
-@LastEditTime: 2019-10-15 14:49:42
+@LastEditTime: 2019-10-16 16:07:17
 @github: https://github.com/longfengpili
 '''
 
@@ -94,7 +94,7 @@ class ResolveData(ParseBiFunc):
             for key in keys:
                 need_columns.add(key)
                 key_[key] = data_json.get(key)
-            resolvebi_logger.error(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
+            resolvebi_logger.warning(f'【{id}】【{key_}】 do not parse, if need please change your resolve columns !')
         return need_columns, columns_value
 
     def resolve_multiple_rows(self,rows):
@@ -105,7 +105,7 @@ class ResolveData(ParseBiFunc):
             resolved.append(row)
             need_columns_all.update(need_columns)
         if need_columns_all:
-            resolvebi_logger.error('\n' + '⭐'*40 + f'\n【{need_columns_all}】 do not parse, if need please change your resolve columns !\n' + '⭐'*40)
+            resolvebi_logger.warning('\n' + '⭐'*40 + f'\n【{need_columns_all}】 do not parse, if need please change your resolve columns !\n' + '⭐'*40)
         return resolved
 
     def resolve_data_once(self, repair_tablename, resolve_tablename, n=1000):

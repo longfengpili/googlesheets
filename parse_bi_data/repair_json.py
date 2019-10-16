@@ -1,7 +1,7 @@
 '''
 @Author: longfengpili
 @Date: 2019-07-12 10:51:48
-@LastEditTime: 2019-10-16 15:46:55
+@LastEditTime: 2019-10-16 16:05:48
 @github: https://github.com/longfengpili
 '''
 
@@ -79,11 +79,9 @@ class RepairJsonData(object):
             
             if self.error_num >= self.error_max:
                 error_json = {}
-                msg_type = re.search('"msg_type":"(.*?)"', str(self.myjson_origin))
-                if msg_type:
-                    msg_type = msg_type.group(1)
-                else:
-                    msg_type = 'error'
+                # msg_type = re.search('"msg_type":"(.*?)"', str(self.myjson_origin))
+                # msg_type = msg_type.group(1) if msg_type else 'error'
+                msg_type = 'error'
                     
                 msg_type = f'{msg_type}'
                 self.errors.insert(0, f'【{msg_type}】\n{self.myjson_origin}')
